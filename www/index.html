@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Patrulha dos Bigodes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@ body{background:var(--fundo);color:var(--creme);font-family:var(--corpo);display
 #stage{position:relative;height:100%;overflow:hidden;touch-action:none;background:#9fd8e8}
 canvas{display:block;width:100%;height:100%}
 
-#hud{position:absolute;left:0;right:0;top:0;padding:10px 12px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+#hud{position:absolute;left:0;right:0;top:0;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;display:flex;flex-direction:column;gap:6px;pointer-events:none}
 .linha{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .chip{background:rgba(42,34,48,.72);border-radius:999px;padding:2px 10px;font-weight:700;font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums;white-space:nowrap}
 #barra{position:relative;height:12px;border-radius:999px;background:rgba(42,34,48,.6);overflow:hidden}
@@ -85,6 +85,8 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .topo h2{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font-size:24px;line-height:1}
 .topo h2 [data-ico]{width:28px;height:28px;flex:0 0 28px}
 .voltar{flex:0 0 36px;width:36px;height:36px;border-radius:12px;background:#fff;padding:8px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
+.cfgMini{flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#fff;padding:6px;margin-left:6px;box-shadow:0 0 0 2px var(--linha),0 2px 0 var(--linha)}
+.cfgMini:active{transform:translateY(2px)}
 .voltar.inicio{flex-basis:40px;width:40px;height:40px;padding:7px;background:var(--manteiga)}
 .dock{display:flex;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--papel);border-top:2px solid var(--linha);flex:0 0 auto}
 .dock button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff;color:var(--tinta);border-radius:12px;padding:5px 2px 4px;font-weight:800;font-size:11px;line-height:1.2;white-space:nowrap;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
@@ -141,6 +143,10 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 #avisoAdm:empty{display:none}
 #telaLoja .cartao,#telaAlbum .cartao,#telaAdmin .cartao{height:100%}
 .notaAdm{font-size:13px!important;opacity:.7}
+.chipsGatos{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;-webkit-overflow-scrolling:touch}
+.chipGato{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border-radius:14px;background:#fff;color:var(--tinta);font-weight:800;font-size:12px;box-shadow:0 0 0 2px var(--linha)}
+.chipGato canvas{width:40px;height:40px}
+.chipGato[aria-pressed="true"]{background:var(--manteiga);box-shadow:0 0 0 2px var(--tinta)}
 .semPedidos{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;padding:22px 14px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--linha)}
 .semPedidos b{font-size:17px;font-weight:800}
 .semPedidos span{font-size:14px;font-weight:600;opacity:.65}
@@ -183,7 +189,8 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .raca.falta.col-epico,.raca.falta.col-lendario{background:#f1ecf6;box-shadow:0 0 0 2px var(--linha) inset}
 
 /* abrigo */
-.tela.cheia{padding:0}
+.tela.cheia{padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:var(--papel)}
+.tela:not(.cheia){padding-top:max(14px,env(safe-area-inset-top,0px));padding-bottom:max(14px,env(safe-area-inset-bottom,0px))}
 .tela.cheia .cartao{max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none}
 .palco{position:relative;flex:1;min-height:0;overflow:hidden;background:#ffe2c2}
 #sala{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
@@ -282,7 +289,7 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .inicio .tile .tico{width:48px;height:48px}
 .inicio .tile b{font-size:18px}
 .inicio .tile small{font-size:13px}
-.engrenagem{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:12px;background:#fff;padding:7px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha);z-index:1}
+.engrenagem{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:12px;width:40px;height:40px;border-radius:12px;background:#fff;padding:7px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha);z-index:1}
 .engrenagem:active{transform:translateY(2px);box-shadow:0 0 0 2px var(--linha)}
 .faixa > div{display:flex;flex-direction:column;gap:2px}
 .faixa label b{display:flex!important;justify-content:space-between;gap:8px}
@@ -351,7 +358,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 .ef[hidden]{display:none}
 .ef svg{width:24px;height:24px;flex:0 0 24px}
 .ef b{color:var(--manteiga);font-variant-numeric:tabular-nums}
-#bolsa{position:absolute;right:10px;top:112px;display:flex;flex-direction:column;gap:10px;z-index:3}
+#bolsa{position:absolute;right:10px;top:calc(112px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:10px;z-index:3}
 #bolsa[hidden]{display:none}
 .usarItem{position:relative;width:52px;height:52px;border-radius:50%;background:rgba(255,243,223,.94);padding:9px;box-shadow:0 0 0 3px rgba(42,34,48,.55),0 4px 0 rgba(42,34,48,.35)}
 .usarItem:active{transform:scale(.92)}
@@ -429,7 +436,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela" id="ajuda" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar inicio" id="fecharAjuda" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="ajuda"></span>Como jogar</h2></header>
+      <header class="topo"><button class="voltar inicio" id="fecharAjuda" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="ajuda"></span>Como jogar</h2><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
       <div class="corpo">
         <div class="bloco"><h3>Na corrida</h3>
           <div class="lista">
@@ -496,8 +503,9 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.0</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.1</p>
       </div>
+      <div class="rodape"><button class="acao" id="confirmarConfig" type="button">Confirmar</button></div>
     </section>
   </div>
 
@@ -509,7 +517,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
   </div>
   <div class="tela" id="telaPreparar" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar inicio" id="fecharPreparar" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="mapa"></span>Preparar patrulha</h2><span class="pill moeda" id="xpPill">0 moedas</span></header>
+      <header class="topo"><button class="voltar" id="fecharPreparar" type="button" aria-label="Voltar" title="Voltar" data-ico="voltar"></button><h2><span data-ico="mapa"></span>Patrulha</h2><span class="pill moeda" id="xpPill">0 moedas</span><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
       <div class="corpo">
         <div class="piloto">
           <canvas id="previa" width="128" height="128"></canvas>
@@ -531,7 +539,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela" id="telaAlbum" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar inicio" id="fecharAlbum" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="album"></span>Álbum</h2><span class="pill" id="albumTotal">0 de 17</span></header>
+      <header class="topo"><button class="voltar inicio" id="fecharAlbum" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="album"></span>Álbum</h2><span class="pill" id="albumTotal">0 de 17</span><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
       <div class="corpo">
         <div class="progresso"><i id="albumBarra"></i></div>
         <div id="albumGrade"></div>
@@ -541,7 +549,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela cheia" id="telaAbrigo" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar inicio" id="fecharAbrigo" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2 id="salaTitulo"><span data-ico="abrigo"></span>Abrigo</h2><span class="pill moeda" id="abrigoMoedas">0 moedas</span></header>
+      <header class="topo"><button class="voltar inicio" id="fecharAbrigo" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2 id="salaTitulo"><span data-ico="abrigo"></span>Abrigo</h2><span class="pill moeda" id="abrigoMoedas">0 moedas</span><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
       <div class="palco">
         <canvas id="sala"></canvas>
         <p class="dica" id="salaDica">Arraste para ver a sala · toque num gato</p>
@@ -578,7 +586,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela" id="telaLoja" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar inicio" id="fecharLoja" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="loja"></span>Loja</h2><span class="pill moeda" id="lojaMoedas">0 moedas</span></header>
+      <header class="topo"><button class="voltar inicio" id="fecharLoja" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="loja"></span>Loja</h2><span class="pill moeda" id="lojaMoedas">0 moedas</span><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
       <div class="corpo">
         <div id="vitrine"></div>
         <div id="lojaLista" class="secoes"></div>
@@ -629,11 +637,12 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
+const VERSAO = '1.1';
 const GATOS = [
   { id: 'peta', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
   { id: 'teo', nome: 'Téo', pelo: '#26232b', orelha: '#37333c', dentro: '#b99ca2', olho: '#e2c531', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#eaa3b2', narizT: 1.35,
     branco: { topo: -0.62, larg: 0.1, ladoE: 0.45, ladoD: -0.3, dx: 0,
-      kE: [-0.12, -0.3], jE: [-0.24, 0.2], cE: [-0.42, 0.5], kD: [0.35, -0.52], jD: [0.7, -0.42], cD: [0.95, -0.36] }, coleira: '#1b1920' },
+      kE: [-0.12, -0.3], jE: [-0.24, 0.2], cE: [-0.42, 0.5], kD: [0.35, -0.52], jD: [0.7, -0.42], cD: [0.95, -0.36] } },
   { id: 'tunico', nome: 'Tunico', pelo: '#a47a59', orelha: '#2e211d', dentro: '#5c4138', olho: '#5b9bd8', patas: '#3a2a24', pata: '#5c4138', nariz: '#1c1413', linha: '#fbf3e6',
     mascara: '#2a1c18' },
   { id: 'olivia', nome: 'Olívia', pelo: '#211e26', orelha: '#211e26', dentro: '#6b565c', olho: '#d9d048', olho2: '#8fc153', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f2a0b0',
@@ -647,12 +656,13 @@ const GATOS = [
 function ler(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 function gravar(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 let gato = GATOS[0];
-let save = { album: {}, abrigo: [], moedas: 0, pedidos: [], recorde: 0, up: { sache: 0, escova: 0, turbo: 0, abrigo: 0, vagas: 0 }, tem: { volante: ['padrao'], chapeu: ['nenhum'] }, uso: { volante: 'padrao', chapeu: 'nenhum' } };
+let save = { album: {}, abrigo: [], moedas: 0, pedidos: [], recorde: 0, up: { sache: 0, escova: 0, turbo: 0, abrigo: 0, vagas: 0 }, tem: { volante: ['padrao'], chapeu: ['nenhum'], coleira: ['nenhuma'] }, coleiras: {}, uso: { volante: 'padrao', chapeu: 'nenhum' } };
 try {
   const lido = JSON.parse(ler('pegagatos.save') || 'null');
   if (lido && typeof lido === 'object') {
     for (const k of ['album', 'up', 'uso']) if (lido[k] && typeof lido[k] === 'object') Object.assign(save[k], lido[k]);
-    if (lido.tem) for (const k of ['volante', 'chapeu']) if (Array.isArray(lido.tem[k])) save.tem[k] = lido.tem[k];
+    if (lido.tem) for (const k of ['volante', 'chapeu', 'coleira']) if (Array.isArray(lido.tem[k])) save.tem[k] = lido.tem[k];
+    if (lido.coleiras && typeof lido.coleiras === 'object') save.coleiras = lido.coleiras;
     if (Array.isArray(lido.abrigo)) save.abrigo = lido.abrigo.slice(0, 400);
     if (Array.isArray(lido.pedidos)) save.pedidos = lido.pedidos;
     save.moedas = Math.max(0, parseInt(lido.moedas, 10) || 0);
@@ -757,8 +767,25 @@ function pilotoDeRaca(p) {
   if (!g.listra && t.estampa === 'tigre') g.listra = t.estampaCor;
   return g;
 }
+const COLEIRAS = [
+  { id: 'nenhuma', nome: 'Sem coleira', preco: 0 },
+  { id: 'vermelha', nome: 'Coleira vermelha', preco: 30, cor: '#d63a3a' },
+  { id: 'azul', nome: 'Coleira azul', preco: 30, cor: '#3f8fd0' },
+  { id: 'rosa', nome: 'Coleira rosa', preco: 30, cor: '#ff8fb1' },
+  { id: 'verde', nome: 'Coleira verde', preco: 30, cor: '#3fae6a' },
+  { id: 'amarela', nome: 'Coleira amarela', preco: 30, cor: '#ffd84a' },
+  { id: 'roxa', nome: 'Coleira roxa', preco: 40, cor: '#8e5bd6' },
+  { id: 'preta', nome: 'Coleira preta', preco: 40, cor: '#26232b' },
+  { id: 'dourada', nome: 'Coleira com guizo dourado', preco: 120, cor: '#c0392b', guizo: true }
+];
+function vestirColeira(g) {
+  const o = Object.assign({}, g); delete o.coleira; delete o.guizo;
+  const c = COLEIRAS.find(x => x.id === (save.coleiras || {})[g.id]);
+  if (c && c.cor) { o.coleira = c.cor; if (c.guizo) o.guizo = true; }
+  return o;
+}
 function listaPilotos() {
-  return GATOS.map(g => Object.assign({}, g, { nome: save.nomes[g.id] || g.nome })).concat(save.pilotos.map(pilotoDeRaca));
+  return GATOS.map(g => Object.assign({}, g, { nome: save.nomes[g.id] || g.nome })).concat(save.pilotos.map(pilotoDeRaca)).map(vestirColeira);
 }
 function resolverGato() { const id = ler('gatuno.gato'); return listaPilotos().find(g => g.id === id) || listaPilotos()[0]; }
 gato = resolverGato();
@@ -1351,6 +1378,15 @@ function atualizarMenu() {
   $('tCasa').textContent = (save.casa.length + save.casaPilotos.length) + '/' + casaMax() + ' moradores';
   $('tLoja').textContent = save.moedas + (save.moedas === 1 ? ' moeda' : ' moedas');
 }
+function appEmSegundoPlano(oculto) {
+  if (oculto && (state === 'play' || state === 'count')) pausar();
+  if (!ac) return;
+  try { if (oculto) ac.suspend(); else if (somLigado) ac.resume(); } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => appEmSegundoPlano(document.hidden));
+window.addEventListener('pagehide', () => appEmSegundoPlano(true));
+window.__appPausado = () => appEmSegundoPlano(true);
+window.__appVoltou = () => { if (!document.hidden) appEmSegundoPlano(false); };
 function irMenu() {
   trocarMusica('menu');
   state = 'menu'; boostT = 0; shake = 0; pops.length = 0;
@@ -1449,8 +1485,8 @@ function terminar() {
   fim.hidden = false;
   somMiau();
 }
-$('jogar').addEventListener('click', () => { initSom(); abrirPreparar(); });
-$('fimBotao').addEventListener('click', () => { initSom(); abrirPreparar(); });
+$('jogar').addEventListener('click', () => { initSom(); origemPreparar = 'menu'; abrirPreparar(); });
+$('fimBotao').addEventListener('click', () => { initSom(); origemPreparar = 'fim'; abrirPreparar(); });
 $('turbo').addEventListener('click', usarTurbo);
 $('pausar').addEventListener('click', pausar);
 $('continuar').addEventListener('click', continuar);
@@ -2068,6 +2104,11 @@ function cabecaVolante(k, cx, hy, r, R) {
   for (const d of gato.listra ? [-0.22, 0, 0.22] : []) {
     k.beginPath(); k.moveTo(cx + d * r, hy - r * (0.9 - Math.abs(d) * 0.3)); k.lineTo(cx + d * r, hy - r * 0.62); k.stroke();
   }
+  if (gato.coleira) {
+    k.strokeStyle = '#2a2230'; k.lineWidth = Math.max(2, R * 0.02);
+    k.fillStyle = gato.coleira; k.beginPath(); k.ellipse(cx, hy + r * 0.9, r * 0.72, r * 0.19, 0, 0, 7); k.fill(); k.stroke();
+    k.fillStyle = 'rgba(255,255,255,.35)'; k.beginPath(); k.ellipse(cx - r * 0.25, hy + r * 0.84, r * 0.2, r * 0.05, -0.1, 0, 7); k.fill();
+  }
   const ch = save.uso.chapeu, ty = hy - r;
   k.strokeStyle = '#2a2230'; k.lineWidth = Math.max(2, R * 0.02); k.lineJoin = 'round';
   if (ch === 'laco') {
@@ -2151,7 +2192,7 @@ function desenharPainel(k, py0) {
 function volante() {
   const cx = W / 2, cy = H - W * 0.02, R = W * 0.36, hy = H + R * 0.2, r = R * 0.55;
   const vol = VOLANTES.find(v => v.id === save.uso.volante) || VOLANTES[0];
-  const chave = [W, H, vol.id, save.uso.chapeu, gato.id, gato.pelo, gato.orelha, gato.patas, gato.pata, gato.listra].join('|');
+  const chave = [W, H, vol.id, save.uso.chapeu, gato.id, gato.pelo, gato.orelha, gato.patas, gato.pata, gato.listra, gato.coleira].join('|');
   if (!volCache || volCache.chave !== chave) {
     const meio = Math.ceil(R * 1.36) + 4, roda = document.createElement('canvas');
     roda.width = roda.height = meio * 2;
@@ -2314,6 +2355,8 @@ const ICO = {
   aquarioPe: sv('<rect x="4" y="3.5" width="16" height="9" rx="1" fill="#8fd0f0"/><rect x="4" y="11" width="16" height="1.6" fill="#d9b37a"/><path d="M9 7.5a2 1.2 0 1 0 0 .1l2 1.2v-2.4z" fill="#ffb347"/><rect x="5" y="12.6" width="14" height="8" fill="#7a5236"/>'),
   casinha: sv('<path d="M3 11 12 3l9 8z" fill="#ff7a5c"/><rect x="5" y="10.5" width="14" height="10" fill="#fff3df"/><path d="M9 20.5v-4a3 3 0 0 1 6 0v4z" fill="#3a2a2a"/>'),
   luxo: sv('<ellipse cx="12" cy="15.5" rx="10" ry="4.5" fill="#d9a82b"/><ellipse cx="12" cy="13" rx="10" ry="4.5" fill="#7a3a5a"/><ellipse cx="12" cy="13.4" rx="7.4" ry="2.8" fill="#a05080"/><circle cx="3" cy="12" r="1.2" fill="#ffd84a"/><circle cx="21" cy="12" r="1.2" fill="#ffd84a"/>'),
+  coleira: (cor, guizo) => sv('<ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="' + cor + '" stroke-width="3.2"/><ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="#2a2230" stroke-width=".6" opacity=".5"/>' + (guizo ? '<circle cx="12" cy="18.2" r="2.6" fill="#ffd84a" stroke="#b8860b" stroke-width=".9"/>' : '<circle cx="12" cy="17.6" r="1.7" fill="#c3c6cf" stroke="#8a8f99" stroke-width=".6"/>')),
+  semColeira: sv('<ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="#c9bba8" stroke-width="2.4" stroke-dasharray="3 2.4"/>'),
   nenhum: sv('<circle cx="12" cy="12" r="8" fill="none" stroke="#2a2230" stroke-width="2"/><path d="M6.5 17.5 17.5 6.5" stroke="#2a2230" stroke-width="2"/>'),
   inicio: sv('<path d="M3.5 11.5 12 4.5l8.5 7" fill="none" stroke="#2a2230" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 9.5v10h4v-5.5h3v5.5h4v-10" fill="none" stroke="#2a2230" stroke-width="2.4" stroke-linejoin="round"/>'),
   voltar: sv('<path d="M15 5 8 12l7 7" fill="none" stroke="#2a2230" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>'),
@@ -2361,7 +2404,15 @@ function criarDock(tela, atual) {
   return nav;
 }
 function marcarDock(nav, atual) { for (const b of nav.children) { const aqui = b.dataset.ir === atual; b.classList.toggle('aqui', aqui); if (aqui) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); } }
+let origemPreparar = 'menu';
+function telaAtiva() {
+  if (!telaAbrigo.hidden) return modoSala === 'casa' ? 'casa' : 'abrigo';
+  for (const [el, n] of [[telaAlbum, 'album'], [telaLoja, 'loja'], [telaAjuda, 'ajuda'], [$('telaPreparar'), 'preparar'], [telaGatos, 'gatos']]) if (!el.hidden) return n;
+  if (!fim.hidden) return 'fim';
+  return 'menu';
+}
 function navegar(d) {
+  if (d === 'jogar') origemPreparar = telaAtiva();
   irMenu();
   if (d === 'jogar') abrirPreparar();
   else if (d === 'casa') abrirCasa();
@@ -3804,7 +3855,13 @@ function secao(pai, titulo) {
   b.appendChild(cria('h3', '', titulo)); b.appendChild(l); pai.appendChild(b);
   return l;
 }
-let lojaAba = 'itens', decorOnde = 'abrigo';
+let lojaAba = 'itens', decorOnde = 'abrigo', lojaAlvo = '';
+function atualizarColeiras() {
+  gato = listaPilotos().find(g => g.id === gato.id) || gato; volCache = null;
+  for (const lst of [moradores].concat(Object.values(estadoSalas).map(e => e && e.moradores || [])))
+    for (const m of lst) if (m.reg && m.reg.pilot) m.g = gatoDe(m.reg);
+  sprites.clear();
+}
 function montarLoja() {
   $('lojaMoedas').textContent = txtMoedas();
   const pai = $('lojaLista'); pai.textContent = '';
@@ -3831,6 +3888,27 @@ function montarLoja() {
         max ? 'Completo' : preco + ' moedas', !max && save.moedas >= preco, max ? 'usando' : '', () => { save.moedas -= preco; save.up[m.id] = n + 1; salvar(); somMoeda(); prepararAbrigo(); montarLoja(); });
     }
   } else if (lojaAba === 'cosmeticos') {
+    const pilotos = listaPilotos();
+    if (!pilotos.some(g => g.id === lojaAlvo)) lojaAlvo = gato.id;
+    lista = secao(pai, 'Coleiras');
+    lista.appendChild(cria('p', 'nota', 'Escolha o gato e depois a coleira. Cada gato pode ter a sua.'));
+    const chips = cria('div', 'chipsGatos');
+    for (const g of pilotos) {
+      const b = cria('button', 'chipGato'); b.type = 'button'; b.setAttribute('aria-pressed', g.id === lojaAlvo ? 'true' : 'false');
+      b.appendChild(carinha(g, 72)); b.appendChild(cria('span', '', g.nome));
+      b.addEventListener('click', () => { lojaAlvo = g.id; montarLoja(); });
+      chips.appendChild(b);
+    }
+    lista.appendChild(chips);
+    const alvo = pilotos.find(g => g.id === lojaAlvo), atual = (save.coleiras || {})[lojaAlvo] || 'nenhuma';
+    for (const c of COLEIRAS) {
+      const tem = save.tem.coleira.indexOf(c.id) >= 0, usando = atual === c.id;
+      const ico = c.cor ? ICO.coleira(c.cor, c.guizo) : ICO.semColeira;
+      const usar = () => { if (c.id === 'nenhuma') delete save.coleiras[lojaAlvo]; else save.coleiras[lojaAlvo] = c.id; salvar(); atualizarColeiras(); montarLoja(); };
+      if (usando) linhaLoja(lista, ico, c.nome, alvo.nome + ' está usando', 'Em uso', false, 'usando');
+      else if (tem) linhaLoja(lista, ico, c.nome, 'Já é sua', 'Colocar no ' + alvo.nome, true, '', usar);
+      else linhaLoja(lista, ico, c.nome, c.guizo ? 'Coleira de festa com guizo dourado' : 'Compre uma vez e use em qualquer gato', c.preco + ' moedas', save.moedas >= c.preco, '', () => { save.moedas -= c.preco; save.tem.coleira.push(c.id); somMoeda(); usar(); });
+    }
     for (const [titulo, itens, chave] of [['Chapéus do seu gato', CHAPEUS, 'chapeu'], ['Volantes', VOLANTES, 'volante']]) {
       lista = secao(pai, titulo);
       for (const it of itens) {
@@ -3963,12 +4041,12 @@ function montarAdmin() {
   const liberar = {
     regioes: () => { save.regioes = REGIOES.map((r, q) => q); },
     album: () => { for (const t of TIPOS) save.album[t.raca] = Math.max(1, save.album[t.raca] || 0); },
-    visual: () => { save.tem.volante = VOLANTES.map(v => v.id); save.tem.chapeu = CHAPEUS.map(c => c.id); },
+    visual: () => { save.tem.volante = VOLANTES.map(v => v.id); save.tem.chapeu = CHAPEUS.map(c => c.id); save.tem.coleira = COLEIRAS.map(c => c.id); },
     melhorias: () => { for (const m of MELHORIAS) save.up[m.id] = m.precos.length; prepararAbrigo(); },
     itens: () => { for (const it of ITENS_LOJA) save.inv[it.id] = Math.max(1, Math.round(A('maxItens'))); },
     decoracao: () => { for (const onde of ['abrigo', 'casa']) for (const d of DECOR.filter(x => x.local === onde)) while (save.decor[onde].filter(x => x === d.id).length < d.max && cabeDecor(onde, d.id)) save.decor[onde].push(d.id); aplicarDecor(); }
   };
-  const nomesLib = { regioes: 'Todas as regiões', album: 'Completar o álbum (todos os gatos)', visual: 'Todos os chapéus e volantes', melhorias: 'Melhorias no máximo', itens: 'Encher os itens', decoracao: 'Toda a decoração' };
+  const nomesLib = { regioes: 'Todas as regiões', album: 'Completar o álbum (todos os gatos)', visual: 'Todos os chapéus, volantes e coleiras', melhorias: 'Melhorias no máximo', itens: 'Encher os itens', decoracao: 'Toda a decoração' };
   for (const k in liberar) botaoAdm(bx, nomesLib[k], () => { liberar[k](); salvar(); avisoAdm('Pronto: ' + nomesLib[k].toLowerCase()); montarAdmin(); });
   botaoAdm(bx, 'Liberar tudo', () => { for (const k in liberar) liberar[k](); salvar(); avisoAdm('Tudo liberado!'); montarAdmin(); });
 
@@ -4099,7 +4177,12 @@ function abrirPreparar() {
   abrirRegioes();
   menu.hidden = true; fim.hidden = true; telaGatos.hidden = true; $('telaPreparar').hidden = false;
 }
-$('fecharPreparar').addEventListener('click', irMenu);
+$('fecharPreparar').addEventListener('click', () => {
+  const o = origemPreparar; origemPreparar = 'menu';
+  if (o === 'fim') { $('telaPreparar').hidden = true; fim.hidden = false; }
+  else if (['album', 'loja', 'abrigo', 'casa', 'ajuda'].indexOf(o) >= 0) navegar(o);
+  else irMenu();
+});
 $('confirmarPatrulha').addEventListener('click', () => { initSom(); $('telaPreparar').hidden = true; comecarFase(); });
 
 /* ---------- configurações ---------- */
@@ -4120,7 +4203,10 @@ function abrirConfig(origem) {
   $('cfgNomeAbrigo').value = save.nomeAbrigo || '';
   configOrigem = origem; initSom(); atualizarConfig(); montarPilotos();
   $('catalogo').hidden = true;
-  menu.hidden = true; telaPausa.hidden = true; $('telaConfig').hidden = false;
+  menu.hidden = true; telaPausa.hidden = true;
+  const el = { album: telaAlbum, loja: telaLoja, ajuda: telaAjuda, preparar: $('telaPreparar'), abrigo: telaAbrigo, casa: telaAbrigo, gatos: telaGatos }[origem];
+  if (el) el.hidden = true;
+  $('telaConfig').hidden = false;
   const corpo = document.querySelector('#telaConfig .corpo');
   if (origem === 'gatos') setTimeout(() => { corpo.scrollTop = $('blocoPilotos').offsetTop - 10; }, 30); else corpo.scrollTop = 0;
 }
@@ -4196,12 +4282,28 @@ function montarCatalogo() {
 $('abrirCatalogo').addEventListener('click', () => { const c = $('catalogo'); c.hidden = !c.hidden; if (!c.hidden) montarCatalogo(); });
 $('abrirConfig').addEventListener('click', () => abrirConfig('menu'));
 $('pausaConfig').addEventListener('click', () => abrirConfig('pausa'));
-$('fecharConfig').addEventListener('click', () => {
+function fecharConfig() {
   $('telaConfig').hidden = true;
-  if (configOrigem === 'pausa' && state === 'pause') telaPausa.hidden = false;
-  else if (configOrigem === 'gatos') { montarGrade(); telaGatos.hidden = false; }
+  const o = configOrigem;
+  if (o === 'pausa' && state === 'pause') telaPausa.hidden = false;
+  else if (o === 'gatos') { montarGrade(); telaGatos.hidden = false; }
+  else if (o === 'preparar') abrirPreparar();
+  else if (o === 'album') telaAlbum.hidden = false;
+  else if (o === 'loja') { montarLoja(); telaLoja.hidden = false; }
+  else if (o === 'ajuda') telaAjuda.hidden = false;
+  else if (o === 'abrigo' || o === 'casa') {
+    telaAbrigo.hidden = false;
+    const t = document.querySelector('#salaTitulo .tituloTxt'); if (t) t.textContent = save.nomeAbrigo || 'Abrigo';
+  }
   else irMenu();
+}
+$('fecharConfig').addEventListener('click', fecharConfig);
+$('confirmarConfig').addEventListener('click', () => {
+  const n = $('cfgNomeAbrigo'); save.nomeAbrigo = n.value.trim().slice(0, 18); n.value = save.nomeAbrigo; decorVer++;
+  salvar(); fecharConfig();
 });
+document.querySelectorAll('[data-cfg]').forEach(b => b.addEventListener('click', () => abrirConfig(telaAtiva())));
+$('versaoJogo').textContent = 'Patrulha dos Bigodes · versão ' + VERSAO;
 $('cfgLigado').addEventListener('change', e => { save.audio.ligado = e.target.checked; salvar(); initSom(); aplicarVolumes(); atualizarConfig(); });
 for (const [id, out, k] of FAIXAS) {
   $(id).addEventListener('input', e => { save.audio[k] = Math.max(0, Math.min(1, e.target.value / 100)); $(out).textContent = Math.round(save.audio[k] * 100) + '%'; aplicarVolumes(); });
