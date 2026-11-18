@@ -1,6 +1,6 @@
 # Patrulha dos Bigodes — aplicativo Android (APK)
 
-O jogo fica em `www/index.html`. O ícone e a tela de abertura (com a Peta) ficam em `assets/`.
+O jogo fica em `www/index.html`. O ícone e a tela de abertura (com a Peta) ficam em `recursos/`.
 Nome do app: **Patrulha dos Bigodes** · identificador: `com.patrulhadosbigodes.app`
 
 ---
@@ -15,7 +15,7 @@ Nome do app: **Patrulha dos Bigodes** · identificador: `com.patrulhadosbigodes.
 ```
 (pasta do repositório)
 ├── .github/workflows/gerar-apk.yml
-├── assets/          (ícones e tela de abertura)
+├── recursos/        (ícone e tela de abertura)
 ├── ferramentas/     (fonte e assinatura do app)
 ├── www/index.html   (o jogo)
 ├── .gitignore
@@ -61,7 +61,9 @@ Dica: se um dia o Actions ficar vermelho (✗), clique nele, abra a etapa com er
 ```
 npm install
 npm run fonte
-npm run android
+npx cap add android
+(copie o conteúdo de recursos/android/res para android/app/src/main/res)
+npx cap sync android
 npx cap open android
 ```
 
