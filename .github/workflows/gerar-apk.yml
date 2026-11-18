@@ -8,6 +8,7 @@ on:
 jobs:
   apk:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - name: Baixar o projeto
         uses: actions/checkout@v4
@@ -39,6 +40,7 @@ jobs:
 
       - name: Embutir a fonte do jogo (funciona sem internet)
         continue-on-error: true
+        timeout-minutes: 2
         run: npm run fonte
 
       - name: Criar o projeto Android
@@ -64,6 +66,7 @@ jobs:
 
       - name: Montar o APK
         working-directory: android
+        timeout-minutes: 25
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
