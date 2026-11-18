@@ -10,6 +10,10 @@
 :root{
   /* Layout: uma coluna em retrato com o jogo em canvas; HUD e telas por cima em DOM. Mundo único, sem tema claro/escuro. */
   --fundo:#1d2f36;
+  --roxo:#8f5cf0;
+  --roxo-escuro:#6a3fc4;
+  --rosa:#ff6fa3;
+  --rosa-escuro:#d94f86;
   --creme:#fff3df;
   --tinta:#2a2230;
   --coral:#ff7a5c;
@@ -52,15 +56,18 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .nota{font-size:14px!important;font-weight:700!important;opacity:.7}
 
 /* botões */
-.acao{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--coral);color:var(--tinta);font-weight:800;font-size:22px;border-radius:16px;padding:10px 16px;box-shadow:0 5px 0 #c9523a}
-.acao:active{transform:translateY(3px);box-shadow:0 2px 0 #c9523a}
+.acao{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--rosa);color:var(--tinta);font-weight:800;font-size:22px;border-radius:16px;padding:10px 16px;box-shadow:0 5px 0 var(--rosa-escuro)}
+.acao:active{transform:translateY(3px);box-shadow:0 2px 0 var(--rosa-escuro)}
 .acao [data-ico]{width:22px;height:22px}
 .par{display:flex;gap:8px}
 .sec{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#fff;color:var(--tinta);font-weight:800;font-size:16px;border-radius:12px;padding:8px 10px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
 .sec:active{transform:translateY(2px);box-shadow:0 0 0 2px var(--linha)}
 .sec [data-ico]{width:20px;height:20px}
-.mini{flex:0 0 auto;min-width:96px;background:var(--coral);color:var(--tinta);font-weight:800;font-size:14px;border-radius:10px;padding:7px 8px;box-shadow:0 3px 0 #c9523a}
+.mini{flex:0 0 auto;min-width:96px;background:var(--roxo);color:#fff;font-weight:800;font-size:14px;border-radius:10px;padding:7px 8px;box-shadow:0 3px 0 var(--roxo-escuro)}
 .mini:disabled{background:#e4d8c8;box-shadow:none;color:rgba(42,34,48,.55);cursor:default}
+.mini.equipar{background:var(--rosa);color:var(--tinta);box-shadow:0 3px 0 var(--rosa-escuro)}
+.mini.comprar{background:var(--roxo);color:#fff;box-shadow:0 3px 0 var(--roxo-escuro)}
+.mini:disabled.comprar,.mini:disabled.equipar{background:#e4d8c8;box-shadow:none;color:rgba(42,34,48,.55)}
 .mini.usando{background:var(--verde-agua);box-shadow:0 3px 0 #1f8f7f;color:var(--tinta)}
 
 /* tela inicial */
@@ -92,7 +99,7 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .dock button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff;color:var(--tinta);border-radius:12px;padding:5px 2px 4px;font-weight:800;font-size:11px;line-height:1.2;white-space:nowrap;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
 .dock button:active{transform:translateY(2px);box-shadow:0 0 0 2px var(--linha)}
 .dock button svg{width:24px;height:24px}
-.dock button.jogar{background:var(--coral)}
+.dock button.jogar{background:var(--rosa)}
 .dock button.aqui{background:var(--manteiga);box-shadow:0 0 0 2px var(--tinta)}
 .voltar:active{transform:translateY(2px);box-shadow:0 0 0 2px var(--linha)}
 .pill{display:inline-flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:2px 10px;font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums;box-shadow:0 0 0 2px var(--linha)}
@@ -108,7 +115,7 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .xpBarra.espera{margin-top:5px}
 .abasLoja{position:sticky;top:-14px;z-index:2;display:flex;gap:4px;padding:8px 0;margin-top:-8px;background:var(--creme)}
 .abaLoja{flex:1;min-width:0;background:#fff;color:var(--tinta);font-weight:800;font-size:13px;border-radius:12px;padding:8px 2px;white-space:nowrap;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
-.abaLoja[aria-pressed="true"]{background:var(--manteiga);box-shadow:0 0 0 2px var(--tinta)}
+.abaLoja[aria-pressed="true"]{background:#efe4ff;box-shadow:0 0 0 2px var(--tinta)}
 .segLoja{display:flex;background:#efe6da;border-radius:12px;padding:3px;gap:3px}
 .segLoja button{flex:1;border-radius:10px;padding:7px;font-weight:800;font-size:14px;color:var(--tinta);background:transparent}
 .segLoja button[aria-pressed="true"]{background:#fff;box-shadow:0 1px 0 var(--linha)}
@@ -143,10 +150,20 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 #avisoAdm:empty{display:none}
 #telaLoja .cartao,#telaAlbum .cartao,#telaAdmin .cartao{height:100%}
 .notaAdm{font-size:13px!important;opacity:.7}
-.chipsGatos{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;-webkit-overflow-scrolling:touch}
+.chipsGatos{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:4px 4px 8px}
+.lista > .nota{margin:0;padding:2px 8px}
+.sexo{font-weight:800}
+.sexo.f{color:#e0569a}
+.sexo.m{color:#3f8fd0}
 .chipGato{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border-radius:14px;background:#fff;color:var(--tinta);font-weight:800;font-size:12px;box-shadow:0 0 0 2px var(--linha)}
 .chipGato canvas{width:40px;height:40px}
-.chipGato[aria-pressed="true"]{background:var(--manteiga);box-shadow:0 0 0 2px var(--tinta)}
+#telaPreparar .topo h2 span{display:none}
+#telaPreparar .topo .pill{font-size:13px;padding:4px 9px;white-space:nowrap}
+#telaAbrigo .topo h2{font-size:22px}
+@media (max-width:400px){#salaTitulo svg{display:none}}
+#telaAbrigo .topo .pill{font-size:13px;padding:4px 9px;white-space:nowrap}
+.topo h2{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chipGato[aria-pressed="true"]{background:#efe4ff;box-shadow:0 0 0 2px var(--tinta)}
 .atualizaCard{max-width:340px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 20px}
 .atualizaIco{width:64px;height:64px}
 .atualizaCard h2{margin:0;font-size:24px}
@@ -576,7 +593,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.4</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.6</p>
         <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
         <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
@@ -723,19 +740,19 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '1.4';
+const VERSAO = '1.6';
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
-  { id: 'peta', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
-  { id: 'teo', nome: 'Téo', pelo: '#26232b', orelha: '#37333c', dentro: '#b99ca2', olho: '#e2c531', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#eaa3b2', narizT: 1.35,
+  { id: 'peta', sexo: 'f', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
+  { id: 'teo', sexo: 'm', nome: 'Téo', pelo: '#26232b', orelha: '#37333c', dentro: '#b99ca2', olho: '#e2c531', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#eaa3b2', narizT: 1.35,
     branco: { topo: -0.62, larg: 0.1, ladoE: 0.45, ladoD: -0.3, dx: 0,
       kE: [-0.12, -0.3], jE: [-0.24, 0.2], cE: [-0.42, 0.5], kD: [0.35, -0.52], jD: [0.7, -0.42], cD: [0.95, -0.36] } },
-  { id: 'tunico', nome: 'Tunico', pelo: '#a47a59', orelha: '#2e211d', dentro: '#5c4138', olho: '#5b9bd8', patas: '#3a2a24', pata: '#5c4138', nariz: '#1c1413', linha: '#fbf3e6',
+  { id: 'tunico', sexo: 'm', nome: 'Tunico', pelo: '#a47a59', orelha: '#2e211d', dentro: '#5c4138', olho: '#5b9bd8', patas: '#3a2a24', pata: '#5c4138', nariz: '#1c1413', linha: '#fbf3e6',
     mascara: '#2a1c18' },
-  { id: 'olivia', nome: 'Olívia', pelo: '#211e26', orelha: '#211e26', dentro: '#6b565c', olho: '#d9d048', olho2: '#8fc153', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f2a0b0',
+  { id: 'olivia', sexo: 'f', nome: 'Olívia', pelo: '#211e26', orelha: '#211e26', dentro: '#6b565c', olho: '#d9d048', olho2: '#8fc153', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f2a0b0',
     branco: { topo: -0.36, larg: 0.22, ladoE: 0.34, ladoD: 0.34, dx: 0 } },
-  { id: 'sebastian', nome: 'Sebastian', pelo: '#4d4950', listra: '#38343c', orelha: '#454148', dentro: '#6e5862', olho: '#dbd552', pata: '#2f2c33', nariz: '#1d1a20', linha: '#aaa4b0' },
-  { id: 'seline', nome: 'Seline', pelo: '#201d25', orelha: '#201d25', dentro: '#4a3d45', olho: '#e0a43a', pupila: [0.11, 0.14], patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#ee9fae',
+  { id: 'sebastian', sexo: 'm', nome: 'Sebastian', pelo: '#4d4950', listra: '#38343c', orelha: '#454148', dentro: '#6e5862', olho: '#dbd552', pata: '#2f2c33', nariz: '#1d1a20', linha: '#aaa4b0' },
+  { id: 'seline', sexo: 'f', nome: 'Seline', pelo: '#201d25', orelha: '#201d25', dentro: '#4a3d45', olho: '#e0a43a', pupila: [0.11, 0.14], patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#ee9fae',
     branco: { topo: -0.3, larg: 0.07, ladoE: 0.8, ladoD: 0.8, dx: 0,
       kE: [-0.07, 0.2], jE: [-0.42, 0.36], cE: [-0.56, 0.76], kD: [0.07, 0.2], jD: [0.42, 0.36], cD: [0.56, 0.76] },
     pinta: { x: 0.22, y: 0.45, rx: 0.11, ry: 0.07, g: -0.3 }, sarda: '#b56f7c' }
@@ -779,12 +796,33 @@ save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
 function salvar() { gravar('pegagatos.save', JSON.stringify(save)); }
 const ADM_PADRAO = { pedMax: 3, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
   carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20 };
-let ADM = { v: {}, precos: {} };
-try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; } } catch (e) {}
+let ADM = { v: {}, precos: {}, corpos: {} };
+try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; } } catch (e) {}
 const A = k => { const v = ADM.v[k]; return typeof v === 'number' && isFinite(v) ? v : ADM_PADRAO[k]; };
 function salvarAdm() { gravar('pegagatos.admin', JSON.stringify(ADM)); }
 const precisa = () => (save.up.turbo ? 2 : 3);
-const NOMES = ['Bolinha', 'Mingau', 'Pipoca', 'Farofa', 'Paçoca', 'Nina', 'Mel', 'Tigrão', 'Amora', 'Biscoito', 'Pudim', 'Fubá', 'Luna', 'Tom', 'Mia', 'Chico', 'Jujuba', 'Sardinha', 'Feijão', 'Quindim', 'Nescau', 'Batata', 'Lili', 'Zeca', 'Cacau', 'Pantufa', 'Sushi', 'Pingo', 'Tapioca', 'Brigadeiro'];
+const NOMES_NEUTROS = ['Bolinha', 'Mingau', 'Pipoca', 'Farofa', 'Paçoca', 'Mel', 'Biscoito', 'Pudim', 'Fubá', 'Jujuba', 'Sardinha', 'Feijão', 'Quindim', 'Nescau', 'Batata', 'Cacau', 'Pantufa', 'Sushi', 'Pingo', 'Tapioca', 'Brigadeiro', 'Paçoquinha', 'Cookie'];
+const NOMES_M = ['Tigrão', 'Tom', 'Chico', 'Zeca', 'Frajolino', 'Bento', 'Simba', 'Fred', 'Pedrinho', 'Juca'];
+const NOMES_F = ['Nina', 'Amora', 'Luna', 'Mia', 'Lili', 'Belinha', 'Mimi', 'Lola', 'Princesa', 'Jade'];
+const NOMES = NOMES_NEUTROS.concat(NOMES_M, NOMES_F);
+const nomePara = sexo => { const l = NOMES_NEUTROS.concat(sexo === 'f' ? NOMES_F : NOMES_M); return l[Math.floor(Math.random() * l.length)]; };
+function sexoDaRaca(raca) {
+  if (/escaminha|tricolor|c[aá]lico/i.test(raca)) return 'f';
+  if (/laranja|ruivo|amarelo/i.test(raca)) return Math.random() < 0.8 ? 'm' : 'f';
+  return Math.random() < 0.5 ? 'm' : 'f';
+}
+const sexoDoId = id => { let h = 0; for (const ch of String(id || '')) h = (h * 31 + ch.charCodeAt(0)) | 0; return (h & 1) ? 'f' : 'm'; };
+const simbolo = g => g && g.sexo === 'f' ? '♀\uFE0E' : g && g.sexo === 'm' ? '♂\uFE0E' : '';
+const nomeComSexo = g => g.nome + (simbolo(g) ? ' ' + simbolo(g) : '');
+function nomeEl(tag, cls, g) {
+  const el = document.createElement(tag); if (cls) el.className = cls;
+  el.appendChild(document.createTextNode(g.nome));
+  if (simbolo(g)) { const sp = document.createElement('span'); sp.className = 'sexo ' + g.sexo; sp.textContent = ' ' + simbolo(g); el.appendChild(sp); }
+  return el;
+}
+const na = g => g && g.sexo === 'f' ? 'na' : 'no';
+const da = g => g && g.sexo === 'f' ? 'da' : 'do';
+const CORPO = { m: 0.85, g: 1.2 };
 const VERDE = '#7ecb4f', AMARELO = '#e2c531', AZUL = '#5b9bd8', AMBAR = '#e0a43a', COBRE = '#d9822b';
 const TIPOS = [
   { raca: 'vira-lata preto', peso: 3, pelo: '#2b2730', dentro: '#51454f', olhos: [VERDE, AMARELO], nariz: '#17131c', linha: '#8f889b' },
@@ -850,7 +888,7 @@ if (!Array.isArray(save.casa)) {
 if (!Array.isArray(save.pilotos)) save.pilotos = [];
 function pilotoDeRaca(p) {
   const t = TIPOS.find(x => x.raca === p.raca) || COMUNS[0];
-  const g = Object.assign({ orelha: t.pelo, pata: '#fff3df' }, t, { id: p.id, nome: p.nome, olho: p.olho || t.olhos[0], extra: true });
+  const g = Object.assign({ orelha: t.pelo, pata: '#fff3df' }, t, { id: p.id, nome: p.nome, olho: p.olho || t.olhos[0], extra: true, sexo: p.sexo || sexoDoId(p.id) });
   if (!g.listra && t.estampa === 'tigre') g.listra = t.estampaCor;
   return g;
 }
@@ -871,8 +909,11 @@ function vestirColeira(g) {
   if (c && c.cor) { o.coleira = c.cor; if (c.guizo) o.guizo = true; }
   return o;
 }
+const CORPO_PADRAO = { tunico: 'g' };
+const corpoDoPiloto = id => { const c = (ADM.corpos || {})[id]; return c != null ? c : (CORPO_PADRAO[id] || ''); };
 function listaPilotos() {
-  return GATOS.map(g => Object.assign({}, g, { nome: save.nomes[g.id] || g.nome })).concat(save.pilotos.map(pilotoDeRaca)).map(vestirColeira);
+  return GATOS.map(g => { const o = Object.assign({}, g, { nome: save.nomes[g.id] || g.nome }); const c = corpoDoPiloto(g.id); if (CORPO[c]) o.corpo = CORPO[c]; return o; })
+    .concat(save.pilotos.map(pilotoDeRaca)).map(vestirColeira);
 }
 function resolverGato() { const id = ler('gatuno.gato'); return listaPilotos().find(g => g.id === id) || listaPilotos()[0]; }
 gato = resolverGato();
@@ -962,7 +1003,12 @@ function gatoAleatorio() {
   else if (REG.tiposE.length && raro < (REG.chL + REG.chE) * mr) tipo = REG.tiposE[Math.floor(Math.random() * REG.tiposE.length)];
   else for (const t of lista) { sorte -= t.peso; if (sorte <= 0) { tipo = t; break; } }
   const g = Object.assign({ orelha: tipo.pelo, pata: '#fff3df' }, tipo);
-  g.nome = NOMES[Math.floor(Math.random() * NOMES.length)];
+  g.sexo = sexoDaRaca(tipo.raca);
+  g.nome = nomePara(g.sexo);
+  if (!tipo.colecao) {
+    const c = Math.random(); g.corpoTipo = c < 0.25 ? 'm' : c > 0.75 ? 'g' : ''; if (g.corpoTipo) g.corpo = CORPO[g.corpoTipo];
+    if (!tipo.fofo && Math.random() < 0.2) { g.fofo = true; g.peludo = 1; }
+  }
   g.olho = tipo.olhos[Math.floor(Math.random() * tipo.olhos.length)];
   if (tipo.focinhoChance && Math.random() < tipo.focinhoChance) g.focinho = '#fbf7ef';
   return g;
@@ -1456,7 +1502,7 @@ function continuar() {
 function atualizarMenu() {
   const prontos = save.pedidos.filter(pd => pd.pronto).length;
   $('badgeAbrigo').hidden = !prontos; $('badgeAbrigo').textContent = prontos;
-  $('pilotoNome').textContent = gato.nome;
+  $('pilotoNome').textContent = ''; $('pilotoNome').appendChild(nomeEl('span', '', gato));
   rosto($('previa'), gato);
   $('recorde').textContent = save.recorde;
   $('menuMoedas').textContent = save.moedas;
@@ -1495,7 +1541,7 @@ function montarGrade() {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'gato'; b.setAttribute('aria-pressed', g.id === gato.id ? 'true' : 'false');
     const cvs = document.createElement('canvas'); cvs.width = cvs.height = 128;
-    const nome = document.createElement('span'); nome.textContent = g.nome;
+    const nome = nomeEl('span', '', g);
     b.appendChild(cvs); b.appendChild(nome); rosto(cvs, g);
     b.addEventListener('click', () => { gato = g; gravar('gatuno.gato', g.id); montarGrade(); });
     grade.appendChild(b);
@@ -1505,7 +1551,7 @@ function montarGrade() {
   mais.innerHTML = '<span class="maisIco">+</span><span>Adicionar</span>';
   mais.addEventListener('click', () => { telaGatos.hidden = true; abrirConfig('gatos'); });
   grade.appendChild(mais);
-  $('confirmarGato').textContent = 'Confirmar ' + gato.nome;
+  $('confirmarGato').textContent = 'Confirmar ' + nomeComSexo(gato);
 }
 $('confirmarGato').addEventListener('click', () => { telaGatos.hidden = true; abrirPreparar(); });
 function comecarFase() {
@@ -1546,8 +1592,8 @@ function terminar() {
   const colecionados = [];
   for (const g of pegos) {
     save.album[g.raca] = (save.album[g.raca] || 0) + 1;
-    if (g.colecao) { colecionados.push(g); save.casa.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0 }); continue; }
-    if (save.abrigo.length < cap()) save.abrigo.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: g.focinho ? 1 : 0, pr: g.premio ? 1 : 0 });
+    if (g.colecao) { colecionados.push(g); save.casa.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo }); continue; }
+    if (save.abrigo.length < cap()) save.abrigo.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: g.focinho ? 1 : 0, pr: g.premio ? 1 : 0, s: g.sexo, c: g.corpoTipo || '', fl: g.peludo ? 1 : 0 });
     else { sobra++; ganhoSobra += g.pts; }
   }
   save.moedas += ganhoSobra;
@@ -1934,22 +1980,22 @@ function raboGato(x, y, s, g) {
 }
 function gatoRua(x, y, s, g, pula, semSombra, fecha) {
   if (s < 1.5) return;
-  if (!semSombra) { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(x, y, s * 0.2, s * 0.045, 0, 0, 7); ctx.fill(); }
+  if (!semSombra) { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(x, y, s * 0.2 * (g.corpo || 1), s * 0.045, 0, 0, 7); ctx.fill(); }
   y -= pula;
   if (g.aura && s > 3) auraFelino(ctx, x, y - s * 0.3, s * 0.62, g, relogio);
   const borda = 'rgba(42,34,48,.85)', lw = Math.max(1, s * 0.014);
   if (!pularRabo) raboGato(x, y, s, g);
   ctx.fillStyle = g.pelo; ctx.strokeStyle = borda; ctx.lineWidth = lw;
-  ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15, s * 0.16, 0, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15 * (g.corpo || 1), s * 0.16, 0, 0, 7); ctx.fill(); ctx.stroke();
   if (g.estampa && s > 16) {
-    ctx.save(); ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15, s * 0.16, 0, 0, 7); ctx.clip();
+    ctx.save(); ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15 * (g.corpo || 1), s * 0.16, 0, 0, 7); ctx.clip();
     ctx.strokeStyle = g.estampaCor; ctx.fillStyle = g.estampaCor; ctx.lineCap = 'round';
     if (g.estampa === 'tigre') { ctx.lineWidth = s * 0.022; for (const d of [-1, 1]) for (const oy of [-0.24, -0.15, -0.06]) { ctx.beginPath(); ctx.moveTo(x + d * s * 0.16, y + oy * s); ctx.quadraticCurveTo(x + d * s * 0.1, y + (oy - 0.01) * s, x + d * s * 0.07, y + (oy + 0.025) * s); ctx.stroke(); } }
     else { ctx.lineWidth = s * 0.01; for (const [px, py] of [[-0.09, -0.22], [0.09, -0.22], [-0.11, -0.12], [0.11, -0.12], [-0.06, -0.05], [0.06, -0.05]]) { ctx.beginPath(); if (g.estampa === 'pintas') { ctx.arc(x + px * s, y + py * s, s * 0.009, 0, 7); ctx.fill(); } else { ctx.arc(x + px * s, y + py * s, s * 0.017, 0.3, 5.6); ctx.stroke(); } } }
     ctx.restore();
   }
   if (g.fofo && s > 10) felpa(ctx, x, y - s * 0.25, s * 0.075, s * 0.03, 0, Math.PI, 4, s * 0.03, g.peito || g.pelo, null);
-  if (g.branco) { ctx.fillStyle = '#fbf7ef'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.14, s * 0.08, s * 0.12, 0, 0, 7); ctx.fill(); }
+  if (g.branco) { ctx.fillStyle = '#fbf7ef'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.14, s * 0.08 * (g.corpo || 1), s * 0.12, 0, 0, 7); ctx.fill(); }
   if (!pularCabeca) cabecaGato(x, y - s * 0.4, s * 0.15, g, fecha);
 }
 
@@ -2536,6 +2582,8 @@ function gatoDe(reg) {
   const g = Object.assign({ orelha: t.pelo, pata: '#fff3df' }, t);
   g.nome = reg.n; g.olho = reg.o || t.olhos[0]; if (reg.f) g.focinho = '#fbf7ef';
   if (reg.pr) { g.premio = 1; g.coleira = '#c0392b'; g.guizo = true; }
+  g.sexo = reg.s || (/escaminha|tricolor|c[aá]lico/i.test(reg.r || '') ? 'f' : NOMES_F.indexOf(reg.n) >= 0 ? 'f' : NOMES_M.indexOf(reg.n) >= 0 ? 'm' : sexoDoId(reg.id || reg.n));
+  if (!g.colecao) { if (reg.c && CORPO[reg.c]) g.corpo = CORPO[reg.c]; if (reg.fl) g.fofo = true; }
   return g;
 }
 function cria(tag, classe, txt) { const e = document.createElement(tag); if (classe) e.className = classe; if (txt != null) e.textContent = txt; return e; }
@@ -3417,7 +3465,7 @@ function desenhaBola(c, k, X, Y) {
 
 function gatoDeitado(x, y, s, g, dir) {
   const borda = 'rgba(42,34,48,.85)', lw = Math.max(1, s * 0.014), resp = 1 + Math.sin(relogio * 2.2 + x * 0.01) * 0.03;
-  const bx = x + dir * s * 0.05, by = y - s * 0.11, rx = s * 0.29, ry = s * 0.12 * resp;
+  const cw = g.corpo || 1, bx = x + dir * s * 0.05, by = y - s * 0.11 * (cw > 1 ? 1.08 : 1), rx = s * 0.29 * (cw > 1 ? 1.1 : cw < 1 ? 0.9 : 1), ry = s * 0.12 * resp * (cw > 1 ? 1.2 : cw < 1 ? 0.86 : 1);
   ctx.fillStyle = 'rgba(0,0,0,.16)'; ctx.beginPath(); ctx.ellipse(x, y, s * 0.34, s * 0.045, 0, 0, 7); ctx.fill();
   ctx.fillStyle = g.pelo; ctx.strokeStyle = borda; ctx.lineWidth = lw;
   ctx.beginPath(); ctx.ellipse(bx, by, rx, ry, 0, 0, 7); ctx.fill();
@@ -3743,8 +3791,8 @@ function tocarSala(e) {
 function selecionar(m, seguirCam) {
   sel = m; seguir = !!seguirCam;
   rosto($('fichaRosto'), m.g);
-  $('fichaNome').textContent = m.g.nome;
-  $('fichaRaca').textContent = (m.g.premio ? 'com guizo dourado · ' : '') + (m.g.piloto ? (m.g.extra ? m.g.raca + ' · seu piloto' : 'seu gato piloto') : m.g.raca + ' · ' + m.g.raridade + (modoSala === 'casa' && !m.g.colecao ? ' · veio do abrigo' : ''));
+  $('fichaNome').textContent = ''; $('fichaNome').appendChild(nomeEl('span', '', m.g));
+  $('fichaRaca').textContent = (m.g.premio ? 'com guizo dourado · ' : '') + (m.g.piloto ? (m.g.extra ? m.g.raca + (m.g.sexo === 'f' ? ' · sua piloto' : ' · seu piloto') : (m.g.sexo === 'f' ? 'sua gata piloto' : 'seu gato piloto')) : m.g.raca + ' · ' + m.g.raridade + (modoSala === 'casa' && !m.g.colecao ? ' · veio do abrigo' : ''));
   $('fichaFaz').textContent = atividade(m);
   rotuloDoar();
   const bc = $('fichaCasa'), bd = $('fichaDoar');
@@ -3838,7 +3886,7 @@ function criarMoradores() {
 function montarListas() {
   if (modoSala === 'casa') return montarListasCasa();
   $('salaVazia').textContent = 'O abrigo está vazio. Jogue uma partida para trazer gatos.';
-  $('abrigoMoedas').textContent = txtMoedas();
+  $('abrigoMoedas').textContent = save.moedas.toLocaleString('pt-BR');
   $('salaVazia').hidden = save.abrigo.length > 0;
   let prontos = 0;
   const lista = $('pedidos'); lista.textContent = '';
@@ -3857,7 +3905,7 @@ function montarListas() {
     linha.appendChild(rostos);
     const d = cria('div');
     d.appendChild(cria('b', '', pd.quem + (n > 1 ? ' quer adotar ' + n + ' gatos' : ' quer adotar')));
-    d.appendChild(document.createTextNode(n > 1 ? gs.map(g => g.nome + (g.premio ? ' (guizo)' : '')).join(', ') : gs[0].nome + ' · ' + gs[0].raca + (gs[0].premio ? ' · com guizo (×2)' : '')));
+    d.appendChild(document.createTextNode(n > 1 ? gs.map(g => nomeComSexo(g) + (g.premio ? ' (guizo)' : '')).join(', ') : nomeComSexo(gs[0]) + ' · ' + gs[0].raca + (gs[0].premio ? ' · com guizo (×2)' : '')));
     if (n > 1 && A('bonusPacote') > 0) d.appendChild(cria('small', 'bonusPacote', '+' + Math.round(A('bonusPacote') * (n - 1)) + '% por adotar juntos'));
     linha.appendChild(d);
     const valor = valorPedido(pd), b = cria('button', 'mini', 'Entregar +' + valor); b.type = 'button';
@@ -3897,13 +3945,13 @@ function gradeMoradores() {
   const peso = m => m.g.piloto ? 100 : m.g.pts;
   for (const m of moradores.slice().sort((a, b) => peso(b) - peso(a))) {
     const b = cria('button', 'cg r-' + (m.g.piloto ? 'comum' : m.g.rc)); b.type = 'button';
-    b.appendChild(carinha(m.g, 112)); b.appendChild(cria('b', '', m.g.nome)); b.appendChild(cria('small', '', m.g.piloto ? 'seu piloto' : m.g.raca + (m.g.premio ? ' · ×2' : '')));
+    b.appendChild(carinha(m.g, 112)); b.appendChild(nomeEl('b', '', m.g)); b.appendChild(cria('small', '', m.g.piloto ? 'seu piloto' : m.g.raca + (m.g.premio ? ' · ×2' : '')));
     b.addEventListener('click', () => { abrirAba(''); selecionar(m, true); });
     grade.appendChild(b);
   }
 }
 function montarListasCasa() {
-  $('abrigoMoedas').textContent = txtMoedas();
+  $('abrigoMoedas').textContent = save.moedas.toLocaleString('pt-BR');
   $('salaVazia').hidden = moradores.length > 0;
   $('salaVazia').textContent = 'Sua casa está vazia. Traga gatos do abrigo ou seus pilotos pela aba Trazer gatos.';
   $('seloPedidos').textContent = ''; $('seloPedidos').className = 'selo neutro vazioSelo';
@@ -3960,7 +4008,7 @@ function linhaLoja(lista, ico, nome, desc, rotulo, ativo, classe, acao) {
   const linha = cria('div', 'item'), d = cria('div'), q = cria('span', 'ico');
   q.innerHTML = ico; linha.appendChild(q);
   d.appendChild(cria('b', '', nome)); d.appendChild(document.createTextNode(desc)); linha.appendChild(d);
-  const b = cria('button', 'mini' + (classe ? ' ' + classe : ''), rotulo); b.type = 'button'; b.disabled = !ativo;
+  const b = cria('button', 'mini' + (classe ? ' ' + classe : '') + (/moedas$/.test(rotulo) ? ' comprar' : ''), rotulo); b.type = 'button'; b.disabled = !ativo;
   if (acao) b.addEventListener('click', acao);
   linha.appendChild(b); lista.appendChild(linha);
 }
@@ -4009,7 +4057,7 @@ function montarLoja() {
     const chips = cria('div', 'chipsGatos');
     for (const g of pilotos) {
       const b = cria('button', 'chipGato'); b.type = 'button'; b.setAttribute('aria-pressed', g.id === lojaAlvo ? 'true' : 'false');
-      b.appendChild(carinha(g, 72)); b.appendChild(cria('span', '', g.nome));
+      b.appendChild(carinha(g, 72)); b.appendChild(nomeEl('span', '', g));
       b.addEventListener('click', () => { lojaAlvo = g.id; montarLoja(); });
       chips.appendChild(b);
     }
@@ -4019,8 +4067,9 @@ function montarLoja() {
       const tem = save.tem.coleira.indexOf(c.id) >= 0, usando = atual === c.id;
       const ico = c.cor ? ICO.coleira(c.cor, c.guizo) : ICO.semColeira;
       const usar = () => { if (c.id === 'nenhuma') delete save.coleiras[lojaAlvo]; else save.coleiras[lojaAlvo] = c.id; salvar(); atualizarColeiras(); montarLoja(); };
+      if (c.id === 'nenhuma') { if (usando) linhaLoja(lista, ico, 'Tirar coleira', alvo.nome + ' está sem coleira', 'Sem coleira', false, ''); else linhaLoja(lista, ico, 'Tirar coleira', 'Deixa ' + (alvo.sexo === 'f' ? 'a ' : 'o ') + alvo.nome + ' sem coleira', 'Tirar coleira', true, 'equipar', usar); continue; }
       if (usando) linhaLoja(lista, ico, c.nome, alvo.nome + ' está usando', 'Em uso', false, 'usando');
-      else if (tem) linhaLoja(lista, ico, c.nome, 'Já é sua', 'Colocar no ' + alvo.nome, true, '', usar);
+      else if (tem) linhaLoja(lista, ico, c.nome, 'Já é sua', 'Colocar ' + na(alvo) + ' ' + alvo.nome, true, 'equipar', usar);
       else linhaLoja(lista, ico, c.nome, c.guizo ? 'Coleira de festa com guizo dourado' : 'Compre uma vez e use em qualquer gato', c.preco + ' moedas', save.moedas >= c.preco, '', () => { save.moedas -= c.preco; save.tem.coleira.push(c.id); somMoeda(); usar(); });
     }
     for (const [titulo, itens, chave] of [['Chapéus do seu gato', CHAPEUS, 'chapeu'], ['Volantes', VOLANTES, 'volante']]) {
@@ -4028,8 +4077,9 @@ function montarLoja() {
       for (const it of itens) {
         const tem = save.tem[chave].indexOf(it.id) >= 0, usando = save.uso[chave] === it.id;
         const ico = chave === 'volante' ? ICO.volante(it) : ICO[it.id];
+        if (it.id === 'nenhum') { if (usando) linhaLoja(lista, ico, 'Tirar chapéu', 'Seu gato está sem chapéu', 'Sem chapéu', false, ''); else linhaLoja(lista, ico, 'Tirar chapéu', 'Dirige sem nada na cabeça', 'Tirar chapéu', true, 'equipar', () => { save.uso[chave] = it.id; salvar(); montarLoja(); }); continue; }
         if (usando) linhaLoja(lista, ico, it.nome, chave === 'volante' ? 'Em uso no seu carro' : 'Seu gato está usando', 'Em uso', false, 'usando');
-        else if (tem) linhaLoja(lista, ico, it.nome, 'Já é seu', 'Usar', true, '', () => { save.uso[chave] = it.id; salvar(); montarLoja(); });
+        else if (tem) linhaLoja(lista, ico, it.nome, 'Já é seu', chave === 'volante' ? 'Usar' : 'Colocar', true, 'equipar', () => { save.uso[chave] = it.id; salvar(); montarLoja(); });
         else linhaLoja(lista, ico, it.nome, chave === 'volante' ? 'Cor do volante na corrida' : 'Vai na cabeça do seu gato', it.preco + ' moedas', save.moedas >= it.preco, '', () => { save.moedas -= it.preco; save.tem[chave].push(it.id); save.uso[chave] = it.id; salvar(); somMoeda(); montarLoja(); });
       }
     }
@@ -4171,7 +4221,7 @@ function montarAdmin() {
   bx = cria('div', 'botoesAdm'); g.appendChild(bx);
   botaoAdm(bx, 'Adicionar ao abrigo ou à casa', () => {
     const t = TIPOS.find(x => x.raca === sel.value); if (!t) return;
-    const reg = { id: novoId(), n: NOMES[Math.floor(Math.random() * NOMES.length)], r: t.raca, o: t.olhos[0], f: 0 };
+    const sx = sexoDaRaca(t.raca), reg = { id: novoId(), n: nomePara(sx), r: t.raca, o: t.olhos[0], f: 0, s: sx };
     save.album[t.raca] = (save.album[t.raca] || 0) + 1;
     if (t.colecao) { save.casa.push(reg); avisoAdm(reg.n + ' foi morar na casa'); }
     else { save.abrigo.push(reg); avisoAdm(reg.n + ' chegou ao abrigo'); }
@@ -4179,6 +4229,18 @@ function montarAdmin() {
   });
   botaoAdm(bx, 'Deixar pedidos prontos agora', () => { atualizarPedidos(); for (const pd of save.pedidos) pd.chega = 0; atualizarPedidos(true); avisoAdm('Pedidos prontos'); });
   botaoAdm(bx, 'Esvaziar o abrigo', () => { save.abrigo = []; save.pedidos = []; salvar(); avisoAdm('Abrigo vazio'); }, true);
+
+  g = grupoAdm(raiz, 'Corpo dos meus gatos');
+  g.appendChild(cria('p', 'nota notaAdm', 'Escolha o jeitinho de cada um dos seus 6 gatos.'));
+  for (const p of GATOS) {
+    const l = cria('label', 'campoAdm'); l.appendChild(nomeEl('span', '', Object.assign({}, p, { nome: save.nomes[p.id] || p.nome })));
+    const se = cria('select');
+    for (const [v, t] of [['m', 'Magrinho'], ['', 'Normal'], ['g', 'Gordinho']]) { const o = cria('option', '', t); o.value = v; if (corpoDoPiloto(p.id) === v) o.selected = true; se.appendChild(o); }
+    se.addEventListener('change', () => { ADM.corpos[p.id] = se.value; salvarAdm(); atualizarColeiras(); avisoAdm((save.nomes[p.id] || p.nome) + ': ' + se.options[se.selectedIndex].text.toLowerCase()); });
+    l.appendChild(se); g.appendChild(l);
+  }
+  bx = cria('div', 'botoesAdm'); g.appendChild(bx);
+  botaoAdm(bx, 'Voltar ao padrão', () => { ADM.corpos = {}; salvarAdm(); atualizarColeiras(); montarAdmin(); });
 
   for (const [titulo, campos] of CAMPOS_ADM) {
     g = grupoAdm(raiz, titulo);
@@ -4221,7 +4283,7 @@ function montarAdmin() {
 
   g = grupoAdm(raiz, 'Resetar');
   bx = cria('div', 'botoesAdm'); g.appendChild(bx);
-  botaoAdm(bx, 'Ajustes de admin no padrão', () => { ADM = { v: {}, precos: {} }; aplicarAdmin(); avisoAdm('Ajustes no padrão'); montarAdmin(); }, true);
+  botaoAdm(bx, 'Ajustes de admin no padrão', () => { ADM = { v: {}, precos: {}, corpos: {} }; aplicarAdmin(); avisoAdm('Ajustes no padrão'); montarAdmin(); }, true);
   botaoAdm(bx, 'Apagar todo o progresso do jogo', () => { try { localStorage.removeItem('pegagatos.save'); localStorage.removeItem('gatuno.gato'); } catch (e) {} location.reload(); }, true);
 
   bx = cria('div', 'botoesAdm'); raiz.appendChild(bx);
@@ -4279,7 +4341,7 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
     }
     lista.appendChild(card);
   });
-  $('pilotoNome').textContent = gato.nome; rosto($('previa'), gato);
+  $('pilotoNome').textContent = ''; $('pilotoNome').appendChild(nomeEl('span', '', gato)); rosto($('previa'), gato);
   const vagas = vagasCarro(), livres = Math.max(0, cap() - save.abrigo.length), lim = Math.min(vagas, livres), av = $('avisoVagas');
   if (livres === 0) { av.hidden = false; av.textContent = 'Seu abrigo está cheio (' + save.abrigo.length + '/' + cap() + '). Entregue pedidos, doe gatos ou leve alguns para casa antes de patrulhar.'; }
   else if (livres < vagas) { av.hidden = false; av.textContent = 'Seu abrigo tem ' + save.abrigo.length + ' de ' + cap() + ' gatos. Só cabem mais ' + livres + ', então esta patrulha termina com ' + livres + (livres === 1 ? ' gato.' : ' gatos.'); }
@@ -4324,9 +4386,9 @@ function abrirConfig(origem) {
   const corpo = document.querySelector('#telaConfig .corpo');
   if (origem === 'gatos') setTimeout(() => { corpo.scrollTop = $('blocoPilotos').offsetTop - 10; }, 30); else corpo.scrollTop = 0;
 }
-function nomeLivre() {
+function nomeLivre(sexo) {
   const usados = new Set(listaPilotos().map(g => g.nome));
-  const livres = NOMES.filter(n => !usados.has(n));
+  const livres = NOMES_NEUTROS.concat(sexo === 'f' ? NOMES_F : NOMES_M).filter(n => !usados.has(n));
   return livres.length ? livres[Math.floor(Math.random() * livres.length)] : 'Gato ' + (save.pilotos.length + 1);
 }
 function montarPilotos() {
@@ -4383,7 +4445,7 @@ function montarCatalogo() {
       b.appendChild(carinha(amostra(t), 112)); b.appendChild(cria('b', '', t.raca));
       b.addEventListener('click', () => {
         const id = 'x' + Date.now().toString(36) + Math.floor(Math.random() * 1000);
-        save.pilotos.push({ id, raca: t.raca, nome: nomeLivre(), olho: t.olhos[Math.floor(Math.random() * t.olhos.length)] });
+        const sx = sexoDaRaca(t.raca); save.pilotos.push({ id, raca: t.raca, nome: nomeLivre(sx), sexo: sx, olho: t.olhos[Math.floor(Math.random() * t.olhos.length)] });
         salvar(); somMoeda();
         cat.hidden = true; montarPilotos();
         const corpo = document.querySelector('#telaConfig .corpo'); corpo.scrollTop = $('blocoPilotos').offsetTop - 10;
