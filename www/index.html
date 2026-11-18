@@ -441,6 +441,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
         <p class="nota">Escolha quem vai dirigir. Todos correm igual, muda só o visual. Para renomear ou adicionar gatos, toque em Adicionar.</p>
         <div id="grade"></div>
       </div>
+      <div class="rodape"><button class="acao" id="confirmarGato" type="button">Confirmar</button></div>
     </section>
   </div>
 
@@ -513,7 +514,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.2</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.3</p>
         <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
         <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
@@ -660,7 +661,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '1.2';
+const VERSAO = '1.3';
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
@@ -1434,7 +1435,9 @@ function montarGrade() {
   mais.innerHTML = '<span class="maisIco">+</span><span>Adicionar</span>';
   mais.addEventListener('click', () => { telaGatos.hidden = true; abrirConfig('gatos'); });
   grade.appendChild(mais);
+  $('confirmarGato').textContent = 'Confirmar ' + gato.nome;
 }
+$('confirmarGato').addEventListener('click', () => { telaGatos.hidden = true; abrirPreparar(); });
 function comecarFase() {
   $('telaPreparar').hidden = true;
   limite = Math.max(1, Math.min(vagasCarro(), cap() - save.abrigo.length));
