@@ -157,6 +157,39 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 #atualizaDepois{background:#fff;color:var(--tinta);box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
 #procurarAtualizacao{align-self:center;margin:2px auto 0;display:block}
 .notaAtualiza{text-align:center}
+.ajudaVisual{gap:12px}
+.ajTitulo{margin:6px 0 0;font-size:13px;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.ajPassos{display:flex;flex-direction:column;gap:8px}
+.ajPasso{position:relative;display:flex;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 12px 10px 10px;box-shadow:0 0 0 2px var(--linha)}
+.ajPasso b{display:block;font-size:16px}
+.ajPasso span:not(.ajNum),.ajItem span:not([data-ico]),.ajEtapa span:not([data-ico]),.ajExtras span:not([data-ico]){font-size:13px;font-weight:600;opacity:.75;line-height:1.3;display:block}
+.ajPasso em,.ajItem em{font-style:normal;color:var(--coral);font-weight:800}
+.ajNum{position:absolute;top:-7px;left:-7px;width:24px;height:24px;border-radius:50%;background:var(--coral);color:var(--tinta);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--creme)}
+.ajIlus{flex:0 0 96px;width:96px;height:64px;border-radius:12px;background:var(--papel)}
+.ajIcones{display:flex;align-items:center;justify-content:center;gap:4px}
+.ajIcones [data-ico]{width:34px;height:34px}
+.ajIcones i{font-style:normal;font-weight:800;color:var(--coral)}
+.ajVagas{font-family:var(--display);font-weight:800;font-size:22px;color:#2f8f5a;background:#e3f6ec;border-radius:10px;padding:4px 10px}
+.ajItens{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ajItem{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;background:#fff;border-radius:16px;padding:12px 8px 10px;box-shadow:0 0 0 2px var(--linha)}
+.ajItem [data-ico]{width:42px;height:42px}
+.ajItem b{font-size:15px}
+.ajItem.ajRuim{background:#fff1ec;box-shadow:0 0 0 2px #ffc9b8}
+.ajItem.ajDica{background:#f3efff;box-shadow:0 0 0 2px #e0d6f7}
+.ajTempo{position:absolute;top:6px;right:6px;font-style:normal;font-weight:800;font-size:12px;background:var(--manteiga);border-radius:999px;padding:2px 7px}
+.ajRaras{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.ajRaras div{border-radius:12px;padding:8px 2px;text-align:center;box-shadow:0 0 0 2px var(--linha)}
+.ajRaras b{display:block;font-size:11px}
+.ajRaras span{font-family:var(--display);font-weight:800;font-size:15px}
+.ajNota{margin:0!important;font-size:13px!important}
+.ajFluxo{display:flex;flex-direction:column;align-items:stretch;gap:2px}
+.ajEtapa{display:grid;grid-template-columns:40px 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;background:#fff;border-radius:14px;padding:8px 12px;box-shadow:0 0 0 2px var(--linha)}
+.ajEtapa [data-ico]{grid-row:1/3;width:40px;height:40px}
+.ajSeta{font-style:normal;text-align:center;color:var(--coral);font-weight:800;transform:rotate(90deg);line-height:1;font-size:16px}
+.ajExtras{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ajExtras div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;background:#fff;border-radius:14px;padding:10px 6px;box-shadow:0 0 0 2px var(--linha)}
+.ajExtras [data-ico]{width:34px;height:34px}
+.ajExtras b{font-size:13px}
 .semPedidos{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;padding:22px 14px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--linha)}
 .semPedidos b{font-size:17px;font-weight:800}
 .semPedidos span{font-size:14px;font-weight:600;opacity:.65}
@@ -282,7 +315,11 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 @keyframes cartaoEntra{from{transform:translateY(40px) scale(.94);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.faceFim,.fimCard.entra,.seloRecorde{animation:none}}
 .tela.inicial{flex-direction:column;justify-content:flex-start;gap:14px;padding:14px 16px 24px;overflow-y:auto;touch-action:pan-y;background:linear-gradient(180deg,rgba(18,30,36,.55) 0%,rgba(18,30,36,.2) 50%,rgba(18,30,36,0) 72%)}
-.tela.inicial .engrenagem{position:absolute;top:14px;right:14px}
+.tela.inicial .engrenagem{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px}
+.tela.inicial{padding-top:calc(max(14px,env(safe-area-inset-top,0px)) + 20px)!important}
+.tela.inicial .marca{margin-top:auto}
+.tela.inicial .inicio{margin-bottom:auto}
+.marca .sub{font-size:18px!important}
 .marca{width:100%;max-width:460px;padding:22px 46px 0;text-align:center;display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
 .marca .titulo{font-family:var(--display);font-weight:800;font-size:clamp(36px,10.5vw,64px);line-height:.95;margin:0;color:var(--creme);text-wrap:balance;
   text-shadow:3px 3px 0 #2a2230,-3px 3px 0 #2a2230,3px -3px 0 #2a2230,-3px -3px 0 #2a2230,0 4px 0 #2a2230,4px 0 0 #2a2230,-4px 0 0 #2a2230,0 -4px 0 #2a2230,0 9px 0 rgba(42,34,48,.45)}
@@ -419,7 +456,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
     <button class="engrenagem" id="abrirConfig" type="button" aria-label="Configurações" data-ico="config"></button>
     <div class="marca">
       <h1 class="titulo">Patrulha dos<br><span>Bigodes</span></h1>
-      <p class="sub">Dê carona aos gatos de rua até lotar o carro.</p>
+      <p class="sub">Todo gatinho merece um lar!</p>
     </div>
     <section class="cartao simples inicio">
       <button class="acao" id="jogar" type="button"><span data-ico="play"></span>Jogar</button>
@@ -448,29 +485,54 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
   <div class="tela" id="ajuda" hidden>
     <section class="cartao">
       <header class="topo"><button class="voltar inicio" id="fecharAjuda" type="button" aria-label="Tela inicial" title="Tela inicial" data-ico="inicio"></button><h2><span data-ico="ajuda"></span>Como jogar</h2><button class="cfgMini" data-cfg type="button" aria-label="Configurações" title="Configurações" data-ico="config"></button></header>
-      <div class="corpo">
-        <div class="bloco"><h3>Na corrida</h3>
-          <div class="lista">
-            <div class="item"><span class="ico" data-ico="gato"></span><div><b>Carona</b>Chegue perto de um gato na pista e ele pula para dentro do carro. A patrulha acaba (o carro freia) quando lota (10 vagas, mais na loja), ou quando você encerra pela pausa.</div></div>
-            <div class="item"><span class="ico" data-ico="virar"></span><div><b>Virar</b>Segure o lado esquerdo ou direito da tela, ou use as setas.</div></div>
-            <div class="item"><span class="ico" data-ico="turbo"></span><div><b>Turbo</b>Junte 3 peixes e dê dois toques na tela, ou aperte Espaço.</div></div>
-            <div class="item"><span class="ico" data-ico="sache"></span><div><b>Sachê</b>Atrai os gatos até você por 5 segundos. Pegar outro soma o tempo.</div></div>
-            <div class="item"><span class="ico" data-ico="escova"></span><div><b>Escova</b>Deixa os gatos mais lentos por 6 segundos. Pegar outra soma o tempo.</div></div>
-            <div class="item"><span class="ico" data-ico="guizo"></span><div><b>Guizo dourado</b>Por 8 segundos, cada gato pego ganha uma coleira com guizo: vale o dobro de pontos, dá moedas na hora e paga o dobro na adoção.</div></div>
-            <div class="item"><span class="ico" data-ico="loja"></span><div><b>Itens comprados</b>Sachê, escova e guizo também são vendidos na loja conforme você libera regiões. Eles aparecem no lado direito da tela da corrida: toque para usar.</div></div>
-            <div class="item"><span class="ico" data-ico="pepino"></span><div><b>Pepino</b>Assusta seu gato e faz o carro perder velocidade.</div></div>
-            <div class="item"><span class="ico" data-ico="pausa"></span><div><b>Pausar</b>Botão II no topo, ou as teclas P e Esc.</div></div>
-          </div>
+      <div class="corpo ajudaVisual">
+        <h3 class="ajTitulo">Na corrida</h3>
+        <div class="ajPassos">
+          <div class="ajPasso"><span class="ajNum">1</span>
+            <svg class="ajIlus" viewBox="0 0 120 80"><rect x="35" y="4" width="50" height="72" rx="8" fill="#2a2230"/><rect x="39" y="10" width="42" height="60" rx="3" fill="#9fd8e8"/><rect x="39" y="10" width="21" height="60" fill="#ff7a5c" opacity=".55"/><circle cx="49" cy="52" r="7" fill="#fff3df" stroke="#2a2230" stroke-width="2"/><path d="M28 40H8m0 0 7-6m-7 6 7 6" stroke="#ff7a5c" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M92 40h20m0 0-7-6m7 6-7 6" stroke="#c9bba8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><b>Vire o carro</b><span>Segure o lado <em>esquerdo</em> ou <em>direito</em> da tela.</span></div></div>
+          <div class="ajPasso"><span class="ajNum">2</span>
+            <div class="ajIlus ajIcones"><span data-ico="gato"></span><i>➜</i><span data-ico="vagas"></span></div>
+            <div><b>Colete os gatos</b><span>Recolha os gatinhos da estrada e leve todos para o abrigo.</span></div></div>
+          <div class="ajPasso"><span class="ajNum">3</span>
+            <div class="ajIlus ajIcones"><span class="ajVagas">10/10</span></div>
+            <div><b>Encha o carro</b><span>Quando lotar, o carro freia e a patrulha termina. Mais vagas na <em>Loja</em>.</span></div></div>
         </div>
-        <div class="bloco"><h3>Depois da corrida</h3>
-          <div class="lista">
-            <div class="item"><span class="ico" data-ico="estrela"></span><div><b>Pontos</b>Gato comum vale 1, incomum 3, raro 8. Felinos épicos valem 25 e lendários 60.</div></div>
-            <div class="item"><span class="ico" data-ico="mapa"></span><div><b>Regiões</b>Libere regiões novas com moedas, como se melhorasse o carro para ir mais longe. As mais distantes têm gatos mais raros.</div></div>
-            <div class="item"><span class="ico" data-ico="abrigo"></span><div><b>Abrigo</b>Os gatos vão para o abrigo (começa com 30 vagas). Interessados aparecem sozinhos com o tempo; entregue os gatos para ganhar moedas. A patrulha só traz quantos gatos couberem no abrigo.</div></div>
-            <div class="item"><span class="ico" data-ico="album"></span><div><b>Álbum</b>Guarda toda raça que você já pegou, mesmo depois de adotada.</div></div>
-            <div class="item"><span class="ico" data-ico="casa"></span><div><b>Minha casa</b>Lendários e épicos moram aqui. Você também pode trazer gatos do abrigo e seus pilotos, sem limite.</div></div>
-            <div class="item"><span class="ico" data-ico="loja"></span><div><b>Loja</b>Gaste as moedas em melhorias, volantes e chapéus.</div></div>
-          </div>
+
+        <h3 class="ajTitulo">Itens da pista</h3>
+        <div class="ajItens">
+          <div class="ajItem ajBom"><span data-ico="turbo"></span><b>Peixe</b><span>Junte <em id="ajPeixes">3</em> e toque 2× na tela: turbo!</span></div>
+          <div class="ajItem ajBom"><span data-ico="sache"></span><b>Sachê</b><span>Puxa os gatos até o carro</span></div>
+          <div class="ajItem ajBom"><span data-ico="escova"></span><b>Escova</b><span>Os gatos ficam mais lentos</span></div>
+          <div class="ajItem ajBom"><span data-ico="guizo"></span><b>Guizo</b><span>Cada gato vale o dobro em pontos e moedas</span></div>
+          <div class="ajItem ajRuim"><span data-ico="pepino"></span><b>Pepino</b><span>Desvie! Assusta seu gato e freia o carro</span></div>
+          <div class="ajItem ajDica"><span data-ico="loja"></span><b>Comprados</b><span>Itens da Loja ficam à direita na corrida: toque para usar</span></div>
+        </div>
+
+        <h3 class="ajTitulo">Raridades</h3>
+        <div class="ajRaras">
+          <div class="bg-comum"><b>Comum</b><span>1 pt</span></div>
+          <div class="bg-incomum"><b>Incomum</b><span>3 pts</span></div>
+          <div class="bg-raro"><b>Raro</b><span>8 pts</span></div>
+          <div class="bg-epico"><b>Épico</b><span>25 pts</span></div>
+          <div class="bg-lendario"><b>Lendário</b><span>60 pts</span></div>
+        </div>
+        <p class="nota ajNota">Épicos e lendários vão direto para a Minha casa. Regiões mais distantes têm gatos mais raros.</p>
+
+        <h3 class="ajTitulo">Depois da corrida</h3>
+        <div class="ajFluxo">
+          <div class="ajEtapa"><span data-ico="abrigo"></span><b>Abrigo</b><span>Os gatos esperam adoção. Pedidos aparecem sozinhos.</span></div>
+          <i class="ajSeta">➜</i>
+          <div class="ajEtapa"><span data-ico="moeda"></span><b>Moedas</b><span>Entregue os gatos pedidos e ganhe moedas.</span></div>
+          <i class="ajSeta">➜</i>
+          <div class="ajEtapa"><span data-ico="loja"></span><b>Loja</b><span>Itens, melhorias, visual e decoração.</span></div>
+          <i class="ajSeta">➜</i>
+          <div class="ajEtapa"><span data-ico="mapa"></span><b>Regiões</b><span>Libere novas ruas com gatos mais raros.</span></div>
+        </div>
+        <div class="ajExtras">
+          <div><span data-ico="casa"></span><b>Minha casa</b><span>Seus gatos favoritos, épicos e lendários.</span></div>
+          <div><span data-ico="album"></span><b>Álbum</b><span>Toda raça que você já pegou.</span></div>
+          <div><span data-ico="pausa"></span><b>Pausar</b><span>Botão II no topo da corrida.</span></div>
         </div>
       </div>
     </section>
@@ -514,7 +576,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.3</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.4</p>
         <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
         <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
@@ -661,7 +723,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '1.3';
+const VERSAO = '1.4';
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
@@ -1403,6 +1465,14 @@ function atualizarMenu() {
   $('tCasa').textContent = (save.casa.length + save.casaPilotos.length) + '/' + casaMax() + ' moradores';
   $('tLoja').textContent = save.moedas + (save.moedas === 1 ? ' moeda' : ' moedas');
 }
+let ultimoQuadro = 0, paradoPorSumir = false;
+const vigia = setInterval(() => {
+  if (!ultimoQuadro) return;
+  const sumiu = performance.now() - ultimoQuadro > 1500 || window.innerWidth < 2 || window.innerHeight < 2;
+  if (sumiu && !paradoPorSumir) { paradoPorSumir = true; appEmSegundoPlano(true); }
+}, 700);
+if (vigia && vigia.unref) vigia.unref();
+function voltouATela() { if (paradoPorSumir) { paradoPorSumir = false; if (!document.hidden) appEmSegundoPlano(false); } }
 function appEmSegundoPlano(oculto) {
   if (oculto && (state === 'play' || state === 'count')) pausar();
   if (!ac) return;
@@ -1523,7 +1593,12 @@ $('pausaMenu').addEventListener('click', irMenu);
 $('fimMenu').addEventListener('click', irMenu);
 $('abrirGatos').addEventListener('click', () => { montarGrade(); menu.hidden = true; $('telaPreparar').hidden = true; telaGatos.hidden = false; });
 $('fecharGatos').addEventListener('click', abrirPreparar);
-$('abrirAjuda').addEventListener('click', () => { menu.hidden = true; telaAjuda.hidden = false; });
+function montarAjuda() {
+  $('ajPeixes').textContent = save.up.turbo ? 2 : 3;
+  document.querySelector('#ajuda .ajVagas').textContent = vagasCarro() + '/' + vagasCarro();
+  document.querySelector('#ajuda .corpo').scrollTop = 0;
+}
+$('abrirAjuda').addEventListener('click', () => { montarAjuda(); menu.hidden = true; telaAjuda.hidden = false; });
 $('fecharAjuda').addEventListener('click', irMenu);
 $('som').addEventListener('click', () => {
   save.audio.ligado = !save.audio.ligado; salvar(); initSom(); aplicarVolumes();
@@ -2571,6 +2646,7 @@ let MUNDO = 1.9;
 const PAREDE = 0.58, CHAO_PULO = 0.65;
 let modoSala = 'abrigo';
 let uidGato = 0;
+let camY = 0;
 let moradores = [], sel = null, camX = 0, camVel = 0, seguir = false, kSala = 1, vwSala = 1, noite = false, arrastou = false;
 const parts = [];
 let bola = { x: 1.0, y: 0.8, vx: 0, vy: 0 };
@@ -3586,14 +3662,24 @@ function desenharSala(dt) {
     else if (Math.abs(camVel) > 0.001) { camX += camVel * dt; camVel *= Math.pow(0.04, dt); }
   }
   camX = vwSala >= MUNDO ? (MUNDO - vwSala) / 2 : Math.max(0, Math.min(MUNDO - vwSala, camX));
-  const X = v => (v - camX) * k, Y = v => v * k, c = ctxA;
+  let alvoY = 0;
+  const fichaEl = $('ficha');
+  if (sel && sel.hy != null && !fichaEl.hidden) {
+    const fr = fichaEl.getBoundingClientRect(), livre = (fr.top - r.top) / r.height - 0.03;
+    const topo = sel.hy - (sel.ht || 0.2) * (sel.est === 'dormir' ? 0.4 : 0.75);
+    alvoY = Math.max(0, Math.min(sel.hy + 0.02 - livre, topo - 0.04));
+  }
+  camY += (alvoY - camY) * Math.min(1, dt * 5);
+  if (Math.abs(camY) < 0.0005) camY = 0;
+  const X = v => (v - camX) * k, Y = v => (v - camY) * k, c = ctxA;
+  if (camY > 0) { c.fillStyle = modoSala === 'casa' ? '#b98a5e' : '#c9935f'; c.fillRect(0, 0, w, h); }
   bola.x += bola.vx * dt; bola.y += bola.vy * dt;
   bola.vx *= Math.pow(0.3, dt); bola.vy *= Math.pow(0.3, dt);
   if (bola.x < 0.08 || bola.x > MUNDO - 0.08) { bola.vx = -bola.vx; bola.x = Math.max(0.08, Math.min(MUNDO - 0.08, bola.x)); }
   if (bola.y < 0.68 || bola.y > 0.95) { bola.vy = -bola.vy; bola.y = Math.max(0.68, Math.min(0.95, bola.y)); }
   if (camX < 0 || camX + vwSala > MUNDO) { c.fillStyle = modoSala === 'casa' ? '#9fb89a' : '#d9b48c'; c.fillRect(0, 0, w, h); }
   const nT = Math.ceil(MUNDO);
-  for (let i = Math.max(0, Math.floor(camX)); i <= Math.min(nT - 1, Math.floor(camX + vwSala)); i++) c.drawImage(tileSala(i, k, h, Y), Math.round((i - camX) * k), 0);
+  for (let i = Math.max(0, Math.floor(camX)); i <= Math.min(nT - 1, Math.floor(camX + vwSala)); i++) c.drawImage(tileSala(i, k, h, v => v * k), Math.round((i - camX) * k), -Math.round(camY * k));
   if (modoSala === 'casa') { fogo(c, k, X, Y); brinquedo(c, k, X, Y, 2.3); }
   else MODS.forEach((t, q) => { if (t === 'arvore' && q + 1 > camX && q < camX + vwSala) brinquedo(c, k, X, Y, q + 0.52); });
   for (const m of moradores) viver(m, dt);
@@ -3613,7 +3699,7 @@ function desenharSala(dt) {
 
 /* ----- toque e arrasto ----- */
 let arr = null;
-function mundoDoToque(e) { const r = cvA.getBoundingClientRect(); return { x: camX + (e.clientX - r.left) / r.height, y: (e.clientY - r.top) / r.height }; }
+function mundoDoToque(e) { const r = cvA.getBoundingClientRect(); return { x: camX + (e.clientX - r.left) / r.height, y: camY + (e.clientY - r.top) / r.height }; }
 cvA.addEventListener('pointerdown', e => {
   arr = { id: e.pointerId, x0: e.clientX, y0: e.clientY, ult: e.clientX, cam: camX, mov: false, tUlt: performance.now(), vel: 0 };
   try { cvA.setPointerCapture(e.pointerId); } catch (er) {}
@@ -4385,6 +4471,7 @@ atualizarMenu();
 let ant = performance.now();
 let pausaDesenhada = false, ultPedido = 0;
 function quadro(agora) {
+  ultimoQuadro = performance.now(); if (paradoPorSumir) voltouATela();
   const dt = Math.min(0.05, (agora - ant) / 1000); ant = agora;
   if (telaAbrigo.hidden) {
     update(dt);
