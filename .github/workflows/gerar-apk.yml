@@ -1,0 +1,70 @@
+name: Gerar APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar Capacitor
+        run: npm install
+
+      - name: Embutir a fonte do jogo (funciona sem internet)
+        continue-on-error: true
+        run: npm run fonte
+
+      - name: Criar o projeto Android
+        run: npx cap add android
+
+      - name: Número da versão (sobe sozinho a cada envio)
+        run: sed -i "s/versionCode 1$/versionCode ${{ github.run_number }}/" android/app/build.gradle
+
+      - name: Gerar ícones e tela de abertura
+        run: npx capacitor-assets generate --android
+
+      - name: Deixar o jogo sempre em pé (retrato)
+        run: sed -i 's/<activity/<activity android:screenOrientation="portrait"/' android/app/src/main/AndroidManifest.xml
+
+      - name: Copiar o jogo para o app
+        run: npx cap sync android
+
+      - name: Usar sempre a mesma assinatura (para atualizar sem perder o progresso)
+        run: |
+          mkdir -p ~/.android
+          cp ferramentas/debug.keystore ~/.android/debug.keystore
+          if [ -n "$ANDROID_USER_HOME" ]; then mkdir -p "$ANDROID_USER_HOME"; cp ferramentas/debug.keystore "$ANDROID_USER_HOME/debug.keystore"; fi
+
+      - name: Montar o APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Renomear
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PatrulhaDosBigodes.apk
+
+      - name: Disponibilizar o APK para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: PatrulhaDosBigodes-APK
+          path: PatrulhaDosBigodes.apk
