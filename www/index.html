@@ -147,6 +147,16 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .chipGato{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border-radius:14px;background:#fff;color:var(--tinta);font-weight:800;font-size:12px;box-shadow:0 0 0 2px var(--linha)}
 .chipGato canvas{width:40px;height:40px}
 .chipGato[aria-pressed="true"]{background:var(--manteiga);box-shadow:0 0 0 2px var(--tinta)}
+.atualizaCard{max-width:340px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 20px}
+.atualizaIco{width:64px;height:64px}
+.atualizaCard h2{margin:0;font-size:24px}
+.atualizaVersao{margin:0;font-weight:800;color:#2f8f5a}
+.atualizaNotas{margin:0;font-size:14px;opacity:.75;white-space:pre-line;max-height:120px;overflow:auto}
+.atualizaCard .acao{width:100%}
+#telaAtualizar{z-index:20}
+#atualizaDepois{background:#fff;color:var(--tinta);box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
+#procurarAtualizacao{align-self:center;margin:2px auto 0;display:block}
+.notaAtualiza{text-align:center}
 .semPedidos{display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center;padding:22px 14px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--linha)}
 .semPedidos b{font-size:17px;font-weight:800}
 .semPedidos span{font-size:14px;font-weight:600;opacity:.65}
@@ -503,7 +513,9 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.1</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 1.2</p>
+        <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
+        <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
       <div class="rodape"><button class="acao" id="confirmarConfig" type="button">Confirmar</button></div>
     </section>
@@ -513,6 +525,17 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
     <section class="cartao">
       <header class="topo"><button class="voltar" id="fecharAdmin" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="chave"></span>Administrador</h2></header>
       <div class="corpo" id="corpoAdmin"></div>
+    </section>
+  </div>
+  <div class="tela" id="telaAtualizar" hidden>
+    <section class="cartao simples atualizaCard">
+      <div class="atualizaIco" data-ico="presente"></div>
+      <h2 id="atualizaTitulo">Nova versão disponível!</h2>
+      <p class="atualizaVersao" id="atualizaVersao"></p>
+      <p class="atualizaNotas" id="atualizaNotas"></p>
+      <button class="acao" id="atualizaAgora" type="button">Atualizar agora</button>
+      <button class="mini" id="atualizaDepois" type="button">Depois</button>
+      <p class="nota atualizaDica" id="atualizaDica" hidden>O download começou. Quando terminar, toque no arquivo baixado e depois em <b>Instalar</b>. Seu progresso continua salvo.</p>
     </section>
   </div>
   <div class="tela" id="telaPreparar" hidden>
@@ -637,7 +660,8 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '1.1';
+const VERSAO = '1.2';
+const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
   { id: 'teo', nome: 'Téo', pelo: '#26232b', orelha: '#37333c', dentro: '#b99ca2', olho: '#e2c531', patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#eaa3b2', narizT: 1.35,
@@ -1386,7 +1410,7 @@ function appEmSegundoPlano(oculto) {
 document.addEventListener('visibilitychange', () => appEmSegundoPlano(document.hidden));
 window.addEventListener('pagehide', () => appEmSegundoPlano(true));
 window.__appPausado = () => appEmSegundoPlano(true);
-window.__appVoltou = () => { if (!document.hidden) appEmSegundoPlano(false); };
+window.__appVoltou = () => { if (!document.hidden) appEmSegundoPlano(false); if (typeof procurarAtualizacao === 'function' && Date.now() - ultimaChecagem > 30 * 60000) procurarAtualizacao(false); };
 function irMenu() {
   trocarMusica('menu');
   state = 'menu'; boostT = 0; shake = 0; pops.length = 0;
@@ -2357,6 +2381,7 @@ const ICO = {
   luxo: sv('<ellipse cx="12" cy="15.5" rx="10" ry="4.5" fill="#d9a82b"/><ellipse cx="12" cy="13" rx="10" ry="4.5" fill="#7a3a5a"/><ellipse cx="12" cy="13.4" rx="7.4" ry="2.8" fill="#a05080"/><circle cx="3" cy="12" r="1.2" fill="#ffd84a"/><circle cx="21" cy="12" r="1.2" fill="#ffd84a"/>'),
   coleira: (cor, guizo) => sv('<ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="' + cor + '" stroke-width="3.2"/><ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="#2a2230" stroke-width=".6" opacity=".5"/>' + (guizo ? '<circle cx="12" cy="18.2" r="2.6" fill="#ffd84a" stroke="#b8860b" stroke-width=".9"/>' : '<circle cx="12" cy="17.6" r="1.7" fill="#c3c6cf" stroke="#8a8f99" stroke-width=".6"/>')),
   semColeira: sv('<ellipse cx="12" cy="12" rx="9" ry="5" fill="none" stroke="#c9bba8" stroke-width="2.4" stroke-dasharray="3 2.4"/>'),
+  presente: sv('<rect x="3.5" y="9" width="17" height="11.5" rx="1.6" fill="#ff7a5c"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.2" fill="#ff5d73"/><rect x="10.6" y="6.5" width="2.8" height="14" fill="#ffd84a"/><path d="M12 6.5C9 2.5 5.5 4 7 6.5zM12 6.5c3-4 6.5-2.5 5 0z" fill="#ffd84a" stroke="#c98a1a" stroke-width=".8"/>'),
   nenhum: sv('<circle cx="12" cy="12" r="8" fill="none" stroke="#2a2230" stroke-width="2"/><path d="M6.5 17.5 17.5 6.5" stroke="#2a2230" stroke-width="2"/>'),
   inicio: sv('<path d="M3.5 11.5 12 4.5l8.5 7" fill="none" stroke="#2a2230" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 9.5v10h4v-5.5h3v5.5h4v-10" fill="none" stroke="#2a2230" stroke-width="2.4" stroke-linejoin="round"/>'),
   voltar: sv('<path d="M15 5 8 12l7 7" fill="none" stroke="#2a2230" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>'),
@@ -4304,6 +4329,44 @@ $('confirmarConfig').addEventListener('click', () => {
 });
 document.querySelectorAll('[data-cfg]').forEach(b => b.addEventListener('click', () => abrirConfig(telaAtiva())));
 $('versaoJogo').textContent = 'Patrulha dos Bigodes · versão ' + VERSAO;
+
+/* ---------- aviso de atualização (só no app do celular) ---------- */
+const ehApp = () => { try { const C = window.Capacitor; if (C && (C.isNativePlatform ? C.isNativePlatform() : C.platform && C.platform !== 'web')) return true; } catch (e) {} try { return location.protocol === 'https:' && location.hostname === 'localhost'; } catch (e) { return false; } };
+function versaoMaior(a, b) {
+  const x = String(a).split('.').map(n => parseInt(n, 10) || 0), y = String(b).split('.').map(n => parseInt(n, 10) || 0);
+  for (let q = 0; q < Math.max(x.length, y.length); q++) { const d = (x[q] || 0) - (y[q] || 0); if (d) return d > 0; }
+  return false;
+}
+let ultimaChecagem = 0, versaoAdiada = '', atualizacaoPendente = null;
+function statusAtualizacao(txt) { const el = $('statusAtualizacao'); el.hidden = !txt; el.textContent = txt || ''; }
+async function procurarAtualizacao(manual) {
+  if (!ehApp() || REPO_GITHUB.indexOf('/') < 0 || REPO_GITHUB.indexOf('__') === 0) { if (manual) statusAtualizacao('As atualizações automáticas funcionam no app do celular.'); return; }
+  ultimaChecagem = Date.now();
+  if (manual) statusAtualizacao('Procurando…');
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO_GITHUB + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-store' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const rel = await r.json(), nova = String(rel.tag_name || '').replace(/^v/i, '');
+    const apk = (rel.assets || []).find(a => /\.apk$/i.test(a.name));
+    if (apk && versaoMaior(nova, VERSAO) && (manual || versaoAdiada !== nova)) { statusAtualizacao(''); mostrarAtualizacao(nova, rel.body || '', apk.browser_download_url); }
+    else if (manual) statusAtualizacao('Você já tem a versão mais nova (' + VERSAO + ').');
+  } catch (e) { if (manual) statusAtualizacao('Não deu para verificar agora. Confira a internet e tente de novo.'); }
+}
+function mostrarAtualizacao(nova, notas, url) {
+  if (state === 'play' || state === 'count' || state === 'freando') { atualizacaoPendente = [nova, notas, url]; return; }
+  atualizacaoPendente = null;
+  $('atualizaVersao').textContent = 'Você tem a ' + VERSAO + ' · nova: ' + nova;
+  $('atualizaNotas').textContent = notas.replace(/\r/g, '').trim();
+  $('atualizaNotas').hidden = !notas.trim();
+  $('atualizaDica').hidden = true; $('atualizaAgora').textContent = 'Atualizar agora';
+  $('atualizaAgora').onclick = () => { $('atualizaDica').hidden = false; $('atualizaAgora').textContent = 'Baixar de novo'; location.href = url; };
+  $('atualizaDepois').onclick = () => { versaoAdiada = nova; $('telaAtualizar').hidden = true; };
+  $('telaAtualizar').hidden = false;
+}
+const timerAtualiza = setInterval(() => { if (atualizacaoPendente && state !== 'play' && state !== 'count' && state !== 'freando') mostrarAtualizacao.apply(null, atualizacaoPendente); }, 2000);
+if (timerAtualiza && timerAtualiza.unref) timerAtualiza.unref();
+$('procurarAtualizacao').addEventListener('click', () => procurarAtualizacao(true));
+setTimeout(() => procurarAtualizacao(false), 2500);
 $('cfgLigado').addEventListener('change', e => { save.audio.ligado = e.target.checked; salvar(); initSom(); aplicarVolumes(); atualizarConfig(); });
 for (const [id, out, k] of FAIXAS) {
   $(id).addEventListener('input', e => { save.audio[k] = Math.max(0, Math.min(1, e.target.value / 100)); $(out).textContent = Math.round(save.audio[k] * 100) + '%'; aplicarVolumes(); });

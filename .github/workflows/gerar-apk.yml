@@ -5,6 +5,9 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   apk:
     runs-on: ubuntu-latest
@@ -67,14 +70,21 @@ jobs:
       - name: Deixar o jogo sempre em pé (retrato)
         run: sed -i 's/<activity/<activity android:screenOrientation="portrait"/' android/app/src/main/AndroidManifest.xml
 
+      - name: Endereço do repositório para o aviso de atualização
+        run: sed -i "s#__REPO_GITHUB__#${{ github.repository }}#" www/index.html
+
       - name: Copiar o jogo para o app
         run: npx cap sync android
 
       - name: Usar sempre a mesma assinatura (para atualizar sem perder o progresso)
+        env:
+          APP_KEYSTORE: ${{ secrets.APP_KEYSTORE }}
         run: |
           mkdir -p ~/.android
-          cp ferramentas/debug.keystore ~/.android/debug.keystore
-          if [ -n "$ANDROID_USER_HOME" ]; then mkdir -p "$ANDROID_USER_HOME"; cp ferramentas/debug.keystore "$ANDROID_USER_HOME/debug.keystore"; fi
+          if [ -n "$APP_KEYSTORE" ]; then echo "$APP_KEYSTORE" | base64 -d > ~/.android/debug.keystore
+          elif [ -f ferramentas/debug.keystore ]; then cp ferramentas/debug.keystore ~/.android/debug.keystore
+          else echo "::error::Falta o segredo APP_KEYSTORE (Settings > Secrets and variables > Actions)"; exit 1; fi
+          if [ -n "$ANDROID_USER_HOME" ]; then mkdir -p "$ANDROID_USER_HOME"; cp ~/.android/debug.keystore "$ANDROID_USER_HOME/debug.keystore"; fi
 
       - name: Montar o APK
         working-directory: android
@@ -91,3 +101,16 @@ jobs:
         with:
           name: PatrulhaDosBigodes-APK
           path: PatrulhaDosBigodes.apk
+
+      - name: Publicar a versão (o app avisa quem tem versão antiga)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(grep -oP "const VERSAO = '\K[^']+" www/index.html || echo 1.0)
+          NOTAS=$(git log -1 --pretty=%s)
+          if gh release view "v$VER" >/dev/null 2>&1; then
+            gh release upload "v$VER" PatrulhaDosBigodes.apk --clobber
+            gh release edit "v$VER" --notes "$NOTAS"
+          else
+            gh release create "v$VER" PatrulhaDosBigodes.apk --title "Versão $VER" --notes "$NOTAS" --latest
+          fi
