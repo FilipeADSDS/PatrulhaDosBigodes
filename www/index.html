@@ -138,8 +138,11 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .felTopo canvas{width:84px;height:84px;flex:0 0 auto}
 .felTopo b{display:block;font-size:22px;font-family:var(--display)}
 .felTopo span{font-size:14px;font-weight:700;opacity:.7}
+.felTopo b span{font-size:inherit;opacity:1;font-weight:inherit}
 .felOpcoes{display:flex;flex-direction:column;gap:10px}
-.felOpcoes .sec svg{width:22px;height:22px}
+.felOpcoes .sec svg,.felOpcoes .acao svg{width:22px;height:22px;flex:0 0 auto}
+.felOpcoes .acao{display:flex;align-items:center;justify-content:center;gap:8px}
+.felOpcoes .acao:disabled{opacity:.55}
 .felOpcoes .sec:disabled{opacity:.5}
 .felGrade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:44vh;overflow-y:auto;padding:2px}
 .felGrade .cg canvas{width:64px;height:64px}
@@ -598,7 +601,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div class="ajItem ajBom"><span data-ico="turbo"></span><b>Peixe</b><span>Junte <em id="ajPeixes">3</em> e toque no botão TURBO</span></div>
           <div class="ajItem ajBom"><span data-ico="sache"></span><b>Sachê</b><span>Puxa os gatos até o carro</span></div>
           <div class="ajItem ajBom"><span data-ico="escova"></span><b>Escova</b><span>Os gatos ficam mais lentos</span></div>
-          <div class="ajItem ajBom"><span data-ico="guizo"></span><b>Guizo</b><span>Cada gato vale o dobro em pontos e moedas</span></div>
+          <div class="ajItem ajBom"><span data-ico="guizo"></span><b>Guizo</b><span>Cada gato vale o dobro; felinos com guizo rendem ingresso em dobro</span></div>
           <div class="ajItem ajRuim"><span data-ico="pepino"></span><b>Pepino</b><span>Desvie! Freia o carro e os gatos por perto fogem</span></div>
           <div class="ajItem ajDica"><span data-ico="loja"></span><b>Comprados</b><span>Itens da Loja ficam à direita na corrida: toque para usar</span></div>
         </div>
@@ -672,7 +675,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 2.3</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 2.5</p>
         <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
         <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
@@ -830,7 +833,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '2.3';
+const VERSAO = '2.5';
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', sexo: 'f', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
@@ -1136,6 +1139,7 @@ function gatoAleatorio() {
     tipo = grupo[Math.floor(Math.random() * grupo.length)];
   }
   else for (const t of lista) { sorte -= t.peso; if (sorte <= 0) { tipo = t; break; } }
+  if (!tipo) { const alt = REG.tiposE.length ? REG.tiposE : REG.tiposL.length ? REG.tiposL : REG.tiposM.length ? REG.tiposM : COMUNS; tipo = alt[Math.floor(Math.random() * alt.length)]; }
   const g = Object.assign({ orelha: tipo.pelo, pata: '#fff3df' }, tipo);
   g.sexo = sexoDaRaca(tipo.raca);
   g.nome = nomePara(g.sexo);
@@ -1398,11 +1402,11 @@ const REGIOES = [
   { nome: 'Grande Rota Selvagem', nivel: 5, preco: 1500, xp: 1800, desc: 'Todas as paisagens numa rota só. Qualquer gato pode aparecer.',
     gatos: null, epicos: null, lendarios: null, chE: 0.012, chL: 0.002, faixas: [0.5, 0.38, 0.12],
     pista: [[90, 0, 'jardim'], [60, 1.5, 'jardim'], [30, 0, 'jardim'], [40, 0, 'caixa'], [80, -3, 'caixa'], [80, 4, 'caixa'], [30, 0, 'caixa'], [50, 0, 'praia'], [120, 2.2, 'praia'], [40, 0, 'praia'], [120, -2.2, 'praia'], [30, 0, 'praia'], [30, 0, 'aquario'], [70, 4, 'aquario'], [70, -4, 'aquario'], [70, 4, 'aquario'], [30, 0, 'aquario'], [40, 0, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [40, 0, 'neve'], [30, 0, 'noite'], [90, 5, 'noite'], [90, -5, 'noite'], [60, 3, 'noite'], [30, 0, 'noite'], [120, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [100, 0, 'cidade'], [30, 0, 'novelo'], [100, -6, 'novelo'], [100, 6, 'novelo'], [70, -4, 'novelo'], [30, 0, 'novelo']] },
-  { nome: 'Vale dos Raros', nivel: 6, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um mítico já passou por aqui.',
-    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: null, chE: 0.419, chL: 0.08, chM: 0.001,
+  { nome: 'Vale dos Raros', nivel: 6, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um gato mago já passou por aqui.',
+    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['gato mago'], chE: 0.419, chL: 0.08, chM: 0.001,
     pista: [[80, 0, 'praia'], [100, 2.5, 'praia'], [30, 0, 'aquario'], [80, -4.5, 'aquario'], [30, 0, 'aquario'], [60, 0, 'neve'], [50, 4, 'neve'], [50, -4, 'neve'], [30, 0, 'novelo'], [100, 6, 'novelo'], [30, 0, 'novelo'], [60, 0, 'praia']] },
-  { nome: 'Trilha Lendária', nivel: 7, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Felinos épicos e lendários aparecem com frequência, e até míticos.',
-    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: null, chE: 0.39, chL: 0.15, chM: 0.01,
+  { nome: 'Trilha Lendária', nivel: 7, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Aqui só aparecem felinos: épicos, lendários e até míticos.',
+    gatos: [], epicos: null, lendarios: null, miticos: null, chE: 0.84, chL: 0.15, chM: 0.01,
     pista: [[80, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [30, 0, 'noite'], [90, 6, 'noite'], [90, -6, 'noite'], [30, 0, 'noite'], [60, 0, 'cidade'], [30, 0, 'caixa'], [80, -4, 'caixa'], [30, 0, 'caixa'], [100, 0, 'cidade']] }
 ];
 function tiposRegiao(r) {
@@ -1904,14 +1908,16 @@ function terminar() {
   if (novo) save.recorde = pontos;
   save.xp += pontos;
   let sobra = 0, ganhoSobra = 0;
-  const colecionados = []; let natN = 0, natV = 0;
+  const colecionados = []; let natN = 0, autoN = 0;
   if (pegos.some(g => g.colecao)) { atualizarCaixa(); save.santInfo.ok = 1; }
   for (const g of pegos) {
     save.album[g.raca] = (save.album[g.raca] || 0) + 1;
     if (g.colecao) {
       colecionados.push(g);
-      if (save.sant.length < santMax()) save.sant.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo });
-      else { natN++; save.felFila.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo }); }
+      const reg = { id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo };
+      /* raça nova no santuário: o primeiro vai direto; os outros você escolhe */
+      if (!save.sant.some(r => tipoFel(r) === tipoFel(reg)) && save.sant.length < santMax()) { save.sant.push(reg); autoN++; }
+      else { natN++; save.felFila.push(reg); }
       continue;
     }
     if (save.abrigo.length < cap()) save.abrigo.push({ id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: g.focinho ? 1 : 0, pr: g.premio ? 1 : 0, s: g.sexo, c: g.corpoTipo || '', fl: g.peludo ? 1 : 0 });
@@ -1924,8 +1930,8 @@ function terminar() {
   contar($('fimN'), n); contar($('fimPts'), pontos); contar($('fimRec'), save.recorde);
   const txtFim = [];
   if (sobra) txtFim.push(sobra + (sobra === 1 ? ' gato não coube' : ' gatos não couberam') + ' no abrigo · +' + ganhoSobra + ' moedas');
-  if (natN) txtFim.push('Santuário cheio: escolha onde ' + (natN === 1 ? 'fica o felino novo' : 'ficam os ' + natN + ' felinos novos'));
-  else if (colecionados.length) txtFim.push(colecionados.length + (colecionados.length === 1 ? ' felino foi' : ' felinos foram') + ' para o Santuário');
+  if (autoN) txtFim.push(autoN + (autoN === 1 ? ' felino novo foi' : ' felinos novos foram') + ' para o Santuário');
+  if (natN) txtFim.push('escolha para onde ' + (natN === 1 ? 'vai 1 felino' : 'vão ' + natN + ' felinos'));
   $('fimTexto').textContent = txtFim.join(' · ');
   $('fimTexto').hidden = !txtFim.length;
   const caixa = $('pegos'); caixa.textContent = '';
@@ -2814,7 +2820,7 @@ const sv = d => '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>';
 const ICO = {
   santuario: sv('<path d="M3 20h18" stroke="#2a2230" stroke-width="2" stroke-linecap="round"/><path d="M7 20V12" stroke="#7a5236" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="7" cy="9" rx="5" ry="3.4" fill="#5f9a3e"/><path d="M13.5 20c0-4 1.5-7 4.5-7s3.5 3 3.5 7z" fill="#e8b25a"/><path d="M15.2 13.6 15 10.6l2 1.6M19.6 13.4l.6-2.9-2.1 1.5" fill="#e8b25a" stroke="#e8b25a" stroke-width="1.2" stroke-linejoin="round"/><circle cx="16.6" cy="15.2" r=".7" fill="#2a2230"/><circle cx="19.2" cy="15.2" r=".7" fill="#2a2230"/>'),
   natureza: sv('<path d="M5 19C5 10 11 5 20 4c-1 9-6 15-15 15z" fill="#5f9a3e" stroke="#2f6a2a" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 19 14 10" stroke="#2f6a2a" stroke-width="1.3" stroke-linecap="round"/>'),
-  cadeado: sv('<rect x="5" y="10.5" width="14" height="10" rx="2.4" fill="#ffd84a" stroke="#2a2230" stroke-width="1.4"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="#2a2230" stroke-width="2"/><circle cx="12" cy="15.3" r="1.5" fill="#2a2230"/>'),
+  cadeado: sv('<rect x="5" y="10.5" width="14" height="10" rx="2.4" fill="#cfc8da" stroke="#2a2230" stroke-width="1.4"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="#2a2230" stroke-width="2"/><circle cx="12" cy="15.3" r="1.5" fill="#2a2230"/>'),
   arbusto: sv('<circle cx="8" cy="13" r="5" fill="#4f8a3a"/><circle cx="16" cy="13" r="5" fill="#4f8a3a"/><circle cx="12" cy="9.5" r="5.5" fill="#6aa34a"/><circle cx="9" cy="9" r="1.3" fill="#ff9eb3"/><circle cx="15" cy="11" r="1.3" fill="#ffd84a"/><circle cx="12" cy="14" r="1.3" fill="#ff9eb3"/><path d="M4 19h16" stroke="#2a2230" stroke-width="1.6" stroke-linecap="round"/>'),
   ninho: sv('<ellipse cx="12" cy="15" rx="9" ry="4.5" fill="#c9a24e"/><ellipse cx="12" cy="13.8" rx="6" ry="2.6" fill="#e8cf86"/><path d="M4 13l2 3M8 11l1 3M16 11l-1 3M20 13l-2 3M12 10.5v3" stroke="#a9853a" stroke-width="1.2" stroke-linecap="round"/>'),
   poca: sv('<ellipse cx="12" cy="14" rx="9" ry="4.4" fill="#b6a58c"/><ellipse cx="12" cy="14" rx="7.4" ry="3.2" fill="#5bb6e0"/><path d="M8 13.2h3" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>'),
@@ -2958,7 +2964,7 @@ function cartaoAlbum(t) {
 function abrirAlbum() {
   const raiz = $('albumGrade'); raiz.textContent = '';
   const grupos = [
-    ['Míticos', MITICOS, 'Criaturas de lenda. Só aparecem no Vale dos Raros e na Trilha Lendária, e muito raramente.'],
+    ['Míticos', MITICOS, 'Criaturas de lenda. Aparecem muito raramente na Trilha Lendária (o gato mago também no Vale dos Raros).'],
     ['Lendários', LENDARIOS, 'Os felinos mais difíceis de encontrar. Moram no Santuário.'],
     ['Épicos', EPICOS, 'Felinos muito raros. Moram no Santuário.'],
     ['Raros', COMUNS.filter(t => t.rc === 'raro'), 'Gatos de rua difíceis de achar. Vão para o abrigo.'],
@@ -3264,7 +3270,9 @@ const santMax = () => Math.max(1, Math.min(Math.round(A('santTeto')), Math.round
 const tipoRaca = r => TIPOS.find(t => t.raca === r);
 const valorNatureza = t => Math.round(t && t.mitico ? A('natMit') : t && t.lendario ? A('natLend') : A('natEpico'));
 const ingressoDe = t => t && t.mitico ? A('ingMit') : t && t.lendario ? A('ingLend') : A('ingEpico');
-function taxaSant() { let t = 0; for (const r of save.sant) { const tp = tipoRaca(r.r); if (tp) t += ingressoDe(tp); } return Math.round(t); }
+const ingressoReg = r => { const tp = tipoRaca(r.r); return tp ? ingressoDe(tp) * (r.pr ? 2 : 1) : 0; };
+const tipoFel = r => r.r + (r.pr ? '|guizo' : '');
+function taxaSant() { let t = 0; for (const r of save.sant) t += ingressoReg(r); return Math.round(t); }
 function atualizarCaixa() {
   const I = save.santInfo, agora = Date.now(), h = Math.max(0, Math.min(24 * 30, (agora - (I.ult || agora)) / 3600000));
   I.ult = agora; const tx = taxaSant();
@@ -4341,7 +4349,7 @@ function selecionar(m, seguirCam) {
   sel = m; seguir = !!seguirCam;
   rosto($('fichaRosto'), m.g);
   $('fichaNome').textContent = ''; $('fichaNome').appendChild(nomeEl('span', '', m.g));
-  $('fichaRaca').textContent = (m.g.premio ? 'com guizo dourado · ' : '') + (m.g.piloto ? (m.g.extra ? m.g.raca + (m.g.sexo === 'f' ? ' · sua piloto' : ' · seu piloto') : (m.g.sexo === 'f' ? 'sua gata piloto' : 'seu gato piloto')) : m.g.raca + ' · ' + m.g.raridade + (modoSala === 'casa' && !m.g.colecao ? ' · veio do abrigo' : modoSala === 'santuario' ? ' · rende ' + ingressoDe(m.g) + '/h' : ''));
+  $('fichaRaca').textContent = (m.g.premio ? 'com guizo dourado · ' : '') + (m.g.piloto ? (m.g.extra ? m.g.raca + (m.g.sexo === 'f' ? ' · sua piloto' : ' · seu piloto') : (m.g.sexo === 'f' ? 'sua gata piloto' : 'seu gato piloto')) : m.g.raca + ' · ' + m.g.raridade + (modoSala === 'casa' && !m.g.colecao ? ' · veio do abrigo' : modoSala === 'santuario' ? ' · rende ' + ingressoDe(m.g) * (m.g.premio ? 2 : 1) + '/h' + (m.g.premio ? ' (guizo)' : '') : ''));
   $('fichaFaz').textContent = atividade(m);
   rotuloDoar();
   const bc = $('fichaCasa'), bd = $('fichaDoar');
@@ -4601,15 +4609,10 @@ function montarListasSant() {
   });
   card.appendChild(bt); b1.appendChild(card); corpo.appendChild(b1);
   const b2 = cria('div', 'bloco'); b2.appendChild(cria('h3', '', 'Espaço'));
-  b2.appendChild(cria('p', 'nota', 'Cabem ' + santMax() + ' felinos (agora: ' + save.sant.length + '). Com o santuário cheio, você escolhe o que fazer com o felino novo: trocar por um daqui, guardar em casa ou devolver à natureza.'));
-  const l2 = cria('div', 'lista'); b2.appendChild(l2);
-  const nv = I.nv || 0;
-  if (nv < SANT_PRECOS.length && santMax() < A('santTeto')) {
-    const pr = SANT_PRECOS[nv], novo = Math.min(Math.round(A('santTeto')), Math.round(A('santBase') + A('santNivel') * (nv + 1)));
-    linhaLoja(l2, ICO.santuario, 'Ampliar o santuário', 'Passa a caber ' + novo + ' felinos', pr + ' moedas', save.moedas >= pr, '', () => {
-      if (save.moedas < pr) return; atualizarCaixa(); save.moedas -= pr; I.nv = nv + 1; salvar(); somMoeda(); montarListas();
-    });
-  } else linhaLoja(l2, ICO.santuario, 'Santuário no tamanho máximo', 'Cabem ' + santMax() + ' felinos', 'Máximo', false, 'usando');
+  b2.appendChild(cria('p', 'nota', 'Cabem ' + santMax() + ' felinos (agora: ' + save.sant.length + '). Para ganhar mais espaço, amplie o santuário na Loja, em Melhorias.'));
+  const bL = cria('button', 'mini', 'Ampliar na Loja'); bL.type = 'button';
+  bL.addEventListener('click', () => { lojaAba = 'melhorias'; navegar('loja'); });
+  b2.appendChild(bL);
   corpo.appendChild(b2);
   const b3 = cria('div', 'bloco'), tot = Object.values(save.natureza).reduce((a, b) => a + b, 0);
   b3.appendChild(cria('h3', '', 'Devolvidos à natureza' + (tot ? ' · ' + tot : '')));
@@ -4632,14 +4635,18 @@ function montarListasSant() {
 let felTrocando = false;
 function mostrarFilaFel() {
   const tela = $('telaFel');
-  if (!save.felFila.length) { tela.hidden = true; return; }
+  if (!save.felFila.length) { tela.hidden = true; felTrocando = false; return; }
   const reg = save.felFila[0], g = gatoDe(reg), t = tipoRaca(reg.r), v = valorNatureza(t);
-  const cheiaSant = save.sant.length >= santMax(), cheiaCasa = noCasa() >= casaMax();
-  if (!cheiaSant) { save.sant.push(reg); save.felFila.shift(); salvar(); return mostrarFilaFel(); }
-  $('felTitulo').textContent = 'Santuário cheio!' + (save.felFila.length > 1 ? ' (1 de ' + save.felFila.length + ')' : '');
+  const grupo = save.felFila.filter(r => tipoFel(r) === tipoFel(reg)), n = grupo.length;
+  const racas = new Set(save.felFila.map(tipoFel)).size;
+  const vSant = Math.max(0, santMax() - save.sant.length), vCasa = Math.max(0, casaMax() - noCasa());
+  const tem = save.sant.filter(r => tipoFel(r) === tipoFel(reg)).length, gz = reg.pr ? ' com guizo' : '';
+  const tira = (lista, k) => { for (const r of lista.slice(0, k)) { const q = save.felFila.indexOf(r); if (q >= 0) save.felFila.splice(q, 1); } };
+  $('felTitulo').textContent = (n > 1 ? 'Para onde eles vão?' : 'Para onde vai?') + (racas > 1 ? ' (' + racas + ' tipos)' : '');
   rosto($('felRosto'), g);
-  $('felNome').textContent = ''; $('felNome').appendChild(nomeEl('span', '', g));
-  $('felRaca').textContent = g.raca + ' · ' + g.raridade;
+  $('felNome').textContent = '';
+  if (n > 1) $('felNome').textContent = g.raca + gz + ' × ' + n; else $('felNome').appendChild(nomeEl('span', '', g));
+  $('felRaca').textContent = (n > 1 ? g.raridade + ' · a escolha vale para todos' : g.raca + gz + ' · ' + g.raridade) + (reg.pr ? ' · ingresso em dobro' : '');
   const op = $('felOpcoes'); op.textContent = '';
   const fim2 = () => { felTrocando = false; salvar(); somMoeda(); atualizarMenu(); if (!telaAbrigo.hidden) { criarMoradores(); montarListas(); } mostrarFilaFel(); };
   if (felTrocando) {
@@ -4652,27 +4659,35 @@ function mostrarFilaFel() {
         atualizarCaixa();
         const vv = valorNatureza(tipoRaca(r2.r));
         save.sant = save.sant.filter(a => a !== r2); save.natureza[r2.r] = (save.natureza[r2.r] || 0) + 1; save.moedas += vv;
-        save.sant.push(reg); save.felFila.shift(); fim2();
+        save.sant.push(reg); tira([reg], 1); fim2();
       });
       gr.appendChild(b);
     }
     op.appendChild(gr);
     const vb = cria('button', 'sec', 'Voltar'); vb.type = 'button'; vb.addEventListener('click', () => { felTrocando = false; mostrarFilaFel(); }); op.appendChild(vb);
   } else {
-    $('felTexto').textContent = 'Não cabe mais ninguém no santuário (' + save.sant.length + '/' + santMax() + '). O que fazer com ' + nomeComSexo(g) + '?';
-    const b1 = cria('button', 'acao', 'Trocar por um do santuário'); b1.type = 'button';
-    b1.addEventListener('click', () => { felTrocando = true; mostrarFilaFel(); });
-    const b2 = cria('button', 'sec', cheiaCasa ? 'Casa cheia (' + noCasa() + '/' + casaMax() + ')' : 'Guardar em casa (' + noCasa() + '/' + casaMax() + ')'); b2.type = 'button'; b2.disabled = cheiaCasa;
+    $('felTexto').textContent = (tem ? 'Você já tem ' + tem + ' ' + g.raca + gz + ' no santuário. ' : '') +
+      (n > 1 ? 'Você pegou ' + n + ' iguais nesta patrulha.' : 'O que fazer com ' + g.nome + '?') +
+      ' Santuário: ' + save.sant.length + '/' + santMax() + ' · Casa: ' + noCasa() + '/' + casaMax() + '.';
+    const qS = Math.min(n, vSant), qC = Math.min(n, vCasa);
+    const b1 = cria('button', 'acao', vSant ? (n > 1 ? (qS < n ? 'Mandar ' + qS + ' para o santuário' : 'Todos para o santuário') : 'Mandar para o santuário') : 'Santuário cheio'); b1.type = 'button'; b1.disabled = !vSant;
+    b1.insertAdjacentHTML('afterbegin', ICO.santuario);
+    b1.addEventListener('click', () => { const k = Math.min(grupo.length, santMax() - save.sant.length); if (k <= 0) return; atualizarCaixa(); for (const r of grupo.slice(0, k)) save.sant.push(r); tira(grupo, k); fim2(); });
+    const b2 = cria('button', 'sec', vCasa ? (n > 1 ? (qC < n ? 'Guardar ' + qC + ' em casa' : 'Todos para casa') : 'Guardar em casa') : 'Casa cheia'); b2.type = 'button'; b2.disabled = !vCasa;
     b2.insertAdjacentHTML('afterbegin', ICO.casa);
-    b2.addEventListener('click', () => { if (noCasa() >= casaMax()) return; save.casa.push(reg); save.felFila.shift(); fim2(); });
-    const b3 = cria('button', 'sec', 'Devolver à natureza +' + v); b3.type = 'button';
+    b2.addEventListener('click', () => { const k = Math.min(grupo.length, casaMax() - noCasa()); if (k <= 0) return; for (const r of grupo.slice(0, k)) save.casa.push(r); tira(grupo, k); fim2(); });
+    const b3 = cria('button', 'sec', (n > 1 ? 'Todos para a natureza +' + v * n : 'Devolver à natureza +' + v)); b3.type = 'button';
     b3.insertAdjacentHTML('afterbegin', ICO.natureza);
-    b3.addEventListener('click', () => { save.moedas += v; save.natureza[reg.r] = (save.natureza[reg.r] || 0) + 1; save.felFila.shift(); fim2(); });
+    b3.addEventListener('click', () => { save.moedas += v * n; save.natureza[reg.r] = (save.natureza[reg.r] || 0) + n; tira(grupo, n); fim2(); });
     op.appendChild(b1); op.appendChild(b2); op.appendChild(b3);
+    if (!vSant && save.sant.length) {
+      const b4 = cria('button', 'sec', 'Trocar por um do santuário'); b4.type = 'button';
+      b4.addEventListener('click', () => { felTrocando = true; mostrarFilaFel(); });
+      op.appendChild(b4);
+    }
   }
   tela.hidden = false;
 }
-
 function abrirSala(modo) {
   initSom(); trocarMusica(modo);
   const hr = new Date().getHours(); noite = hr >= 19 || hr < 6;
@@ -4736,6 +4751,16 @@ function montarLoja() {
       const n = save.up[m.id] || 0, max = n >= m.precos.length, preco = m.precos[n];
       linhaLoja(lista, ICO[m.id], m.nome + (m.precos.length > 1 ? ' · nível ' + n + '/' + m.precos.length : ''), max ? m.desc(n) + ' · no máximo' : 'Agora: ' + (m.id === 'turbo' ? '3 peixes' : m.desc(n).replace('Dura ', '').replace('Cabem ', '').replace('Leva ', '')) + ' · depois: ' + (m.id === 'turbo' ? '2 peixes' : m.desc(n + 1).replace('Dura ', '').replace('Cabem ', '').replace('Leva ', '')),
         max ? 'Completo' : preco + ' moedas', !max && save.moedas >= preco, max ? 'usando' : '', () => { save.moedas -= preco; save.up[m.id] = n + 1; salvar(); somMoeda(); prepararAbrigo(); montarLoja(); });
+    }
+    {
+      const I = save.santInfo, nv = I.nv || 0, max = nv >= SANT_PRECOS.length || santMax() >= A('santTeto'), pr = SANT_PRECOS[nv];
+      const depois = Math.min(Math.round(A('santTeto')), Math.round(A('santBase') + A('santNivel') * (nv + 1)));
+      if (!I.ok) linhaLoja(lista, ICO.cadeado, 'Santuário maior', 'Libera quando você pegar o primeiro felino épico ou lendário', 'Bloqueado', false, '', null);
+      else linhaLoja(lista, ICO.santuario, 'Santuário maior · nível ' + Math.min(nv, SANT_PRECOS.length) + '/' + SANT_PRECOS.length,
+        max ? 'Cabem ' + santMax() + ' felinos · no máximo' : 'Agora: ' + santMax() + ' felinos · depois: ' + depois,
+        max ? 'Completo' : pr + ' moedas', !max && save.moedas >= pr, max ? 'usando' : '', () => {
+          if (save.moedas < pr) return; atualizarCaixa(); save.moedas -= pr; I.nv = nv + 1; salvar(); somMoeda(); atualizarMenu(); montarLoja();
+        });
     }
   } else if (lojaAba === 'cosmeticos') {
     const pilotos = listaPilotos();
@@ -4901,9 +4926,9 @@ function montarAdmin() {
     regioes: () => { save.regioes = REGIOES.map((r, q) => q); },
     album: () => { for (const t of TIPOS) save.album[t.raca] = Math.max(1, save.album[t.raca] || 0); },
     visual: () => { save.tem.volante = VOLANTES.map(v => v.id); save.tem.chapeu = CHAPEUS.map(c => c.id); save.tem.coleira = COLEIRAS.map(c => c.id); },
-    melhorias: () => { for (const m of MELHORIAS) save.up[m.id] = m.precos.length; prepararAbrigo(); },
+    melhorias: () => { for (const m of MELHORIAS) save.up[m.id] = m.precos.length; save.santInfo.nv = SANT_PRECOS.length; prepararAbrigo(); },
     itens: () => { for (const it of ITENS_LOJA) save.inv[it.id] = Math.max(1, Math.round(A('maxItens'))); },
-    decoracao: () => { for (const onde of ['abrigo', 'casa']) for (const d of DECOR.filter(x => x.local === onde)) while (save.decor[onde].filter(x => x === d.id).length < d.max && cabeDecor(onde, d.id)) save.decor[onde].push(d.id); aplicarDecor(); }
+    decoracao: () => { for (const onde of ['abrigo', 'casa', 'santuario']) for (const d of DECOR.filter(x => x.local === onde)) while (save.decor[onde].filter(x => x === d.id).length < d.max && cabeDecor(onde, d.id)) save.decor[onde].push(d.id); aplicarDecor(); }
   };
   const nomesLib = { regioes: 'Todas as regiões', album: 'Completar o álbum (todos os gatos)', visual: 'Todos os chapéus, volantes e coleiras', melhorias: 'Melhorias no máximo', itens: 'Encher os itens', decoracao: 'Toda a decoração' };
   for (const k in liberar) botaoAdm(bx, nomesLib[k], () => { liberar[k](); salvar(); avisoAdm('Pronto: ' + nomesLib[k].toLowerCase()); montarAdmin(); });
@@ -5104,7 +5129,7 @@ function abrirConfig(origem) {
   configOrigem = origem; initSom(); atualizarConfig(); montarPilotos();
   $('catalogo').hidden = true;
   menu.hidden = true; telaPausa.hidden = true;
-  const el = { album: telaAlbum, loja: telaLoja, ajuda: telaAjuda, preparar: $('telaPreparar'), abrigo: telaAbrigo, casa: telaAbrigo, gatos: telaGatos }[origem];
+  const el = { album: telaAlbum, loja: telaLoja, ajuda: telaAjuda, preparar: $('telaPreparar'), abrigo: telaAbrigo, casa: telaAbrigo, santuario: telaAbrigo, gatos: telaGatos }[origem];
   if (el) el.hidden = true;
   $('telaConfig').hidden = false;
   const corpo = document.querySelector('#telaConfig .corpo');
@@ -5161,7 +5186,7 @@ function montarPilotos() {
 function montarCatalogo() {
   const cat = $('catalogo'); cat.textContent = '';
   cat.appendChild(cria('p', 'nota', 'Escolha a raça do novo gato. Ele ganha um nome automático, que você pode trocar depois.'));
-  for (const [titulo, lista] of [['Lendários', LENDARIOS], ['Épicos', EPICOS], ['Raros', COMUNS.filter(t => t.rc === 'raro')], ['Incomuns', COMUNS.filter(t => t.rc === 'incomum')], ['Comuns', COMUNS.filter(t => t.rc === 'comum')]]) {
+  for (const [titulo, lista] of [['Míticos', MITICOS], ['Lendários', LENDARIOS], ['Épicos', EPICOS], ['Raros', COMUNS.filter(t => t.rc === 'raro')], ['Incomuns', COMUNS.filter(t => t.rc === 'incomum')], ['Comuns', COMUNS.filter(t => t.rc === 'comum')]]) {
     cat.appendChild(cria('h3', 'subtitulo', titulo));
     const grade = cria('div', 'gradeAlbum');
     for (const t of lista) {
@@ -5191,7 +5216,7 @@ function fecharConfig() {
   else if (o === 'album') telaAlbum.hidden = false;
   else if (o === 'loja') { montarLoja(); telaLoja.hidden = false; }
   else if (o === 'ajuda') telaAjuda.hidden = false;
-  else if (o === 'abrigo' || o === 'casa') {
+  else if (o === 'abrigo' || o === 'casa' || o === 'santuario') {
     telaAbrigo.hidden = false;
     const t = document.querySelector('#salaTitulo .tituloTxt'); if (t) t.textContent = save.nomeAbrigo || 'Abrigo';
   }
