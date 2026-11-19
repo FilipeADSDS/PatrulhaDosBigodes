@@ -363,7 +363,10 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .fimTopo h2{font-size:30px}
 .seloRecorde{background:linear-gradient(90deg,#ffd84a,#ffb347);color:#5a3600;font-weight:800;font-size:14px;border-radius:999px;padding:3px 12px;animation:pulsa .7s ease-in-out infinite alternate}
 .seloRecorde[hidden]{display:none}
-#pegos{display:flex;flex-direction:column;gap:10px}
+#pegos{display:flex;flex-direction:column;gap:10px;max-height:34vh;overflow-y:auto;overscroll-behavior:contain}
+#fimMenu{width:100%}
+#fimMenu svg,#fimSant svg{width:20px;height:20px}
+#fimSant[hidden]{display:none}
 .grupoFim{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
 .facesFim{display:flex;flex-wrap:wrap;gap:5px;width:100%}
 .faceFim{position:relative;width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;animation:surge .35s cubic-bezier(.2,1.5,.4,1) backwards}
@@ -675,7 +678,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
           <div id="catalogo" hidden></div>
         </div>
         <p class="nota">As configurações ficam salvas neste navegador.</p>
-        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 2.5</p>
+        <p class="versao" id="versaoJogo">Patrulha dos Bigodes · versão 2.6</p>
         <button class="mini" id="procurarAtualizacao" type="button">Procurar atualização</button>
         <p class="nota notaAtualiza" id="statusAtualizacao" hidden></p>
       </div>
@@ -801,7 +804,8 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
       <div id="pegos"></div>
       <p id="fimTexto" class="nota fimNota"></p>
       <button class="acao" id="fimBotao" type="button"><span data-ico="play"></span>Jogar de novo</button>
-      <div class="par"><button class="sec" id="fimAbrigo" type="button"><span data-ico="abrigo"></span>Abrigo</button><button class="sec" id="fimMenu" type="button">Tela inicial</button></div>
+      <div class="par"><button class="sec" id="fimAbrigo" type="button"><span data-ico="abrigo"></span>Abrigo</button><button class="sec" id="fimSant" type="button"><span data-ico="santuario"></span>Santuário</button></div>
+      <button class="sec" id="fimMenu" type="button"><span data-ico="inicio"></span>Tela inicial</button>
     </section>
   </div>
 </div>
@@ -833,7 +837,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '2.5';
+const VERSAO = '2.6';
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', sexo: 'f', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
@@ -896,9 +900,9 @@ const novoId = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 
 for (const a of save.abrigo.concat(save.casa || [], save.sant)) if (a && !a.id) a.id = novoId();
 save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
 function salvar() { gravar('pegagatos.save', JSON.stringify(save)); }
-const ADM_PADRAO = { pedMax: 3, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
+const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
   carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20,
-  santBase: 10, santNivel: 4, santTeto: 30, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
+  santBase: 10, santNivel: 5, santTeto: 40, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
 let ADM = { v: {}, precos: {}, corpos: {}, pelos: {}, chances: {} };
 try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; if (a.pelos && typeof a.pelos === 'object') ADM.pelos = a.pelos; if (a.chances && typeof a.chances === 'object') ADM.chances = a.chances; } } catch (e) {}
 const A = k => { const v = ADM.v[k]; return typeof v === 'number' && isFinite(v) ? v : ADM_PADRAO[k]; };
@@ -1956,6 +1960,7 @@ function terminar() {
   }
   const card = $('fimCard'); card.classList.remove('entra'); void card.offsetWidth; card.classList.add('entra');
   card.scrollTop = 0;
+  $('fimSant').hidden = !save.santInfo.ok;
   fim.hidden = false;
   somMiau();
   if (save.felFila.length) setTimeout(mostrarFilaFel, 900);
@@ -2812,7 +2817,7 @@ const CHAPEUS = [
 const MELHORIAS = [
   { id: 'sache', nome: 'Sachê mais longo', precos: [30, 60, 100], desc: n => 'Dura ' + String(A('durSache') + 1.5 * n).replace('.', ',') + ' s' },
   { id: 'escova', nome: 'Escova mais longa', precos: [30, 60, 100], desc: n => 'Dura ' + (A('durEscova') + 2 * n) + ' s' },
-  { id: 'abrigo', nome: 'Abrigo maior', precos: [60, 120, 200], desc: n => 'Cabem ' + Math.round(A('abrigoBase') + A('abrigoNivel') * n) + ' gatos' },
+  { id: 'abrigo', nome: 'Abrigo maior', precos: [60, 120, 200, 300, 420, 560, 750], desc: n => 'Cabem ' + Math.round(A('abrigoBase') + A('abrigoNivel') * n) + ' gatos' },
   { id: 'vagas', nome: 'Mais vagas no carro', precos: [40, 90, 160, 250, 400], desc: n => 'Leva ' + Math.round(A('carroBase') + A('carroNivel') * n) + ' gatos' },
   { id: 'turbo', nome: 'Turbo rápido', precos: [80], desc: n => (n ? 'Carrega com 2 peixes' : 'Carrega com 2 peixes em vez de 3') }
 ];
@@ -3089,7 +3094,8 @@ const DECOR = [
 ];
 const SLOTS_SANT = [
   { tipo: 'chao', x: 0.2, y: 0.74, larg: 0.12 }, { tipo: 'chao', x: 0.4, y: 0.93, larg: 0.14 }, { tipo: 'chao', x: 1.02, y: 0.94, larg: 0.13 },
-  { tipo: 'chao', x: 2.0, y: 0.74, larg: 0.13 }, { tipo: 'chao', x: 2.42, y: 0.93, larg: 0.14 }, { tipo: 'chao', x: 2.86, y: 0.7, larg: 0.1 }
+  { tipo: 'chao', x: 2.0, y: 0.74, larg: 0.13 }, { tipo: 'chao', x: 2.42, y: 0.93, larg: 0.14 }, { tipo: 'chao', x: 2.86, y: 0.7, larg: 0.1 },
+  { tipo: 'chao', x: 3.1, y: 0.75, larg: 0.12 }, { tipo: 'chao', x: 3.5, y: 0.94, larg: 0.14 }, { tipo: 'chao', x: 3.88, y: 0.74, larg: 0.1 }
 ];
 const SLOTS_CASA = [
   { tipo: 'parede', x: 0.08, y: 0.3, larg: 0.06 }, { tipo: 'parede', x: 1.57, y: 0.28, larg: 0.115 }, { tipo: 'parede', x: 1.86, y: 0.3, larg: 0.075 },
@@ -3241,17 +3247,18 @@ const SPOTS_CASA_BASE = [
   { x: 2.78, y: 0.43, alto: 1, nome: 'na janela' }, { x: 2.92, y: 0.43, alto: 1, nome: 'na janela' }
 ];
 /* Santuário dos Felinos: savana, cachoeira com lago e mata */
-const MUNDO_SANT = 3;
+const MUNDO_SANT = 4;
 const SPOTS_SANT_BASE = [
   { x: 0.4, y: 0.27, alto: 1, deita: 1, nome: 'no galho da acácia' },
   { x: 0.66, y: 0.76, vip: 1, nome: 'Posando na Pedra do Rei' }, { x: 0.78, y: 0.72, vip: 1, nome: 'Posando na Pedra do Rei' }, { x: 0.9, y: 0.76, vip: 1, nome: 'Posando na Pedra do Rei' },
   { x: 1.22, y: 0.42, alto: 1, nome: 'na pedra da cachoeira' }, { x: 1.79, y: 0.37, alto: 1, nome: 'no alto da cachoeira' },
   { x: 1.42, y: 0.765, tigela: 1, nome: 'Bebendo no lago' }, { x: 1.6, y: 0.765, tigela: 1, nome: 'Bebendo no lago' },
   { x: 2.26, y: 0.42, alto: 1, deita: 1, nome: 'no galho da árvore' }, { x: 2.46, y: 0.26, alto: 1, nome: 'no alto da árvore' },
-  { x: 2.72, y: 0.79, cama: 1, nome: 'no tronco caído' }, { x: 0.12, y: 0.88, cama: 1, nome: 'no capim alto' }, { x: 2.04, y: 0.9, cama: 1, nome: 'no capim alto' }
+  { x: 2.72, y: 0.79, cama: 1, nome: 'no tronco caído' }, { x: 0.12, y: 0.88, cama: 1, nome: 'no capim alto' }, { x: 2.04, y: 0.9, cama: 1, nome: 'no capim alto' },
+  { x: 3.55, y: 0.27, alto: 1, deita: 1, nome: 'no galho da acácia' }, { x: 3.22, y: 0.88, cama: 1, nome: 'no capim alto' }, { x: 3.82, y: 0.9, cama: 1, nome: 'no capim alto' }
 ];
 const OBST_SANT_BASE = [{ x0: 0.28, x1: 0.37, y0: 0.6, y1: 0.69 }, { x0: 0.52, x1: 1.04, y0: 0.7, y1: 0.84 }, { x0: 1.24, x1: 1.76, y0: 0.6, y1: 0.72 },
-  { x0: 2.29, x1: 2.41, y0: 0.6, y1: 0.7 }, { x0: 2.56, x1: 2.88, y0: 0.77, y1: 0.84 }];
+  { x0: 2.29, x1: 2.41, y0: 0.6, y1: 0.7 }, { x0: 2.56, x1: 2.88, y0: 0.77, y1: 0.84 }, { x0: 3.43, x1: 3.52, y0: 0.6, y1: 0.69 }];
 const PROPS_SANT = [{ x: 2.72, w: 0.2, z: 0.77, d: troncoCaido }];
 let SPOTS_SANT = SPOTS_SANT_BASE.slice(), OBST_SANT = OBST_SANT_BASE.slice();
 const spotsDoModo = m => m === 'casa' ? SPOTS_CASA : m === 'santuario' ? SPOTS_SANT : SPOTS_ABRIGO;
@@ -3265,7 +3272,7 @@ for (const onde of ['abrigo', 'casa', 'santuario']) save.decor[onde] = save.deco
 aplicarDecor();
 const noCasa = () => save.casa.length + save.casaPilotos.length;
 /* santuário: vagas, ingressos e devolução à natureza */
-const SANT_PRECOS = [250, 500, 900, 1400, 2000];
+const SANT_PRECOS = [250, 500, 900, 1400, 2000, 2800];
 const santMax = () => Math.max(1, Math.min(Math.round(A('santTeto')), Math.round(A('santBase') + A('santNivel') * (save.santInfo.nv || 0))));
 const tipoRaca = r => TIPOS.find(t => t.raca === r);
 const valorNatureza = t => Math.round(t && t.mitico ? A('natMit') : t && t.lendario ? A('natLend') : A('natEpico'));
@@ -4087,6 +4094,10 @@ function cenarioSantuario(c, k, X, Y) {
   const sav = c.createLinearGradient(X(0.75), 0, X(1.25), 0);
   sav.addColorStop(0, noite ? 'rgba(150,130,60,.55)' : 'rgba(226,196,98,.75)'); sav.addColorStop(1, 'rgba(226,196,98,0)');
   c.fillStyle = sav; c.fillRect(X(-0.1), Y(PAREDE), X(1.25) - X(-0.1), h - Y(PAREDE));
+  const sav2 = c.createLinearGradient(X(3.05), 0, X(2.75), 0);
+  sav2.addColorStop(0, noite ? 'rgba(150,130,60,.55)' : 'rgba(226,196,98,.75)'); sav2.addColorStop(1, 'rgba(226,196,98,0)');
+  c.fillStyle = sav2; c.fillRect(X(2.75), Y(PAREDE), X(MUNDO_SANT + 0.1) - X(2.75), h - Y(PAREDE));
+  for (const [x, y, rx] of [[3.62, 0.66, 0.09], [3.7, 0.67, 0.06]]) { c.fillStyle = noite ? '#6f6a72' : '#9d968f'; c.beginPath(); c.ellipse(X(x), Y(y), k * rx, k * rx * 0.55, 0, Math.PI, 0); c.fill(); }
   /* tufos de capim */
   c.strokeStyle = noite ? 'rgba(30,60,25,.45)' : 'rgba(70,110,40,.45)'; c.lineWidth = Math.max(1, k * 0.004); c.lineCap = 'round';
   for (let q = 0; q < 70; q++) {
@@ -4094,11 +4105,8 @@ function cenarioSantuario(c, k, X, Y) {
     if ((tx > 1.2 && tx < 1.8 && ty < 0.75) || (tx > 0.5 && tx < 1.06 && ty > 0.68 && ty < 0.86)) continue;
     for (const dx of [-0.008, 0, 0.008]) { c.beginPath(); c.moveTo(X(tx + dx), Y(ty)); c.lineTo(X(tx + dx * 2.2), Y(ty - 0.022 - Math.abs(dx))); c.stroke(); }
   }
-  /* acácia */
-  c.fillStyle = '#6b4a2e'; c.beginPath(); c.moveTo(X(0.3), Y(0.665)); c.quadraticCurveTo(X(0.31), Y(0.45), X(0.36), Y(0.28)); c.lineTo(X(0.385), Y(0.29)); c.quadraticCurveTo(X(0.345), Y(0.47), X(0.35), Y(0.665)); c.closePath(); c.fill();
-  c.strokeStyle = '#6b4a2e'; c.lineWidth = k * 0.012; c.beginPath(); c.moveTo(X(0.33), Y(0.42)); c.quadraticCurveTo(X(0.27), Y(0.33), X(0.22), Y(0.26)); c.stroke();
-  c.fillStyle = noite ? '#3d6430' : '#5f9a3e'; c.beginPath(); c.ellipse(X(0.33), Y(0.23), k * 0.22, k * 0.055, 0, 0, 7); c.fill();
-  c.fillStyle = noite ? '#4d7a3a' : '#79b351'; c.beginPath(); c.ellipse(X(0.33), Y(0.21), k * 0.18, k * 0.035, 0, 0, 7); c.fill();
+  /* acácias */
+  acacia(c, k, X, Y, 0); acacia(c, k, X, Y, 3.15);
   /* Pedra do Rei */
   c.fillStyle = noite ? '#6f6a72' : '#9d968f'; c.beginPath(); c.ellipse(X(0.78), Y(0.66), k * 0.2, k * 0.09, 0, Math.PI, 0); c.fill();
   c.fillStyle = 'rgba(0,0,0,.18)'; c.beginPath(); c.ellipse(X(0.78), Y(0.8), k * 0.28, k * 0.07, 0, 0, 7); c.fill();
@@ -4129,7 +4137,7 @@ function cenarioSantuario(c, k, X, Y) {
   for (const [x, y, r] of [[2.2, 0.08, 0.17], [2.42, 0.02, 0.16], [2.58, 0.12, 0.13], [2.08, 0.2, 0.1]]) { c.fillStyle = noite ? '#2c4f26' : '#3f7a33'; c.beginPath(); c.arc(X(x), Y(y), k * r, 0, 7); c.fill(); }
   for (const [x, y, r] of [[2.24, 0.06, 0.1], [2.46, 0.0, 0.09], [2.6, 0.1, 0.07]]) { c.fillStyle = noite ? '#386030' : '#57984a'; c.beginPath(); c.arc(X(x), Y(y), k * r, 0, 7); c.fill(); }
   /* ninhos de capim alto */
-  for (const [x, y] of [[0.12, 0.88], [2.04, 0.9]]) {
+  for (const [x, y] of [[0.12, 0.88], [2.04, 0.9], [3.22, 0.88], [3.82, 0.9]]) {
     c.fillStyle = noite ? '#8a7a3e' : '#d8bf6a'; c.beginPath(); c.ellipse(X(x), Y(y), k * 0.08, k * 0.025, 0, 0, 7); c.fill();
     c.strokeStyle = noite ? '#6e6030' : '#b99c48'; c.lineWidth = Math.max(1, k * 0.004);
     for (let q = -4; q <= 4; q++) { c.beginPath(); c.moveTo(X(x + q * 0.016), Y(y + 0.01)); c.lineTo(X(x + q * 0.022), Y(y - 0.045 + Math.abs(q) * 0.006)); c.stroke(); }
@@ -4140,6 +4148,12 @@ function cenarioSantuario(c, k, X, Y) {
   c.fillStyle = '#fff3df'; c.font = '800 ' + Math.round(k * 0.026) + 'px "Baloo 2",sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
   c.fillText('SANTUÁRIO', X(0.055), Y(0.535), k * 0.13);
   desenharDecor(c, k, X, Y, 'santuario');
+}
+function acacia(c, k, X, Y, dx) {
+  c.fillStyle = '#6b4a2e'; c.beginPath(); c.moveTo(X(0.3 + dx), Y(0.665)); c.quadraticCurveTo(X(0.31 + dx), Y(0.45), X(0.36 + dx), Y(0.28)); c.lineTo(X(0.385 + dx), Y(0.29)); c.quadraticCurveTo(X(0.345 + dx), Y(0.47), X(0.35 + dx), Y(0.665)); c.closePath(); c.fill();
+  c.strokeStyle = '#6b4a2e'; c.lineWidth = k * 0.012; c.beginPath(); c.moveTo(X(0.33 + dx), Y(0.42)); c.quadraticCurveTo(X(0.27 + dx), Y(0.33), X(0.22 + dx), Y(0.26)); c.stroke();
+  c.fillStyle = noite ? '#3d6430' : '#5f9a3e'; c.beginPath(); c.ellipse(X(0.33 + dx), Y(0.23), k * 0.22, k * 0.055, 0, 0, 7); c.fill();
+  c.fillStyle = noite ? '#4d7a3a' : '#79b351'; c.beginPath(); c.ellipse(X(0.33 + dx), Y(0.21), k * 0.18, k * 0.035, 0, 0, 7); c.fill();
 }
 function aguaViva(c, k, X, Y) {
   if (1.9 < camX || 1.1 > camX + vwSala) return;
@@ -4823,6 +4837,7 @@ $('fecharAlbum').addEventListener('click', irMenu);
 $('abrirAbrigo').addEventListener('click', abrirAbrigo);
 $('abrirCasa').addEventListener('click', abrirCasa);
 $('fimAbrigo').addEventListener('click', () => { state = 'menu'; abrirAbrigo(); });
+$('fimSant').addEventListener('click', () => { state = 'menu'; abrirSantuario(); });
 $('fecharAbrigo').addEventListener('click', irMenu);
 $('abrirLoja').addEventListener('click', () => { montarLoja(); menu.hidden = true; telaLoja.hidden = false; });
 $('fecharLoja').addEventListener('click', irMenu);
