@@ -1,0 +1,55 @@
+name: Publicar site (iPhone e navegador)
+
+# Toda vez que você der Push, o jogo também é publicado como site no GitHub Pages.
+# No iPhone: abrir o link no Safari → Compartilhar → "Adicionar à Tela de Início".
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Embutir a fonte (para funcionar sem internet)
+        run: node ferramentas/embutir-fonte.mjs
+
+      - name: Montar o site
+        run: |
+          mkdir -p _site
+          cp -r www/. _site/
+          cp -r site/. _site/
+          # edição do iPhone: versão "iOS" e gatos ao volante próprios
+          grep -q "const EDICAO = 'android';" _site/index.html || { echo "::error::marcador EDICAO não encontrado no index.html"; exit 1; }
+          sed -i "s#const EDICAO = 'android';#const EDICAO = 'ios';#" _site/index.html
+          VER=$(grep -oP "const VERSAO = '\K[^']+" _site/index.html || echo 1.0)
+          sed -i "s#__VERSAO_SITE__#$VER-${{ github.run_number }}#g" _site/sw.js
+          echo "Site da versão $VER montado."
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v4

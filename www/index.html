@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Patrulha dos Bigodes</title>
+<meta name="theme-color" content="#1d2f36">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Patrulha">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -1101,6 +1108,9 @@ const Z = {
 };
 
 const VERSAO = '3.0';
+const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
+const IOS = EDICAO === 'ios';
+const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
 const REPO_GITHUB = '__REPO_GITHUB__'; /* o gerador do APK troca pelo endereço do repositório */
 const GATOS = [
   { id: 'peta', sexo: 'f', nome: 'Peta', pelo: '#2b2730', listra: '#3b3644', orelha: '#2b2730', dentro: '#51454f', olho: '#7ecb4f', pata: '#4b4553', nariz: '#17131c', linha: '#8f889b' },
@@ -1117,6 +1127,10 @@ const GATOS = [
       kE: [-0.07, 0.2], jE: [-0.42, 0.36], cE: [-0.56, 0.76], kD: [0.07, 0.2], jD: [0.42, 0.36], cD: [0.56, 0.76] },
     pinta: { x: 0.22, y: 0.45, rx: 0.11, ry: 0.07, g: -0.3 }, sarda: '#b56f7c' }
 ];
+/* edição do iPhone: sem Olívia, Sebastian e Seline; no lugar entra a Lua, uma gata tricolor */
+if (IOS) GATOS.splice(0, GATOS.length, ...GATOS.filter(g => ['olivia', 'sebastian', 'seline'].indexOf(g.id) < 0),
+  { id: 'lua', sexo: 'f', nome: 'Lua', pelo: '#fbf7ef', orelha: '#e58f3c', orelhaD: '#2b2730', dentro: '#ffc2cf', olho: '#7ecb4f', pata: '#f3bcc6', nariz: '#f2a0b0',
+    manchas: [{ x: -0.55, y: -0.5, rx: 0.52, ry: 0.42, cor: '#e58f3c' }, { x: 0.55, y: -0.5, rx: 0.52, ry: 0.42, cor: '#2b2730' }] });
 function ler(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 function gravar(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 let gato = GATOS[0];
@@ -3513,8 +3527,11 @@ function cabecaVolante(k, cx, hy, r, R) {
   k.moveTo(cx - r * 0.98, hy - r * 0.2); k.lineTo(cx - r * 0.82, hy - r * 1.42); k.lineTo(cx - r * 0.2, hy - r * 0.96);
   k.lineTo(cx + r * 0.2, hy - r * 0.96); k.lineTo(cx + r * 0.82, hy - r * 1.42); k.lineTo(cx + r * 0.98, hy - r * 0.2);
   k.closePath(); k.fill(); k.stroke();
+  /* de costas, a orelha de outra cor (tricolor) fica do lado esquerdo da tela */
+  if (gato.orelhaD) { k.fillStyle = gato.orelhaD; k.beginPath(); k.moveTo(cx - r * 0.98, hy - r * 0.2); k.lineTo(cx - r * 0.82, hy - r * 1.42); k.lineTo(cx - r * 0.2, hy - r * 0.96); k.lineTo(cx - r * 0.1, hy - r * 0.5); k.closePath(); k.fill(); k.stroke(); }
   k.fillStyle = gato.pelo;
   k.beginPath(); k.arc(cx, hy, r, 0, 7); k.fill();
+  if (gato.manchas) { k.save(); k.beginPath(); k.arc(cx, hy, r, 0, 7); k.clip(); for (const m of gato.manchas) { k.fillStyle = m.cor; k.beginPath(); k.ellipse(cx - m.x * r, hy + m.y * r, m.rx * r, m.ry * r, 0, 0, 7); k.fill(); } k.restore(); }
   k.beginPath(); k.arc(cx, hy, r, Math.PI * 1.18, Math.PI * 1.82); k.stroke();
   k.strokeStyle = gato.listra; k.lineWidth = R * 0.05; k.lineCap = 'round';
   for (const d of gato.listra ? [-0.22, 0, 0.22] : []) {
@@ -8528,7 +8545,7 @@ function montarAdmin() {
   }
 
   g = grupoAdm(raiz, 'Corpo dos meus gatos');
-  g.appendChild(cria('p', 'nota notaAdm', 'Escolha o jeitinho de cada um dos seus 6 gatos: corpo e pelo.'));
+  g.appendChild(cria('p', 'nota notaAdm', 'Escolha o jeitinho de cada um dos seus ' + GATOS.length + ' gatos: corpo e pelo.'));
   for (const p of GATOS) {
     const l = cria('label', 'campoAdm'); l.appendChild(nomeEl('span', '', Object.assign({}, p, { nome: save.nomes[p.id] || p.nome })));
     const se = cria('select');
@@ -8842,7 +8859,7 @@ const obsTela = typeof MutationObserver === 'function' && new MutationObserver(l
   ajustarFundo();
 });
 if (obsTela) document.querySelectorAll('.tela').forEach(t => obsTela.observe(t, { attributes: true, attributeFilter: ['hidden'], attributeOldValue: true }));
-$('versaoJogo').textContent = 'Patrulha dos Bigodes · versão ' + VERSAO;
+$('versaoJogo').textContent = 'Patrulha dos Bigodes · versão ' + VERSAO_TXT;
 
 /* ---------- aviso de atualização (só no app do celular) ---------- */
 const ehApp = () => { try { const C = window.Capacitor; if (C && (C.isNativePlatform ? C.isNativePlatform() : C.platform && C.platform !== 'web')) return true; } catch (e) {} try { return location.protocol === 'https:' && location.hostname === 'localhost'; } catch (e) { return false; } };
@@ -8851,10 +8868,13 @@ function versaoMaior(a, b) {
   for (let q = 0; q < Math.max(x.length, y.length); q++) { const d = (x[q] || 0) - (y[q] || 0); if (d) return d > 0; }
   return false;
 }
+/* versão site (GitHub Pages): guarda o jogo no aparelho para abrir sem internet e se atualizar sozinho */
+const ehSite = () => { try { return !ehApp() && location.protocol === 'https:' && /\.github\.io$|\.pages\.dev$/.test(location.hostname); } catch (e) { return false; } };
+if (ehSite() && 'serviceWorker' in navigator) { try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {} }
 let ultimaChecagem = 0, versaoAdiada = '', atualizacaoPendente = null;
 function statusAtualizacao(txt) { const el = $('statusAtualizacao'); el.hidden = !txt; el.textContent = txt || ''; }
 async function procurarAtualizacao(manual) {
-  if (!ehApp() || REPO_GITHUB.indexOf('/') < 0 || REPO_GITHUB.indexOf('__') === 0) { if (manual) statusAtualizacao('As atualizações automáticas funcionam no app do celular.'); return; }
+  if (!ehApp() || REPO_GITHUB.indexOf('/') < 0 || REPO_GITHUB.indexOf('__') === 0) { if (manual) statusAtualizacao(ehSite() ? 'No iPhone e no navegador, o jogo se atualiza sozinho: é só abrir com internet.' : 'As atualizações automáticas funcionam no app do celular.'); return; }
   ultimaChecagem = Date.now();
   if (manual) statusAtualizacao('Procurando…');
   try {
