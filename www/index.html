@@ -1104,10 +1104,12 @@ const Z = {
   caixa:  { tunnel: true, name: 'Túnel de Papelão', wall: ['#c69763', '#b98652'], floor: ['#a87a4c', '#9d7043'], road: ['#8c6844', '#83603e'], rumble: ['#f3dcb8', '#d9b98a'], lane: '#f3dcb8', light: '#fff1c9', marks: 'centro' },
   aquario:{ tunnel: true, name: 'Túnel do Aquário', wall: ['#1f8fa6', '#1a8098'], floor: ['#176f86', '#14657b'], road: ['#2b5f78', '#27586f'], rumble: ['#bff3f7', '#2b5f78'], lane: '#bff3f7', light: '#e6fdff', marks: 'centro' },
   noite:  { tunnel: true, name: 'Túnel da Meia-Noite', wall: ['#1f2a52', '#19224a'], floor: ['#141b3d', '#101635'], road: ['#2a3566', '#252f5e'], rumble: ['#57e0c8', '#2a3566'], lane: '#57e0c8', light: '#bff7ff', marks: 'duas' },
+  outono: { tunnel: false, name: 'Bosque do Outono', sky: ['#f4ad6a', '#ffe8c4'], road: ['#8b7466', '#836c5e'], grass: ['#dc9a52', '#d2904a'], rumble: ['#fff3df', '#d9442f'], lane: '#fff3df', marks: 'duas' },
+  tronco: { tunnel: true, name: 'Túnel do Tronco Oco', wall: ['#8e5d36', '#80522f'], floor: ['#6b4426', '#62401f'], road: ['#5d3b22', '#55361f'], rumble: ['#f3c98b', '#c0703a'], lane: '#f3c98b', light: '#ffe2a8', marks: 'centro' },
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.0';
+const VERSAO = '3.1';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1154,6 +1156,7 @@ try {
     if (Array.isArray(lido.carinhos)) save.carinhos = lido.carinhos.filter(x => typeof x === 'string').slice(0, 2000);
     if (typeof lido.regiao === 'number') save.regiao = lido.regiao;
     if (Array.isArray(lido.regioes)) save.regioes = lido.regioes.filter(n => typeof n === 'number');
+    if (typeof lido.regV === 'number') save.regV = lido.regV;
     if (typeof lido.vagas === 'number') save.up.vagas = lido.vagas;
     if (lido.nomes && typeof lido.nomes === 'object') save.nomes = lido.nomes;
     if (Array.isArray(lido.pilotos)) save.pilotos = lido.pilotos;
@@ -1191,8 +1194,8 @@ const filhotesN = () => save.abrigo.filter(a => a.fi).length;
 /* ----- pontos: nível do patrulheiro e estrelas por região ----- */
 /* metas calculadas com simulações de corrida: 1 estrela dá com o carro inicial (10 vagas),
    2 estrelas pedem um carro maior ou sorte, 3 estrelas pedem um carro bem maior */
-const METAS_EST = [[12, 30, 50], [25, 55, 100], [50, 120, 200], [150, 350, 600], [120, 300, 600], [200, 450, 850], [350, 800, 1500]];
-const PREMIO_ESTRELA = [25, 50, 100], MUL_EST = [1, 1.6, 2.5, 4, 4, 6, 9];
+const METAS_EST = [[12, 30, 50], [25, 55, 100], [50, 120, 200], [100, 220, 430], [110, 240, 460], [115, 300, 500], [170, 350, 750], [350, 750, 1450]];
+const PREMIO_ESTRELA = [25, 50, 100], MUL_EST = [1, 1.6, 2.5, 4, 4.5, 5, 6.5, 9];
 const premioEstrela = (rIdx, q) => Math.round(PREMIO_ESTRELA[q] * (MUL_EST[rIdx] || 1));
 /* 1ª estrela: coleira · 2ª: decoração do abrigo · 3ª: chapéu do piloto */
 const PREMIOS_REG = [
@@ -1200,6 +1203,7 @@ const PREMIOS_REG = [
   { coleira: 'cOrla', decor: 'dBoia', chapeu: 'marinheiro' },
   { coleira: 'cPico', decor: 'dBoneco', chapeu: 'abafador' },
   { coleira: 'cCentro', decor: 'dLua', chapeu: 'touca' },
+  { coleira: 'cBosque', decor: 'dCogumelo', chapeu: 'cogumelo' },
   { coleira: 'cRota', decor: 'dPlaca', chapeu: 'explorador' },
   { coleira: 'cVale', decor: 'dCristal', chapeu: 'pirata' },
   { coleira: 'cTrilha', decor: 'dTrofeu', chapeu: 'aureola' }
@@ -1248,7 +1252,7 @@ const SACHES_ESP = [
   { id: 'sPrincesa', k: 'fe', nome: 'Sachê Princesa', preco: 250, cor: '#c2366b', clara: '#ffc9dc', desc: 'só gatas (fêmeas)' },
   { id: 'sPrincipe', k: 'ma', nome: 'Sachê Príncipe', preco: 250, cor: '#2f4a8a', clara: '#c3d0f2', desc: 'só gatos machos' }
 ];
-const REG_ESP = 4;
+const REG_ESP = 5; /* Grande Rota Selvagem */
 for (const k of ['sache', 'escova', 'guizo'].concat(SACHES_ESP.map(e => e.id))) save.inv[k] = Math.max(0, parseInt(save.inv[k], 10) || 0);
 if (!save.decor || typeof save.decor !== 'object') save.decor = {};
 for (const k of ['abrigo', 'casa', 'santuario']) if (!Array.isArray(save.decor[k])) save.decor[k] = [];
@@ -1272,6 +1276,13 @@ const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, es
   santBase: 10, santNivel: 5, santTeto: 40, nomeEpico: 500, nomeLend: 1500, nomeMit: 4000, bercoFracao: 0.5, tocaFracao: 0.5, chanceFilhote: 0.15, chanceCaixa: 0.009, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
 let ADM = { v: {}, precos: {}, corpos: {}, pelos: {}, chances: {} };
 try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; if (a.pelos && typeof a.pelos === 'object') ADM.pelos = a.pelos; if (a.chances && typeof a.chances === 'object') ADM.chances = a.chances; } } catch (e) {}
+try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a.regV === 'number') ADM.regV = a.regV; } catch (e) {}
+if (ADM.regV !== 2) {
+  const mv = n => (n >= 4 ? n + 1 : n), ch = {}, pr = {};
+  for (const k in ADM.chances || {}) ch[mv(+k)] = ADM.chances[k];
+  for (const k in ADM.precos || {}) { const m = /^reg\.(\d+)$/.exec(k); pr[m ? 'reg.' + mv(+m[1]) : k] = ADM.precos[k]; }
+  ADM.chances = ch; ADM.precos = pr; ADM.regV = 2;
+}
 const A = k => { const v = ADM.v[k]; return typeof v === 'number' && isFinite(v) ? v : ADM_PADRAO[k]; };
 function salvarAdm() { gravar('pegagatos.admin', JSON.stringify(ADM)); }
 const precisa = () => (save.up.turbo ? 2 : 3);
@@ -1434,6 +1445,14 @@ if (typeof save.xp !== 'number') { save.xp = 0; for (const t of TIPOS) save.xp +
 if (typeof save.regiao !== 'number') save.regiao = 0;
 if (typeof save.nivelPago !== 'number') save.nivelPago = nivelDe(save.xp).n;
 if (!Array.isArray(save.regioes)) { save.regioes = [0]; [120, 400, 900, 1800].forEach((lim, q) => { if (save.xp >= lim) save.regioes.push(q + 1); }); }
+/* 3.1: o Bosque do Outono entrou como 5ª região; as regiões depois dele andam uma casa (quem já tinha a Grande Rota ganha o Bosque) */
+if (save.regV !== 2) {
+  const mv = n => (n >= 4 ? n + 1 : n), mvObj = o => { const r = {}; for (const k in o) r[mv(+k)] = o[k]; return r; };
+  save.regioes = save.regioes.map(mv);
+  if (save.regioes.indexOf(5) >= 0 && save.regioes.indexOf(4) < 0) save.regioes.push(4);
+  save.regiao = mv(save.regiao); save.estrelas = mvObj(save.estrelas || {}); save.melhorReg = mvObj(save.melhorReg || {});
+  save.regV = 2;
+}
 if (!Array.isArray(save.casa)) {
   /* primeira vez com a casa: os felinos que você já pegou vão morar nela */
   save.casa = [];
@@ -1463,9 +1482,10 @@ const COLEIRAS = [
   { id: 'cOrla', nome: 'Coleira de conchinha', preco: 0, cor: '#5bb6e0', ping: 'concha', premio: 1 },
   { id: 'cPico', nome: 'Coleira floco de neve', preco: 0, cor: '#9fc9ef', ping: 'floco', premio: 2 },
   { id: 'cCentro', nome: 'Coleira de estrela', preco: 0, cor: '#3b3550', ping: 'estrela', premio: 3 },
-  { id: 'cRota', nome: 'Coleira de couro', preco: 0, cor: '#8a5a34', ping: 'fivela', premio: 4 },
-  { id: 'cVale', nome: 'Coleira de cristal', preco: 0, cor: '#9a6fd6', ping: 'cristal', premio: 5 },
-  { id: 'cTrilha', nome: 'Coleira lendária', preco: 0, cor: '#e8b923', ping: 'medalha', premio: 6 }
+  { id: 'cBosque', nome: 'Coleira de folhinha', preco: 0, cor: '#d9822b', ping: 'folha', premio: 4 },
+  { id: 'cRota', nome: 'Coleira de couro', preco: 0, cor: '#8a5a34', ping: 'fivela', premio: 5 },
+  { id: 'cVale', nome: 'Coleira de cristal', preco: 0, cor: '#9a6fd6', ping: 'cristal', premio: 6 },
+  { id: 'cTrilha', nome: 'Coleira lendária', preco: 0, cor: '#e8b923', ping: 'medalha', premio: 7 }
 ];
 function vestirColeira(g) {
   const o = Object.assign({}, g); delete o.coleira; delete o.guizo; delete o.pingente;
@@ -1749,6 +1769,7 @@ function caminhoEstrela(c, x, y, R, ri) {
   c.closePath();
 }
 function pingente(c, x, y, s, tipo) {
+  if (tipo === 'folha') { c.save(); c.translate(x, y); c.rotate(0.35); c.fillStyle = '#e8742f'; c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.1); c.beginPath(); c.moveTo(0, s * 0.95); c.quadraticCurveTo(-s * 0.85, s * 0.1, 0, -s * 0.95); c.quadraticCurveTo(s * 0.85, s * 0.1, 0, s * 0.95); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#9a4a1c'; c.lineWidth = Math.max(0.6, s * 0.07); c.beginPath(); c.moveTo(0, s * 0.8); c.lineTo(0, -s * 0.6); c.stroke(); c.restore(); return; }
   if (tipo === 'coracao' || tipo === 'trevo') { c.save(); c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.12); if (tipo === 'coracao') { caminhoCoracao(c, x, y, s * 0.85); c.stroke(); } desenhaMarca(c, tipo, x, y, s * 0.85, tipo === 'coracao' ? '#ff5d8f' : '#3fae4a'); c.restore(); return; }
   c.save(); c.lineJoin = 'round'; c.lineCap = 'round';
   c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.12);
@@ -1926,15 +1947,18 @@ const REGIOES = [
     gatos: ['vira-lata branco', 'siamês', 'creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: [], lendarios: [], chE: 0, chL: 0, faixas: [0, 0.6, 0.4],
     pista: [[80, 0, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [50, 3.5, 'neve'], [40, 0, 'neve'], [30, 0, 'novelo'], [100, -6, 'novelo'], [100, 6, 'novelo'], [30, 0, 'novelo'], [50, -3.5, 'neve'], [60, 0, 'neve']] },
   { nome: 'Centro da Meia-Noite', nivel: 4, preco: 800, xp: 900, desc: 'Telhados da cidade à noite e o túnel dos olhos brilhantes. Só raros, e os primeiros felinos.',
-    gatos: ['bengal', 'sphynx', 'maine coon', 'persa', 'british shorthair'], epicos: ['leopardo', 'jaguatirica'], lendarios: [], chE: 0.35, chL: 0,
+    gatos: ['bengal', 'sphynx', 'maine coon', 'persa', 'british shorthair'], epicos: ['leopardo', 'jaguatirica'], lendarios: [], chE: 0.08, chL: 0,
     pista: [[100, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [60, 0, 'cidade'], [30, 0, 'noite'], [90, 5, 'noite'], [90, -5, 'noite'], [60, 3, 'noite'], [30, 0, 'noite'], [120, 0, 'cidade'], [40, -5, 'cidade'], [40, 5, 'cidade']] },
-  { nome: 'Grande Rota Selvagem', nivel: 5, preco: 1500, xp: 1800, desc: 'Todas as paisagens numa rota só. Raros, todos os épicos e até lendários.',
-    gatos: ['bengal', 'maine coon'], epicos: null, lendarios: ['tigre branco', 'tigre preto', 'leão branco', 'leão negro'], chE: 0.22, chL: 0.03,
-    pista: [[90, 0, 'jardim'], [60, 1.5, 'jardim'], [30, 0, 'jardim'], [40, 0, 'caixa'], [80, -3, 'caixa'], [80, 4, 'caixa'], [30, 0, 'caixa'], [50, 0, 'praia'], [120, 2.2, 'praia'], [40, 0, 'praia'], [120, -2.2, 'praia'], [30, 0, 'praia'], [30, 0, 'aquario'], [70, 4, 'aquario'], [70, -4, 'aquario'], [70, 4, 'aquario'], [30, 0, 'aquario'], [40, 0, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [40, 0, 'neve'], [30, 0, 'noite'], [90, 5, 'noite'], [90, -5, 'noite'], [60, 3, 'noite'], [30, 0, 'noite'], [120, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [100, 0, 'cidade'], [30, 0, 'novelo'], [100, -6, 'novelo'], [100, 6, 'novelo'], [70, -4, 'novelo'], [30, 0, 'novelo']] },
-  { nome: 'Vale dos Raros', nivel: 6, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um gato mago já passou por aqui.',
-    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['gato mago'], chE: 0.399, chL: 0.1, chM: 0.001,
+  { nome: 'Bosque do Outono', nivel: 5, preco: 1100, xp: 1300, desc: 'Folhas laranja caindo, cogumelos, abóboras e o túnel do tronco oco. Raros e mais felinos épicos.',
+    gatos: ['azul russo', 'ragdoll', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: ['leopardo', 'jaguatirica', 'lince', 'caracal', 'guepardo'], lendarios: [], chE: 0.14, chL: 0,
+    pista: [[90, 0, 'outono'], [60, 2, 'outono'], [60, -2, 'outono'], [40, 0, 'outono'], [30, 0, 'tronco'], [80, 4, 'tronco'], [80, -4, 'tronco'], [30, 0, 'tronco'], [80, 0, 'outono'], [50, 3.5, 'outono'], [50, -3.5, 'outono'], [60, 0, 'outono']] },
+  { nome: 'Grande Rota Selvagem', nivel: 6, preco: 1500, xp: 1800, desc: 'Todas as paisagens numa rota só. Raros, todos os épicos e até lendários.',
+    gatos: ['bengal', 'maine coon'], epicos: null, lendarios: ['tigre branco', 'tigre preto', 'leão branco', 'leão negro'], chE: 0.18, chL: 0.02,
+    pista: [[90, 0, 'jardim'], [60, 1.5, 'jardim'], [30, 0, 'jardim'], [40, 0, 'caixa'], [80, -3, 'caixa'], [80, 4, 'caixa'], [30, 0, 'caixa'], [50, 0, 'praia'], [120, 2.2, 'praia'], [40, 0, 'praia'], [120, -2.2, 'praia'], [30, 0, 'praia'], [30, 0, 'aquario'], [70, 4, 'aquario'], [70, -4, 'aquario'], [70, 4, 'aquario'], [30, 0, 'aquario'], [40, 0, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [50, 3.5, 'neve'], [50, -3.5, 'neve'], [40, 0, 'neve'], [30, 0, 'noite'], [90, 5, 'noite'], [90, -5, 'noite'], [60, 3, 'noite'], [30, 0, 'noite'], [120, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [100, 0, 'cidade'], [30, 0, 'novelo'], [100, -6, 'novelo'], [100, 6, 'novelo'], [70, -4, 'novelo'], [30, 0, 'novelo'], [40, 0, 'outono'], [60, 2, 'outono'], [30, 0, 'tronco'], [70, -3, 'tronco'], [30, 0, 'tronco'], [40, 0, 'outono']] },
+  { nome: 'Vale dos Raros', nivel: 7, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um gato mago já passou por aqui.',
+    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['gato mago'], chE: 0.3, chL: 0.07, chM: 0.001,
     pista: [[80, 0, 'praia'], [100, 2.5, 'praia'], [30, 0, 'aquario'], [80, -4.5, 'aquario'], [30, 0, 'aquario'], [60, 0, 'neve'], [50, 4, 'neve'], [50, -4, 'neve'], [30, 0, 'novelo'], [100, 6, 'novelo'], [30, 0, 'novelo'], [60, 0, 'praia']] },
-  { nome: 'Trilha Lendária', nivel: 7, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Aqui só aparecem felinos: épicos, lendários e até míticos.',
+  { nome: 'Trilha Lendária', nivel: 8, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Aqui só aparecem felinos: épicos, lendários e até míticos.',
     gatos: [], epicos: null, lendarios: null, miticos: null, chE: 0.79, chL: 0.2, chM: 0.01,
     pista: [[80, 0, 'cidade'], [40, 5, 'cidade'], [40, -5, 'cidade'], [30, 0, 'noite'], [90, 6, 'noite'], [90, -6, 'noite'], [30, 0, 'noite'], [60, 0, 'cidade'], [30, 0, 'caixa'], [80, -4, 'caixa'], [30, 0, 'caixa'], [100, 0, 'cidade']] }
 ];
@@ -2838,6 +2862,10 @@ function anel(p, g, z, ultimo, fator) {
       for (let q = 0; q < 7; q++) { const a = Math.PI + (q + 0.5) * Math.PI / 7, rx = w * 1.42, ry = w * 1.1, vx = p.x + Math.cos(a) * rx, vy = p.y - w + Math.sin(a) * ry; ctx.beginPath(); ctx.moveTo(vx - w * 0.04, vy - w * 0.04); ctx.lineTo(vx, vy + w * 0.03); ctx.lineTo(vx + w * 0.04, vy - w * 0.04); ctx.stroke(); }
     }
     if (g.i % 10 === 7) { const bx3 = p.x + lado * w * 1.5, by3 = p.y - w * 0.6, r3 = w * 0.08; ctx.fillStyle = '#ffd166'; ctx.beginPath(); ctx.arc(bx3, by3, r3, 0, 7); ctx.fill(); ctx.fillStyle = '#d9a24a'; for (const [dx, dy] of [[-0.3, -0.3], [0.3, -0.3], [-0.3, 0.3], [0.3, 0.3]]) { ctx.beginPath(); ctx.arc(bx3 + dx * r3, by3 + dy * r3, r3 * 0.14, 0, 7); ctx.fill(); } }
+  } else if (g.zone === 'tronco') {
+    if (g.i % 3 === 0) { ctx.strokeStyle = 'rgba(60,35,18,.4)'; ctx.lineWidth = Math.max(1, w * 0.015); for (const d of [-1, 1]) for (const rr of [0.1, 0.18, 0.26]) { ctx.beginPath(); ctx.ellipse(p.x + d * w * 1.42, p.y - w * 0.95, w * rr * 0.6, w * rr, 0, 0, 7); ctx.stroke(); } }
+    if (g.i % 7 === 4) { const mx = p.x + lado * w * 1.3, my = p.y - w * 0.04; ctx.fillStyle = '#fbf1dc'; ctx.fillRect(mx - w * 0.025, my - w * 0.1, w * 0.05, w * 0.1); ctx.fillStyle = '#e8453c'; ctx.beginPath(); ctx.ellipse(mx, my - w * 0.1, w * 0.09, w * 0.065, 0, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(mx - w * 0.03, my - w * 0.13, w * 0.015, 0, 7); ctx.arc(mx + w * 0.03, my - w * 0.12, w * 0.012, 0, 7); ctx.fill(); }
+    if (g.i % 9 === 2) { ctx.fillStyle = ['#e8742f', '#f2b33d', '#d9442f'][g.i % 3]; ctx.beginPath(); ctx.ellipse(p.x - lado * w * 1.45, p.y - w * 1.2, w * 0.05, w * 0.025, 0.7, 0, 7); ctx.fill(); }
   } else if (g.zone === 'noite') {
     if (g.i % 4 === 0) {
       for (let q = 0; q < 3; q++) { const a = (g.i * 1.7 + q * 2.1), sx3 = p.x + Math.cos(a) * w * (1.5 + q * 0.15), sy3 = p.y - w * (0.4 + Math.abs(Math.sin(a)) * 1.6); ctx.globalAlpha = 0.4 + 0.6 * Math.abs(Math.sin(relogio * 2.5 + g.i + q)); ctx.fillStyle = '#fff3c4'; caminhoEstrela(ctx, sx3, sy3, w * 0.04, w * 0.016); ctx.fill(); }
@@ -2848,16 +2876,52 @@ function anel(p, g, z, ultimo, fator) {
 }
 const COPAS = ['#ffb38a', '#7fd3c2', '#ffd98a', '#f4a3b8'];
 const COPAS2 = ['#ffd2b8', '#b5ece0', '#ffeab8', '#fbcbd8'];
+const COPAS_OUT = ['#e8742f', '#d9442f', '#f2b33d', '#c9612b'], COPAS_OUT2 = ['#ffb27a', '#ff8a6e', '#ffe08a', '#f3a06c'];
+/* Bosque do Outono: cogumelo gigante e abóboras na beira da pista */
+function cogumeloGigante(x, y, s) {
+  if (s < 2) return;
+  const lw = Math.max(1, s * 0.012);
+  sombraChao(x, y, s * 0.2, s * 0.045);
+  ctx.strokeStyle = LIN; ctx.lineWidth = lw;
+  ctx.fillStyle = '#fbf1dc'; ctx.beginPath(); ctx.moveTo(x - s * 0.06, y); ctx.quadraticCurveTo(x - s * 0.075, y - s * 0.18, x - s * 0.05, y - s * 0.3); ctx.lineTo(x + s * 0.05, y - s * 0.3); ctx.quadraticCurveTo(x + s * 0.075, y - s * 0.18, x + s * 0.06, y); ctx.closePath(); ctx.fill(); if (s > 30) ctx.stroke();
+  ctx.fillStyle = '#e8453c'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.28, s * 0.22, s * 0.17, 0, Math.PI, 0); ctx.quadraticCurveTo(x, y - s * 0.25, x - s * 0.22, y - s * 0.28); ctx.closePath(); ctx.fill(); if (s > 30) ctx.stroke();
+  ctx.fillStyle = '#ffffff'; for (const [dx, dy, rr] of [[-0.12, -0.33, 0.03], [0.02, -0.41, 0.035], [0.13, -0.32, 0.025], [-0.03, -0.31, 0.018]]) { ctx.beginPath(); ctx.arc(x + dx * s, y + dy * s, rr * s, 0, 7); ctx.fill(); }
+  if (s > 40) { ctx.fillStyle = 'rgba(42,34,48,.6)'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.arc(x + d * s * 0.022, y - s * 0.17, s * 0.009, 0, 7); ctx.fill(); } }
+}
+function aboboras(x, y, s) {
+  if (s < 2) return;
+  const lw = Math.max(1, s * 0.01);
+  sombraChao(x, y, s * 0.24, s * 0.045);
+  for (const [dx, e, cor] of [[-0.09, 1, '#f08a24'], [0.1, 0.75, '#f5a13a']]) {
+    const px = x + dx * s, r = s * 0.1 * e;
+    ctx.fillStyle = cor; ctx.strokeStyle = LIN; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.ellipse(px, y - r * 0.85, r * 1.25, r * 0.9, 0, 0, 7); ctx.fill(); if (s > 30) ctx.stroke();
+    ctx.strokeStyle = 'rgba(160,70,20,.45)'; ctx.beginPath(); ctx.ellipse(px, y - r * 0.85, r * 0.45, r * 0.88, 0, 0, 7); ctx.stroke();
+    ctx.fillStyle = '#5f8a3a'; ctx.fillRect(px - r * 0.08, y - r * 1.95, r * 0.16, r * 0.3);
+  }
+  ctx.fillStyle = '#d9442f'; for (let q = 0; q < 4; q++) { ctx.beginPath(); ctx.ellipse(x + (q - 1.5) * s * 0.06, y - s * 0.006, s * 0.025, s * 0.012, q * 0.8, 0, 7); ctx.fill(); }
+}
+/* folhas caindo na frente, no Bosque do Outono */
+function folhasCaindo() {
+  const cores = ['#e8742f', '#d9442f', '#f2b33d', '#c9612b'];
+  for (let q = 0; q < 22; q++) {
+    const x = ((q * 0.173 * W + Math.sin(relogio * 0.8 + q) * W * 0.05 + relogio * W * 0.02) % W + W) % W, y = ((q * 0.091 * H + relogio * H * (0.04 + (q % 4) * 0.012)) % H), r = W * (0.006 + (q % 3) * 0.003);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(relogio * (1 + q % 3) + q); ctx.fillStyle = cores[q % 4]; ctx.globalAlpha = 0.85;
+    ctx.beginPath(); ctx.ellipse(0, 0, r, r * 0.5, 0, 0, 7); ctx.fill(); ctx.restore();
+  }
+}
+
 const LIN = 'rgba(42,34,48,.75)';
 function sombraChao(x, y, rx, ry) { ctx.fillStyle = 'rgba(0,0,0,.16)'; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, 7); ctx.fill(); }
-function arvore(x, y, s, v) {
+function arvore(x, y, s, v, outono) {
+  const C1 = outono ? COPAS_OUT2 : COPAS2, C2 = outono ? COPAS_OUT : COPAS;
   if (s < 2) return;
   const lw = Math.max(1, s * 0.012);
   sombraChao(x, y, s * 0.26, s * 0.05);
   ctx.fillStyle = '#9a6b4f'; ctx.strokeStyle = LIN; ctx.lineWidth = lw;
   ctx.beginPath(); ctx.moveTo(x - s * 0.05, y); ctx.lineTo(x - s * 0.035, y - s * 0.56); ctx.lineTo(x + s * 0.035, y - s * 0.56); ctx.lineTo(x + s * 0.05, y); ctx.closePath(); ctx.fill(); if (s > 30) ctx.stroke();
   const cy = y - s * 0.75, r = s * 0.32, bal = Math.sin(relogio * 1.6 + x * 0.01) * s * 0.008;
-  const g = ctx.createRadialGradient(x - r * 0.35 + bal, cy - r * 0.4, r * 0.15, x + bal, cy, r * 1.15); g.addColorStop(0, COPAS2[v % 4]); g.addColorStop(1, COPAS[v % 4]);
+  const g = ctx.createRadialGradient(x - r * 0.35 + bal, cy - r * 0.4, r * 0.15, x + bal, cy, r * 1.15); g.addColorStop(0, C1[v % 4]); g.addColorStop(1, C2[v % 4]);
   ctx.fillStyle = g;
   ctx.beginPath();
   ctx.moveTo(x + bal - r * 0.95, cy - r * 0.3); ctx.lineTo(x + bal - r * 0.7, cy - r * 1.45); ctx.lineTo(x + bal - r * 0.1, cy - r * 0.9);
@@ -3002,6 +3066,7 @@ function cenario(zona, x, y, s, v, o) {
   if (zona === 'jardim') { if (v === 3) arbustoFlor(x, y, s); else arvore(x, y, s, v); }
   else if (zona === 'praia') { if (v < 2) guardaSol(x, y, s, v); else if (v === 2) palmeira(x, y, s, o); else castelinho(x, y, s); }
   else if (zona === 'neve') { if (v === 3) bonecoGato(x, y, s); else if (v === 2) igluNeve(x, y, s); else pinheiro(x, y, s); }
+  else if (zona === 'outono') { if (v < 2) arvore(x, y, s, v + (o > 0 ? 2 : 0), true); else if (v === 2) cogumeloGigante(x, y, s); else aboboras(x, y, s); }
   else { if (v === 2) { poste(x, y, s, o); hidrante(x + (o < 0 ? 1 : -1) * s * 0.3, y, s); } else if (v === 3) lixeiraGato(x, y, s, v); else poste(x, y, s, o); }
 }
 /* detalhes pequenos no chão, fora da pista */
@@ -3013,6 +3078,9 @@ function detalheChao(zona, x, y, s, v) {
   } else if (zona === 'praia') {
     if (v < 2) { ctx.fillStyle = '#ffb38a'; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - s * 0.05, y - s * 0.05); ctx.quadraticCurveTo(x, y - s * 0.09, x + s * 0.05, y - s * 0.05); ctx.closePath(); ctx.fill(); }
     else { ctx.fillStyle = '#ff7a5c'; caminhoEstrela(ctx, x, y - s * 0.02, s * 0.05, s * 0.022); ctx.fill(); }
+  } else if (zona === 'outono') {
+    const cores = ['#e8742f', '#d9442f', '#f2b33d'];
+    for (let q = 0; q < 3; q++) { ctx.fillStyle = cores[(q + v) % 3]; ctx.beginPath(); ctx.ellipse(x + (q - 1) * s * 0.06, y - (q % 2) * s * 0.012, s * 0.03, s * 0.014, (q + v) * 0.9, 0, 7); ctx.fill(); }
   } else if (zona === 'neve') {
     ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.ellipse(x, y, s * 0.1, s * 0.035, 0, Math.PI, 0); ctx.fill();
     if (v === 3) { ctx.fillStyle = '#bfe8ff'; ctx.beginPath(); ctx.moveTo(x, y - s * 0.1); ctx.lineTo(x + s * 0.025, y - s * 0.03); ctx.lineTo(x - s * 0.025, y - s * 0.03); ctx.fill(); }
@@ -3331,6 +3399,27 @@ function fundo(base) {
     ctx.fillStyle = '#ffd84a'; ctx.beginPath(); ctx.moveTo(bx - W * 0.003, by - W * 0.045); ctx.lineTo(bx - W * 0.003, by - W * 0.004); ctx.lineTo(bx - W * 0.024, by - W * 0.004); ctx.fill();
     passaros(desl, 'rgba(255,255,255,.9)');
     ctx.fillStyle = '#fff3d6'; ctx.fillRect(0, HOR - 1, W, 3);
+  } else if (zf === 'outono') {
+    solFundo(W * 0.7, HOR * 0.58, W * 0.085, '#ffd27a', 'rgba(255,180,100,.5)');
+    for (const n of NUVENS) nuvemFundo(((n.x + relogio * n.v * 0.7) % 1.3) * W - W * 0.15 + desl * 0.12, HOR * n.y * 0.7, n.e * 0.85);
+    passaros(desl, 'rgba(110,60,40,.5)');
+    morroFundo(desl * 0.3, HOR - W * 0.02, W * 0.16, 4, 1.1, '#e7ad73');
+    morroFundo(desl * 0.5, HOR, W * 0.1, 6, 2.3, '#dc8d52');
+    /* celeiro vermelho no morro */
+    { const cx = (((W * 0.3 + desl * 0.9) % (W * 1.7)) + W * 1.7) % (W * 1.7) - W * 0.3, cy = HOR - W * 0.03;
+      ctx.fillStyle = '#c0392b'; ctx.fillRect(cx - W * 0.04, cy - W * 0.045, W * 0.08, W * 0.045);
+      ctx.fillStyle = '#8e2a20'; ctx.beginPath(); ctx.moveTo(cx - W * 0.05, cy - W * 0.043); ctx.lineTo(cx, cy - W * 0.075); ctx.lineTo(cx + W * 0.05, cy - W * 0.043); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#fff3df'; ctx.fillRect(cx - W * 0.013, cy - W * 0.03, W * 0.026, W * 0.03);
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = Math.max(1, W * 0.003); ctx.beginPath(); ctx.moveTo(cx - W * 0.013, cy - W * 0.03); ctx.lineTo(cx + W * 0.013, cy); ctx.moveTo(cx + W * 0.013, cy - W * 0.03); ctx.lineTo(cx - W * 0.013, cy); ctx.stroke();
+      ctx.fillStyle = '#fff3df'; ctx.beginPath(); ctx.arc(cx, cy - W * 0.056, W * 0.007, 0, 7); ctx.fill(); }
+    morroFundo(desl * 0.7, HOR + W * 0.01, W * 0.05, 8, 0.4, '#cf7a40');
+    /* arvorezinhas de outono com orelhinhas na linha do horizonte */
+    for (let q = 0; q < 12; q++) {
+      const x = (((q * 0.14 * W * 1.6 + desl * 1.2) % (W * 1.6)) + W * 1.6) % (W * 1.6) - W * 0.2, r = W * (0.018 + (q % 3) * 0.006), y = HOR - W * 0.004;
+      ctx.fillStyle = '#7a5a44'; ctx.fillRect(x - r * 0.12, y - r * 1.4, r * 0.24, r * 1.4);
+      ctx.fillStyle = COPAS_OUT[q % 4]; ctx.beginPath(); ctx.arc(x, y - r * 1.8, r, 0, 7);
+      ctx.moveTo(x - r * 0.9, y - r * 2); ctx.lineTo(x - r * 0.75, y - r * 2.9); ctx.lineTo(x - r * 0.15, y - r * 2.6); ctx.moveTo(x + r * 0.9, y - r * 2); ctx.lineTo(x + r * 0.75, y - r * 2.9); ctx.lineTo(x + r * 0.15, y - r * 2.6); ctx.fill();
+    }
   } else if (zf === 'neve') {
     morroFundo(desl * 0.3, HOR - W * 0.06, W * 0.2, 4, 1.3, '#b8cfe6');
     for (let k = -1; k < 4; k++) {
@@ -3457,6 +3546,7 @@ function render() {
   }
 
   if (!reduz && Z[segs[base % N].zone] && segs[base % N].zone === 'neve') nevando();
+  if (!reduz && Z[segs[base % N].zone] && segs[base % N].zone === 'outono') folhasCaindo();
   /* linhas de velocidade */
   const sp = speed / MAXS;
   if (!reduz && (boostT > 0 || sp > 0.97) && state === 'play') {
@@ -3625,6 +3715,10 @@ function cabecaVolante(k, cx, hy, r, R) {
     k.fillStyle = '#ffd84a'; for (const [ex, ey] of [[-0.25, -0.15], [0.15, -0.38], [0.5, -0.28], [0.05, 0.05]]) { caminhoEstrela(k, cx + ex * r, ty + ey * r, r * 0.08, r * 0.035); k.fill(); }
     k.fillStyle = '#fff3df'; retRed(k, cx - r * 0.68, ty + r * 0.16, r * 1.36, r * 0.22, r * 0.1); k.fill(); k.stroke();
     k.beginPath(); k.arc(cx + r * 1.0, ty + r * 0.08, r * 0.14, 0, 7); k.fill(); k.stroke();
+  } else if (ch === 'cogumelo') {
+    k.fillStyle = '#fbf1dc'; k.beginPath(); k.ellipse(cx, ty + r * 0.22, r * 0.55, r * 0.15, 0, 0, 7); k.fill(); k.stroke();
+    k.fillStyle = '#e8453c'; k.beginPath(); k.ellipse(cx, ty + r * 0.16, r * 0.95, r * 0.66, 0, Math.PI, 0); k.closePath(); k.fill(); k.stroke();
+    k.fillStyle = '#ffffff'; for (const [dx, dy, rr] of [[-0.5, -0.1, 0.14], [0.04, -0.33, 0.16], [0.52, -0.06, 0.12], [-0.14, -0.02, 0.08]]) { k.beginPath(); k.arc(cx + dx * r, ty + dy * r, rr * r, 0, 7); k.fill(); }
   } else if (ch === 'explorador') {
     k.fillStyle = '#d8c08a'; k.beginPath(); k.ellipse(cx, ty + r * 0.24, r * 0.92, r * 0.2, 0, 0, 7); k.fill(); k.stroke();
     k.beginPath(); k.ellipse(cx, ty + r * 0.2, r * 0.6, r * 0.55, 0, Math.PI, 0); k.closePath(); k.fill(); k.stroke();
@@ -3804,9 +3898,10 @@ const CHAPEUS = [
   { id: 'marinheiro', nome: 'Chapéu de marinheiro', preco: 0, premio: 1 },
   { id: 'abafador', nome: 'Protetor de orelhas', preco: 0, premio: 2 },
   { id: 'touca', nome: 'Touca de dormir', preco: 0, premio: 3 },
-  { id: 'explorador', nome: 'Chapéu de explorador', preco: 0, premio: 4 },
-  { id: 'pirata', nome: 'Chapéu de pirata', preco: 0, premio: 5 },
-  { id: 'aureola', nome: 'Auréola lendária', preco: 0, premio: 6 }
+  { id: 'cogumelo', nome: 'Chapéu de cogumelo', preco: 0, premio: 4 },
+  { id: 'explorador', nome: 'Chapéu de explorador', preco: 0, premio: 5 },
+  { id: 'pirata', nome: 'Chapéu de pirata', preco: 0, premio: 6 },
+  { id: 'aureola', nome: 'Auréola lendária', preco: 0, premio: 7 }
 ];
 const MELHORIAS = [
   { id: 'sache', nome: 'Sachê mais longo', precos: [30, 60, 100], desc: n => 'Dura ' + String(A('durSache') + 1.5 * n).replace('.', ',') + ' s' },
@@ -3826,6 +3921,7 @@ const PING_SVG = {
   estrela: '<path d="' + 'M12 14.6L13 17L15.4 17.2L13.6 18.8L14.2 21.2L12 19.9L9.8 21.2L10.4 18.8L8.6 17.2L11 17Z' + '" fill="#ffd84a" stroke="#2a2230" stroke-width=".6" stroke-linejoin="round"/>',
   fivela: '<rect x="9.6" y="15.2" width="4.8" height="3.2" fill="#d9dde4" stroke="#2a2230" stroke-width=".6"/><rect x="10.8" y="16" width="2.4" height="1.6" fill="#8a5a34"/><circle cx="12" cy="19.6" r="1.1" fill="#c0c4cc" stroke="#2a2230" stroke-width=".5"/>',
   cristal: '<path d="M12 15l2.2 2.4L12 22l-2.2-4.6z" fill="#c9a8ff" stroke="#2a2230" stroke-width=".6" stroke-linejoin="round"/><path d="M11.7 15.9l-1 1.6.9.5z" fill="#fff" opacity=".8"/>',
+  folha: '<path d="M12 22.2c-2.8-1.2-3.6-4.2-1.4-7.4 2.8 1.6 3.6 4.6 1.4 7.4z" fill="#e8742f" stroke="#2a2230" stroke-width=".6" stroke-linejoin="round"/><path d="M12 21.6c-.4-1.8-.2-3.6.6-5.6" stroke="#9a4a1c" stroke-width=".5" fill="none"/>',
   medalha: '<circle cx="12" cy="18.6" r="3" fill="#ffd84a" stroke="#2a2230" stroke-width=".6"/><path d="M12 16.7l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z" fill="#e8a417"/>'
 };
 const ICO = {
@@ -3836,6 +3932,7 @@ const ICO = {
   marinheiro: sv('<path d="M6.5 14a5.5 5.5 0 0 1 11 0z" fill="#fff" stroke="#2a2230" stroke-width=".9"/><path d="M4 14.2Q12 11 20 14.2L19 16.6Q12 13.8 5 16.6z" fill="#fff" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><path d="M4.6 14.8Q12 11.8 19.4 14.8l-.2.8Q12 12.8 4.8 15.6z" fill="#3f6fd0"/><path d="M11 16l-1.6 4.4M13 16l1.6 4.4" stroke="#3f6fd0" stroke-width="1.4" stroke-linecap="round"/>'),
   abafador: sv('<path d="M5 13a7 7 0 0 1 14 0" fill="none" stroke="#ff7fa3" stroke-width="2"/><circle cx="5" cy="14" r="3.4" fill="#ffd1e0" stroke="#2a2230" stroke-width=".8"/><circle cx="19" cy="14" r="3.4" fill="#ffd1e0" stroke="#2a2230" stroke-width=".8"/><circle cx="5" cy="14" r="1.6" fill="#fff3f8"/><circle cx="19" cy="14" r="1.6" fill="#fff3f8"/>'),
   touca: sv('<path d="M5 16Q5 7 12 6.5q6 0 8.5 7-3-3-4.5-2.5L16 16z" fill="#3b3f8a" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><rect x="4" y="15" width="13" height="3.2" rx="1.4" fill="#fff3df" stroke="#2a2230" stroke-width=".8"/><circle cx="20.5" cy="14" r="1.8" fill="#fff3df" stroke="#2a2230" stroke-width=".8"/><path d="' + ESTRELA_SVG(9, 11, 1.4, .6) + ESTRELA_SVG(13.5, 9, 1.2, .5) + '" fill="#ffd84a"/>'),
+  cogumelo: sv('<ellipse cx="12" cy="17" rx="5.5" ry="1.8" fill="#fbf1dc" stroke="#2a2230" stroke-width=".9"/><path d="M2.5 16.4a9.5 7.4 0 0 1 19 0z" fill="#e8453c" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="7.4" cy="13.2" r="1.5" fill="#fff"/><circle cx="12.6" cy="10.6" r="1.7" fill="#fff"/><circle cx="17" cy="13.6" r="1.2" fill="#fff"/><circle cx="11" cy="14.6" r=".9" fill="#fff"/>'),
   explorador: sv('<ellipse cx="12" cy="16" rx="10" ry="2.4" fill="#d8c08a" stroke="#2a2230" stroke-width=".9"/><path d="M5.5 15.6a6.5 6.5 0 0 1 13 0z" fill="#d8c08a" stroke="#2a2230" stroke-width=".9"/><rect x="5.6" y="13.6" width="12.8" height="1.6" fill="#7a5236"/><circle cx="12" cy="8.6" r=".9" fill="#c9ae72" stroke="#2a2230" stroke-width=".5"/>'),
   pirata: sv('<path d="M2.5 14Q7 17 12 17t9.5-3q-3.5-1-4.6-5.6Q12 5 7.1 8.4 6 13 2.5 14z" fill="#26232b" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><path d="M3.6 14.3Q12 18.2 20.4 14.3" fill="none" stroke="#ffd84a" stroke-width=".9"/><circle cx="12" cy="10.4" r="1.4" fill="#fff3df"/><path d="M10 13.2l4-2M14 13.2l-4-2" stroke="#fff3df" stroke-width=".9" stroke-linecap="round"/>'),
   aureola: sv('<ellipse cx="12" cy="11" rx="8" ry="3" fill="none" stroke="#ffd84a" stroke-width="2.4"/><ellipse cx="12" cy="11" rx="8" ry="3" fill="none" stroke="#c98a1a" stroke-width=".5"/><path d="' + ESTRELA_SVG(4, 5, 1.6, .6) + ESTRELA_SVG(20, 5.5, 1.4, .5) + ESTRELA_SVG(12, 4, 1.1, .4) + '" fill="#ffd84a"/>'),
@@ -3843,6 +3940,7 @@ const ICO = {
   dBoia: sv('<circle cx="12" cy="12" r="8" fill="#fff" stroke="#2a2230" stroke-width=".9"/><circle cx="12" cy="12" r="4" fill="#9fd8e8" stroke="#2a2230" stroke-width=".9"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4" stroke="#ff5d73" stroke-width="3"/>'),
   dBoneco: sv('<circle cx="12" cy="16.5" r="5" fill="#fff" stroke="#2a2230" stroke-width=".9"/><circle cx="12" cy="8.6" r="3.6" fill="#fff" stroke="#2a2230" stroke-width=".9"/><path d="M12 8.8l3 .7-3 .6z" fill="#ff8a3c"/><rect x="8.6" y="11.4" width="6.8" height="1.6" rx=".8" fill="#ff5d73"/><circle cx="10.8" cy="7.8" r=".5" fill="#2a2230"/><circle cx="13.2" cy="7.8" r=".5" fill="#2a2230"/>'),
   dLua: sv('<path d="M15 3.5a8.5 8.5 0 1 0 5 13.6A7 7 0 0 1 15 3.5z" fill="#ffd84a" stroke="#c98a1a" stroke-width=".8"/><path d="' + ESTRELA_SVG(17.5, 7, 1.4, .6) + ESTRELA_SVG(20, 11.5, 1, .4) + '" fill="#fff3df"/>'),
+  dCogumelo: sv('<path d="M9.4 21.5c-.4-2.6-.3-5 .4-7.3h4.4c.7 2.3.8 4.7.4 7.3z" fill="#fbf1dc" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="10.9" cy="17.4" r=".6" fill="#2a2230"/><circle cx="13.1" cy="17.4" r=".6" fill="#2a2230"/><path d="M3 14.4a9 8.4 0 0 1 18 0c-3 .9-15 .9-18 0z" fill="#e8453c" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="7.6" cy="11" r="1.4" fill="#fff"/><circle cx="12.4" cy="8.2" r="1.6" fill="#fff"/><circle cx="16.6" cy="11.4" r="1.1" fill="#fff"/>'),
   dPlaca: sv('<rect x="11" y="6" width="2" height="15" fill="#8a5a34"/><path d="M4 5h13l3 3-3 3H4z" fill="#3fae6a" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><circle cx="9" cy="8" r="1.2" fill="#fff"/><circle cx="12" cy="8" r="1.2" fill="#fff"/>'),
   dCristal: sv('<path d="M12 3l4 6-4 12-4-12z" fill="#c9a8ff" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><path d="M6 11l2.4 3L6 20l-2-6z" fill="#9fd8e8" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><path d="M18 11l2 3-2 6-2.4-6z" fill="#ffb3d1" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><path d="M11 6l-1.6 3 1.2.6z" fill="#fff"/>'),
   dTrofeu: sv('<path d="M7 4h10v4a5 5 0 0 1-10 0z" fill="#ffd84a" stroke="#c98a1a" stroke-width=".9"/><path d="M7 5.5H4.5a3 3 0 0 0 3 4M17 5.5h2.5a3 3 0 0 1-3 4" fill="none" stroke="#c98a1a" stroke-width="1.2"/><rect x="10.8" y="12.6" width="2.4" height="3.6" fill="#e8b923"/><rect x="7.5" y="16" width="9" height="4" rx="1" fill="#8a5a34"/><path d="' + ESTRELA_SVG(12, 7.6, 2, .85) + '" fill="#fff6c8"/>'),
@@ -4361,9 +4459,10 @@ const DECOR = [
   { id: 'dBoia', local: 'abrigo', nome: 'Boia de salva-vidas', preco: 0, max: 1, onde: 'parede', premio: 1, desc: 'Prêmio da Orla das Sardinhas' },
   { id: 'dBoneco', local: 'abrigo', nome: 'Boneco de neve de pelúcia', preco: 0, max: 1, onde: 'chao', premio: 2, desc: 'Prêmio do Pico do Floco' },
   { id: 'dLua', local: 'abrigo', nome: 'Luminária de lua', preco: 0, max: 1, onde: 'parede', premio: 3, desc: 'Prêmio do Centro da Meia-Noite' },
-  { id: 'dPlaca', local: 'abrigo', nome: 'Placa de estrada', preco: 0, max: 1, onde: 'chao', premio: 4, desc: 'Prêmio da Grande Rota Selvagem' },
-  { id: 'dCristal', local: 'abrigo', nome: 'Cristais brilhantes', preco: 0, max: 1, onde: 'chao', premio: 5, desc: 'Prêmio do Vale dos Raros' },
-  { id: 'dTrofeu', local: 'abrigo', nome: 'Troféu lendário', preco: 0, max: 1, onde: 'chao', premio: 6, desc: 'Prêmio da Trilha Lendária' },
+  { id: 'dCogumelo', local: 'abrigo', nome: 'Cogumelo de pelúcia', preco: 0, max: 1, onde: 'chao', premio: 4, desc: 'Prêmio do Bosque do Outono' },
+  { id: 'dPlaca', local: 'abrigo', nome: 'Placa de estrada', preco: 0, max: 1, onde: 'chao', premio: 5, desc: 'Prêmio da Grande Rota Selvagem' },
+  { id: 'dCristal', local: 'abrigo', nome: 'Cristais brilhantes', preco: 0, max: 1, onde: 'chao', premio: 6, desc: 'Prêmio do Vale dos Raros' },
+  { id: 'dTrofeu', local: 'abrigo', nome: 'Troféu lendário', preco: 0, max: 1, onde: 'chao', premio: 7, desc: 'Prêmio da Trilha Lendária' },
   { id: 'flores', local: 'santuario', nome: 'Canteiro de flores', preco: 60, max: 3, onde: 'chao', desc: 'Flores do campo com borboletas; os felinos cheiram' },
   { id: 'arbusto', local: 'santuario', nome: 'Arbusto florido', preco: 70, max: 3, onde: 'chao', desc: 'Moita cheia de flores para o santuário' },
   { id: 'ninho', local: 'santuario', nome: 'Ninho de capim', preco: 90, max: 3, onde: 'chao', desc: 'Um felino tira uma soneca nele' },
@@ -4500,7 +4599,7 @@ function extrasDecor(lista) {
       case 'flores': sp({ x: x - 0.09, y: y + 0.01, olhar: 1, dir: 1, nome: 'Cheirando as flores' }); ob(0.07, -0.03, 0.02); break;
       case 'arbusto': sp({ x: x + 0.1, y: y + 0.012, olhar: 1, dir: -1, nome: 'Cheirando o arbusto' }); ob(0.08); break;
       case 'dCristal': sp({ x: x + 0.075, y: y + 0.012, olhar: 1, dir: -1, nome: 'Admirando os cristais' }); ob(0.06); break;
-      case 'dBoneco': case 'dPlaca': case 'dTrofeu': ob(0.06); break;
+      case 'dBoneco': case 'dPlaca': case 'dTrofeu': case 'dCogumelo': ob(0.06); break;
       case 'caixaDec': sp({ x, y, caixa: 1, nome: 'Dentro da caixa de papelão' }); ob(0.1, -0.06, 0.02); break;
       case 'bolinhas': sp({ x: x - 0.09, y: y - 0.02, brinca: 1, dir: 1, tx: x - 0.035, ty: y - 0.016, nome: 'Brincando com as bolinhas' }); ob(0.055, -0.018, 0.012); break;
       case 'ratinho': sp({ x: x + 0.075, y: y - 0.02, brinca: 1, dir: -1, tx: x - 0.012, ty: y - 0.014, nome: 'Caçando o ratinho' }); ob(0.04, -0.018, 0.012); break;
@@ -4516,7 +4615,7 @@ function extrasDecor(lista) {
       case 'escadinha': sp({ x: x + 0.065, y: y - 0.135, alto: 1, nome: 'no topo da escadinha' }); ob(0.11, -0.06, 0.02); break;
     }
     /* a área atrás de um móvel de chão também fica bloqueada, na altura dele: assim nenhum gato fica "dentro" do desenho */
-    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
+    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dCogumelo: 0.14, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
     if (ALT_VIS[bid] != null) for (const o of obst) if (o.dec === d.slot) { o.y0 = Math.min(o.y0, y - ALT_VIS[bid] - 0.02); o.x0 -= 0.025; o.x1 += 0.025; }
     const zDe = { bolinhas: -0.03, ratinho: -0.03, peixeChute: -0.03, varinha: -0.035, circuito: -0.035, bolaCipo: -0.03, caixaDec: -0.04, tunel: -0.03, troncoOco: -0.07, ursinho: -0.02, caminha: -0.045, almofada: -0.03, bercinho: -0.045, iglu: -0.004, casinha: -0.004, tocaPedra: -0.004, fonte: 0, cesta: -0.04, luxo: -0.05, ninho: -0.04, rochaQuente: -0.06, piscina: -0.04, torre: -0.004, plataforma: -0.004, redeCipo: -0.004, poltrona: -0.004, aquarioPe: -0.004 };
     const def = defDecor(d.id);
@@ -4809,7 +4908,7 @@ function lugarLivre(m, raio) {
 
 function decidir(m) {
   zonaMor = zonaDe(m);
-  if (m.g.colecao && Math.random() < 0.35) {
+  if (m.g.colecao && Math.random() < 0.18) {
     const sp = sorteia(livres(x => x.vip));
     if (sp) { pegaSpot(m, sp); irPara(m, sp.x, sp.y, 0.2, () => { m.est = 'pose'; m.t = rnd(6, 11); }); return; }
   }
@@ -5188,6 +5287,15 @@ const DECOR_PREMIO = {
     c.shadowColor = 'rgba(255,216,74,.8)'; c.shadowBlur = k * 0.04;
     c.fillStyle = '#ffd84a'; c.beginPath(); c.arc(x, y, R, 0, 7); c.fill(); c.restore();
     c.fillStyle = '#fff3df'; for (const [dx, dy, rr] of [[0.9, -0.9, 0.22], [1.3, 0.3, 0.16], [-1.2, -1.1, 0.14]]) { caminhoEstrela(c, x + dx * R, y + dy * R, R * rr, R * rr * 0.42); c.fill(); }
+  },
+  dCogumelo(c, k, X, Y, cx, cy) {
+    sombraDec(c, k, X, Y, cx, cy, 0.05);
+    c.strokeStyle = 'rgba(42,34,48,.6)'; c.lineWidth = Math.max(1, k * 0.003);
+    c.fillStyle = '#fbf1dc'; c.beginPath(); c.moveTo(X(cx - 0.026), Y(cy)); c.quadraticCurveTo(X(cx - 0.032), Y(cy - 0.05), X(cx - 0.022), Y(cy - 0.085)); c.lineTo(X(cx + 0.022), Y(cy - 0.085)); c.quadraticCurveTo(X(cx + 0.032), Y(cy - 0.05), X(cx + 0.026), Y(cy)); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#2a2230'; for (const d of [-1, 1]) { c.beginPath(); c.arc(X(cx + d * 0.011), Y(cy - 0.045), k * 0.004, 0, 7); c.fill(); }
+    c.fillStyle = 'rgba(255,120,150,.45)'; for (const d of [-1, 1]) { c.beginPath(); c.arc(X(cx + d * 0.019), Y(cy - 0.036), k * 0.005, 0, 7); c.fill(); }
+    c.fillStyle = '#e8453c'; c.beginPath(); c.ellipse(X(cx), Y(cy - 0.08), k * 0.07, k * 0.06, 0, Math.PI, 0); c.quadraticCurveTo(X(cx), Y(cy - 0.07), X(cx - 0.07), Y(cy - 0.08)); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#ffffff'; for (const [dx, dy, rr] of [[-0.038, -0.095, 0.011], [0.004, -0.122, 0.013], [0.042, -0.1, 0.009], [-0.012, -0.093, 0.007]]) { c.beginPath(); c.arc(X(cx + dx), Y(cy + dy), k * rr, 0, 7); c.fill(); }
   },
   dPlaca(c, k, X, Y, cx, cy) {
     sombraDec(c, k, X, Y, cx, cy, 0.04);
@@ -6629,9 +6737,30 @@ function desenhaFantasma(x, y, s, fn) {
   ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.75; ctx.drawImage(cvFant, 0, 0, L, H, x - ox, y - oy, L, H);
   ctx.restore();
 }
+/* felinos (épicos para cima) são desenhados ao vivo por causa da aura, asas e caudas animadas;
+   aqui eles ganham as mesmas poses dos outros gatos: comer, cara de bravo e cara feliz */
+function felinoComendo(m, x, y, s, tipo, semSombra) {
+  const g0 = m.g;
+  ctx.save(); ctx.translate(x, y); ctx.scale(1.04, 0.92); ctx.translate(-x, -y);
+  pularCabeca = true; try { gatoRua(x, y, s, g0, 0, semSombra, true); } finally { pularCabeca = false; }
+  ctx.restore();
+  const s2 = s * (g0.filhote ? 0.62 : g0.alto ? 1.05 : 1), al2 = g0.filhote ? 0.88 : (g0.alto || 1);
+  const r = s2 * 0.15 * 0.97 * (g0.filhote ? 1.32 : 1);
+  let hy = y - s2 * (g0.filhote ? 0.26 : 0.29 + 0.25 * (al2 - 1));
+  if (g0.mitico) hy -= (1 + Math.sin(relogio * 2.2 + x * 0.013)) * s * 0.012 * 0.92;
+  if (g0.fantasma) hy -= (1.6 + Math.sin(relogio * 1.8 + x * 0.013)) * s * 0.03 * 0.92;
+  ctx.save(); ctx.translate(x, hy); ctx.scale(1, 0.94); ctx.translate(-x, -hy);
+  rostoEm(ctx, x, hy, r, g0, { fecha: true, lingua: [0, 0.45, 1, 0.45][+tipo.charAt(1)] || 0 });
+  ctx.restore(); ctx.lineCap = 'butt';
+}
+function felinoPose(m, x, y, s, pula, semSombra, fecha, tipo) {
+  if (tipo && tipo.charAt(0) === 'c' && s >= 16) { felinoComendo(m, x, y, s, tipo, semSombra); return; }
+  humorRosto = tipo === 'b' ? 'bravo' : tipo === 'h' ? 'feliz' : '';
+  try { gatoRua(x, y, s, m.g, pula, semSombra, fecha || (tipo && tipo.charAt(0) === 'c')); } finally { humorRosto = ''; }
+}
 function gatoSala(m, x, y, s, pula, semSombra, fecha, k, tipo) {
-  if (m.g.fantasma && s >= 10) { desenhaFantasma(x, y, s, () => gatoRua(x, y, s, m.g, pula, true, fecha)); return; }
-  if (m.g.aura || s < 10) { gatoRua(x, y, s, m.g, pula, semSombra, fecha); return; }
+  if (m.g.fantasma && s >= 10) { desenhaFantasma(x, y, s, () => felinoPose(m, x, y, s, pula, true, fecha, tipo)); return; }
+  if (m.g.aura || s < 10) { felinoPose(m, x, y, s, pula, semSombra, fecha, tipo); return; }
   const fs = m.g.filhote ? 0.62 : m.g.alto ? 1.05 : 1;
   if (!semSombra) { ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(x, y, s * 0.2 * fs, s * 0.045 * fs, 0, 0, 7); ctx.fill(); }
   y -= pula;
