@@ -1167,7 +1167,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.2';
+const VERSAO = '3.2.1';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1444,7 +1444,7 @@ const SECRETOS = [
     arcoIris: 1, fofo: 1, bochecha: '#ffb3d1', olhoBrilho: 'estrela', aura: '#8fd4ff', brilhos: 'arco' },
   { raca: 'gato fantasma', id: 'fantasma', nomeGato: 'Boo', sexo: 'm', dica: 'Faça uma patrulha bem tarde da noite.', pelo: '#eef3ff', dentro: '#c9d4ff', olhos: ['#4f7cff'], olho2: '#8fb0ff', patas: '#ffffff', pata: '#c9d4ff', nariz: '#a9b8f0', linha: '#5b6a9a',
     fantasma: 1, bochecha: '#b9c9ff', olhoBrilho: 'estrela', fofo: 1, peito: '#f7f9ff', aura: '#a8d4ff', brilho: 1.1 },
-  { raca: 'gato floral', id: 'floral', nomeGato: 'Flora', sexo: 'f', dica: 'Encha a casa, o abrigo e o santuário de flores e plantas.', pelo: '#fbead2', dentro: '#ffc4d8', olhos: ['#5fbf6a', '#5fbf6a'], patas: '#fff6e6', pata: '#ffb3d1', nariz: '#ff8fb1',
+  { raca: 'gato floral', id: 'floral', nomeGato: 'Flora', sexo: 'f', dica: 'Compre todas as flores e plantas da loja e coloque pelo menos 6.', pelo: '#fbead2', dentro: '#ffc4d8', olhos: ['#5fbf6a', '#5fbf6a'], patas: '#fff6e6', pata: '#ffb3d1', nariz: '#ff8fb1',
     manchas: [{ x: -0.6, y: -0.45, rx: 0.26, ry: 0.22, cor: '#f6c7d8' }, { x: 0.62, y: -0.3, rx: 0.22, ry: 0.2, cor: '#d8c7f2' }], floral: 1, bochecha: '#ffb3d1', olhoBrilho: 'flor', raboPonta: { tipo: 'flor', cor: '#ff7fa8' }, coleira: '#7fd08a', pingente: 'flor', aura: '#ffb3d8', brilhos: 'petala' },
   { raca: 'gato aurora', id: 'aurora', nomeGato: 'Aurora', sexo: 'f', dica: 'Busque uma estrela escondida no Pico do Floco.', pelo: '#1d2b55', dentro: '#7fe0c8', olhos: ['#9bf3e0', '#9bf3e0'], patas: '#2a3d72', pata: '#9bf3e0', nariz: '#c9a7ff', linha: '#cfe7ff',
     aurora: 1, fofo: 1, peito: '#243668', olhoBrilho: 'estrela', raboPonta: { tipo: 'floco', cor: '#e8fbff' }, coleira: '#5fd4b8', pingente: 'estrela', aura: '#6ff0c8', brilho: 1.4, brilhos: 'aurora' },
@@ -1470,8 +1470,10 @@ function ganharSecreto(id) {
 const idxAurora = () => REGIOES.findIndex(r => r.nome === 'Pico do Floco');
 /* Gato Floral: todas as flores e plantas da loja colocadas nos seus lugares */
 const FLORES_DEC = () => DECOR.filter(d => d.flor && d.premio == null);
-const floresTodas = () => { const pos = {}; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) pos[d.id] = 1; return FLORES_DEC().every(d => pos[d.id]); };
-const floresFeitas = () => { const pos = {}; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) pos[d.id] = 1; return FLORES_DEC().filter(d => pos[d.id]).length; };
+const FLORES_MIN = 6;
+const floresCompradas = () => FLORES_DEC().filter(d => temDecor(d.local, d.id)).length;
+const floresColocadas = () => { let n = 0; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) { const def = defDecor(d.id); if (def && def.flor) n++; } return n; };
+const floresTodas = () => floresCompradas() >= FLORES_DEC().length && floresColocadas() >= FLORES_MIN;
 const racaCompleta = () => TIPOS.some(t => { if (t.secreto) return false; const l = varsDe(t); return l.length > 0 && l.every(k => temVar(t.raca, k)); });
 function checarSecretos(info) {
   if (!save.secretos || typeof save.secretos !== 'object') save.secretos = {};
@@ -4375,7 +4377,7 @@ function abrirAlbum() {
       const b = cria('div', 'bloco');
       b.appendChild(cria('h3', '', titulo + ' · ' + achados + '/' + lista.length));
       b.appendChild(cria('p', 'nota', nota));
-      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + (save.epicosPegos || 0) + ' · Flores e plantas colocadas: ' + floresFeitas() + '/' + FLORES_DEC().length));
+      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + (save.epicosPegos || 0) + ' · Flores e plantas compradas: ' + floresCompradas() + '/' + FLORES_DEC().length + ' · colocadas: ' + Math.min(floresColocadas(), FLORES_MIN) + '/' + FLORES_MIN));
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
       b.appendChild(g); raiz.appendChild(b);
     }
@@ -7023,7 +7025,7 @@ function abrirDecorar(onde) {
 function entrarEdicao() {
   if (telaAbrigo.hidden) return;
   fecharFicha(); if (abaAberta) abrirAba('');
-  editando = { sel: null };
+  editando = { sel: null }; edicaoDesde = performance.now();
   $('palcoSala').classList.add('editando'); $('barraDecor').hidden = false; $('btnDecorar').hidden = true;
   $('salaDica').classList.add('some'); atualizarBarraDecor();
 }
@@ -7081,7 +7083,9 @@ function tituloEspaco(s) {
   const base = s.tipo === 'parede' ? 'Espaço na parede' : s.tipo === 'fundo' ? (s.h ? 'Espaço baixo no fundo' : modoSala === 'santuario' ? 'Espaço no fundo' : 'Espaço encostado na parede') : 'Espaço no chão';
   return base + (s.berco ? ' do berçário' : s.toca ? ' da toca' : '');
 }
+let fdAbertoEm = 0, edicaoDesde = 0;
 function abrirEspaco(s) {
+  fdAbertoEm = performance.now();
   editando.sel = s.id; camIr = Math.max(0, Math.min(MUNDO - vwSala, s.x - vwSala / 2)); seguir = false;
   const corpo = $('fdCorpo'); corpo.textContent = ''; $('fdTitulo').textContent = tituloEspaco(s);
   const onde = modoSala, L = save.lugar[onde];
@@ -7133,6 +7137,8 @@ function mudouDecor(s, id) {
 }
 $('btnDecorar').addEventListener('click', () => entrarEdicao());
 $('decorPronto').addEventListener('click', () => sairEdicao());
+/* no celular, o mesmo toque que abre a folha gera um clique logo depois, no mesmo ponto: ignora cliques nos primeiros instantes */
+$('folhaDecor').addEventListener('click', e => { if (performance.now() - fdAbertoEm < 450) { e.stopPropagation(); e.preventDefault(); } }, true);
 $('fdFechar').addEventListener('click', () => { $('folhaDecor').hidden = true; if (editando) editando.sel = null; });
 
 let cacheSala = null;
@@ -7240,7 +7246,7 @@ cvA.addEventListener('pointerup', soltarSala);
 cvA.addEventListener('pointercancel', e => { if (arr && e.pointerId === arr.id) arr = null; });
 function tocarSala(e) {
   const p = mundoDoToque(e);
-  if (editando) { const es = espacoNoToque(p); if (es) abrirEspaco(es); else { $('folhaDecor').hidden = true; editando.sel = null; } return; }
+  if (editando) { if (performance.now() - edicaoDesde < 350) return; const es = espacoNoToque(p); if (es) abrirEspaco(es); else { $('folhaDecor').hidden = true; editando.sel = null; } return; }
   const cands = [];
   for (const m of moradores) {
     if (m.hx == null) continue;
