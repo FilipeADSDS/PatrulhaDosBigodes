@@ -148,6 +148,40 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .btnDecorar{position:absolute;bottom:12px;left:10px;color:var(--tinta);z-index:2;display:flex;align-items:center;gap:5px;background:#fff;border-radius:999px;padding:6px 12px 6px 8px;font-weight:800;font-size:14px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
 .btnDecorar [data-ico]{width:20px;height:20px}
 .btnDecorar[hidden],.barraDecor[hidden],.folhaDecor[hidden]{display:none}
+.santBtns{position:absolute;top:46px;right:10px;z-index:2;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.santBtns[hidden]{display:none}
+#telaRegras,#telaParc{z-index:6}
+.santBtn{position:relative;display:flex;align-items:center;gap:5px;background:#fff;color:var(--tinta);border-radius:999px;padding:6px 12px 6px 8px;font-weight:800;font-size:14px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
+.santBtn [data-ico]{width:20px;height:20px;display:inline-flex}
+.santBtn .badge{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;border-radius:999px;background:var(--roxo);color:#fff;font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0 5px;box-shadow:0 0 0 2px #fff}
+.santBtn .badge[hidden]{display:none}
+.santBtn .badge.pronto{background:#e8573c}
+.regrasIntro{margin:0}
+.regrasChips{display:flex;flex-wrap:wrap;gap:8px}
+.regraChip{background:#fff;color:var(--tinta);border-radius:999px;padding:7px 14px;font-weight:800;font-size:14px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
+.regraChip.on{background:var(--roxo);color:#fff;box-shadow:0 3px 0 var(--roxo-escuro)}
+.regraChip.mini2{padding:5px 11px;font-size:13px}
+.regrasAcoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.regrasAcoes .mini{min-width:0}
+.regraLinha{align-items:flex-start}
+.regraLinha canvas{width:56px;height:56px;flex:0 0 56px}
+.regraInfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.regraInfo b{text-transform:capitalize}
+.regraInfo small{opacity:.65;font-weight:700;font-size:12px}
+.regraSlots{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.regraSlot{background:#f3ece4;color:var(--tinta);border-radius:999px;padding:4px 9px;font-weight:800;font-size:12px;opacity:.8;box-shadow:inset 0 0 0 1.5px rgba(42,34,48,.14)}
+.regraSlot.on{background:var(--roxo);color:#fff;opacity:1;box-shadow:0 2px 0 var(--roxo-escuro)}
+.regraSlot.tem::after{content:'✓';margin-left:4px;font-weight:900;color:#2fa58b}
+.regraSlot.on.tem::after{color:#b9f5d8}
+.parcLista{display:flex;flex-direction:column;gap:10px}
+.parcCard{display:flex;gap:10px;align-items:center;background:#fff;border-radius:16px;padding:10px;box-shadow:0 0 0 2px var(--linha),0 3px 0 var(--linha)}
+.parcCard canvas{width:72px;height:72px;flex:0 0 72px}
+.parcInfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.parcInfo small{opacity:.65;font-weight:700}
+.parcInfo b{font-size:16px;text-transform:capitalize}
+.parcPremio{font-weight:800;color:#b07a12}
+.parcAcoes{display:flex;gap:8px;margin-top:6px}
+.parcAcoes .mini{min-width:0;flex:1}
 .barraDecor{position:absolute;top:8px;left:8px;right:8px;z-index:3;display:flex;align-items:center;gap:8px;background:var(--creme);border-radius:16px;padding:7px 8px 7px 12px;box-shadow:0 0 0 2px var(--linha),0 4px 0 rgba(12,18,22,.18)}
 .bdTxt{flex:1;display:flex;flex-direction:column;line-height:1.15;min-width:0}.bdTxt b{font-size:15px}.bdTxt span{font-size:12px;font-weight:700;opacity:.7}
 .barraDecor .mini{flex:0 0 auto;padding:7px 16px}
@@ -200,6 +234,8 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 @keyframes pisca{50%{opacity:.35}}
 .avisoCard{max-width:360px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:stretch}
 .avisoCard #avisoRosto{width:110px;height:110px;margin:0 auto -4px}
+.avisoCard{position:relative}
+.avisoCard .avisoX{top:10px;right:10px;width:34px;height:34px;line-height:34px;font-size:20px}
 .avisoCard [hidden]{display:none!important}
 #tour{position:absolute;inset:0;z-index:30}
 #tour[hidden]{display:none}
@@ -557,6 +593,8 @@ button{transition:transform .09s ease,box-shadow .09s ease,background-color .15s
 .inicio .acao [data-ico]{width:26px;height:26px}
 .inicio .tile{grid-template-columns:40px minmax(0,1fr);padding:10px 9px;column-gap:8px}
 .tile.largo{grid-column:1 / -1;background:linear-gradient(90deg,#fff4c9,#fff 70%)}
+.tile.hotel{background:linear-gradient(90deg,#efe4ff,#fff 70%);opacity:.85}
+.tile.hotel small{opacity:.75}
 .tile .tranca{position:absolute;left:34px;bottom:5px;width:20px;height:20px}
 .tile .tranca[hidden]{display:none}
 .tile.trancado{background:#f6efe6}
@@ -629,6 +667,11 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 .regEstrelas{display:flex;align-items:center;gap:10px;margin:2px 0 6px}
 .regEstrelas .estrelas{gap:8px}
 .regMelhor{font-size:12px;font-weight:700;opacity:.75}
+.contaSec{font-weight:800!important;opacity:.85!important}
+.regAurora{display:flex;align-items:center;gap:10px;margin:6px 0 2px;padding:8px 10px;border-radius:14px;background:linear-gradient(90deg,#1d2b55,#3a2a72);color:#e8fbff}
+.regAurora .auEst{width:26px;height:26px;flex:0 0 26px;filter:hue-rotate(110deg) saturate(1.4) drop-shadow(0 0 4px #6ff0c8);opacity:.55}
+.regAurora.ok .auEst{opacity:1}
+.regAurora small{display:block;opacity:.85;font-weight:700}
 .regPremios{display:flex;align-items:center;gap:6px;margin:0 0 6px}
 .regPremios small{font-size:12px;font-weight:700;opacity:.7}
 .regPremio{width:30px;height:30px;border-radius:9px;background:#f3ece2;display:flex;align-items:center;justify-content:center}
@@ -781,6 +824,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
         <button class="tile" id="abrirAlbum" type="button"><span class="tico" data-ico="album"></span><b>Álbum</b><small id="tAlbum">0/29 raças</small></button>
         <button class="tile" id="abrirLoja" type="button"><span class="tico" data-ico="loja"></span><b>Loja</b><small id="tLoja">0 moedas</small></button>
         <button class="tile" id="abrirAjuda" type="button"><span class="tico" data-ico="ajuda"></span><b>Ajuda</b><small>Como jogar</small></button>
+        <button class="tile largo hotel" id="abrirHotel" type="button"><span class="tico" data-ico="hotel"></span><b>Hotel 7 Vidas</b><small>Em breve</small><i class="tranca" data-ico="cadeado"></i></button>
       </div>
       <button class="nivelMenu" id="nivelMenu" type="button"><span class="nivelSelo" id="menuNivel">1</span><span class="nivelMeio"><span class="nivelTopo"><b id="menuNivelTxt">Nível 1</b><small id="menuNivelXp">0/40 XP</small></span><span class="xpBarra"><i id="menuNivelBarra"></i></span></span><span class="nivelEst"><i data-ico="estrela"></i><b id="menuEstrelas">0/21</b></span></button>
       <div class="stats"><span><i data-ico="trofeu"></i>Recorde: <b id="recorde">0</b> pts</span><span><i data-ico="moeda"></i><b id="menuMoedas">0</b> moedas</span></div>
@@ -966,6 +1010,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
         <p class="dica" id="salaDica">Arraste para ver a sala · toque num gato</p>
         <button class="irBerco" id="irBerco" type="button" hidden></button>
         <button class="btnDecorar" id="btnDecorar" type="button"><span data-ico="lapis"></span>Decorar</button>
+        <div class="santBtns" id="santBtns" hidden><button class="santBtn" id="btnRegras" type="button"><span data-ico="prancheta"></span>Regras</button><button class="santBtn" id="btnParc" type="button"><span data-ico="parceiros"></span>Parceiros<i class="badge" id="parcBadge" hidden>0</i></button></div>
         <div class="barraDecor" id="barraDecor" hidden><span class="bdTxt" id="barraDecorTxt"></span><button class="mini" id="decorPronto" type="button">Pronto</button></div>
         <div class="folhaDecor" id="folhaDecor" hidden>
           <div class="folhaTopo"><h3 id="fdTitulo">Espaço</h3><button class="fechar" id="fdFechar" type="button" aria-label="Fechar">×</button></div>
@@ -1031,6 +1076,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela" id="telaAviso" hidden>
     <section class="cartao simples avisoCard">
+      <button class="fechar avisoX" id="avisoFechar" type="button" aria-label="Fechar" hidden>×</button>
       <div class="nomeIco" id="avisoIco"></div>
       <canvas id="avisoRosto" width="160" height="160" hidden></canvas>
       <h2 id="avisoTitulo"></h2>
@@ -1053,6 +1099,18 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
     </section>
   </div>
 
+  <div class="tela cheia" id="telaRegras" hidden>
+    <section class="cartao">
+      <header class="topo"><button class="voltar" id="fecharRegras" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="prancheta"></span>Regras do Santuário</h2></header>
+      <div class="corpo" id="regrasCorpo"></div>
+    </section>
+  </div>
+  <div class="tela cheia" id="telaParc" hidden>
+    <section class="cartao">
+      <header class="topo"><button class="voltar" id="fecharParc" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="parceiros"></span>Pedidos dos parceiros</h2></header>
+      <div class="corpo" id="parcCorpo"></div>
+    </section>
+  </div>
   <div class="tela" id="telaFel" hidden>
     <section class="cartao simples felCard">
       <h2 id="felTitulo">Santuário cheio!</h2>
@@ -1109,7 +1167,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.1';
+const VERSAO = '3.2';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1153,6 +1211,10 @@ try {
     if (typeof lido.nivelPago === 'number') save.nivelPago = lido.nivelPago;
     if (Array.isArray(lido.premios)) save.premios = lido.premios;
     if (lido.secretos && typeof lido.secretos === 'object') save.secretos = lido.secretos;
+    if (typeof lido.epicosPegos === 'number') save.epicosPegos = lido.epicosPegos;
+    if (lido.regras && typeof lido.regras === 'object') save.regras = lido.regras;
+    if (lido.parc && typeof lido.parc === 'object') save.parc = lido.parc;
+    if (Array.isArray(lido.parcEspera)) save.parcEspera = lido.parcEspera;
     if (Array.isArray(lido.carinhos)) save.carinhos = lido.carinhos.filter(x => typeof x === 'string').slice(0, 2000);
     if (typeof lido.regiao === 'number') save.regiao = lido.regiao;
     if (Array.isArray(lido.regioes)) save.regioes = lido.regioes.filter(n => typeof n === 'number');
@@ -1272,7 +1334,7 @@ for (const a of save.abrigo.concat(save.casa || [], save.sant)) if (a && !a.id) 
 save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
 function salvar() { gravar('pegagatos.save', JSON.stringify(save)); }
 const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
-  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
+  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 3, parcPatr: 4, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
   santBase: 10, santNivel: 5, santTeto: 40, nomeEpico: 500, nomeLend: 1500, nomeMit: 4000, bercoFracao: 0.5, tocaFracao: 0.5, chanceFilhote: 0.15, chanceCaixa: 0.009, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
 let ADM = { v: {}, precos: {}, corpos: {}, pelos: {}, chances: {} };
 try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; if (a.pelos && typeof a.pelos === 'object') ADM.pelos = a.pelos; if (a.chances && typeof a.chances === 'object') ADM.chances = a.chances; } } catch (e) {}
@@ -1378,10 +1440,16 @@ const SECRETOS = [
   { raca: 'gato sortudo', id: 'sortudo', nomeGato: 'Trevo', sexo: 'm', dica: 'Pegue muitos gatos com guizo numa patrulha só.', pelo: '#f2a24e', dentro: '#ffb3a7', olhos: ['#4fbf5a'], patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f28ca0',
     branco: { topo: -0.28, larg: 0.2, ladoE: 0.3, ladoD: 0.3, dx: 0 }, manchas: [{ x: -0.62, y: -0.5, rx: 0.3, ry: 0.22, cor: '#e0862f' }, { x: 0.66, y: -0.45, rx: 0.26, ry: 0.2, cor: '#e0862f' }],
     marca: { tipo: 'trevo', cor: '#3fae4a' }, olhoBrilho: 'estrela', trevoPeito: '#3fae4a', raboPonta: { tipo: 'trevo', cor: '#3fae4a' }, coleira: '#2f9e44', pingente: 'trevo', aura: '#8fdc5a', brilhos: 'trevo' },
-  { raca: 'gato arco-íris', id: 'arcoiris', nomeGato: 'Íris', sexo: 'f', dica: 'Encontre todos os jeitos de uma mesma raça.', pelo: '#fbf7ef', dentro: '#ffc4dc', olhos: ['#5ab8f0'], olho2: '#9be7ff', patas: '#fbf7ef', pata: '#ffb3d1', nariz: '#ff9eb3',
+  { raca: 'gato arco-íris', id: 'arcoiris', nomeGato: 'Íris', sexo: 'f', dica: 'Encontre todos os jeitos de uma mesma raça.', pelo: '#fbf7ef', dentro: '#ffc4dc', olhos: ['#5ab8f0', '#5ab8f0'], olho2: '#9be7ff', patas: '#fbf7ef', pata: '#ffb3d1', nariz: '#ff9eb3',
     arcoIris: 1, fofo: 1, bochecha: '#ffb3d1', olhoBrilho: 'estrela', aura: '#8fd4ff', brilhos: 'arco' },
   { raca: 'gato fantasma', id: 'fantasma', nomeGato: 'Boo', sexo: 'm', dica: 'Faça uma patrulha bem tarde da noite.', pelo: '#eef3ff', dentro: '#c9d4ff', olhos: ['#4f7cff'], olho2: '#8fb0ff', patas: '#ffffff', pata: '#c9d4ff', nariz: '#a9b8f0', linha: '#5b6a9a',
     fantasma: 1, bochecha: '#b9c9ff', olhoBrilho: 'estrela', fofo: 1, peito: '#f7f9ff', aura: '#a8d4ff', brilho: 1.1 },
+  { raca: 'gato floral', id: 'floral', nomeGato: 'Flora', sexo: 'f', dica: 'Encha a casa, o abrigo e o santuário de flores e plantas.', pelo: '#fbead2', dentro: '#ffc4d8', olhos: ['#5fbf6a', '#5fbf6a'], patas: '#fff6e6', pata: '#ffb3d1', nariz: '#ff8fb1',
+    manchas: [{ x: -0.6, y: -0.45, rx: 0.26, ry: 0.22, cor: '#f6c7d8' }, { x: 0.62, y: -0.3, rx: 0.22, ry: 0.2, cor: '#d8c7f2' }], floral: 1, bochecha: '#ffb3d1', olhoBrilho: 'flor', raboPonta: { tipo: 'flor', cor: '#ff7fa8' }, coleira: '#7fd08a', pingente: 'flor', aura: '#ffb3d8', brilhos: 'petala' },
+  { raca: 'gato aurora', id: 'aurora', nomeGato: 'Aurora', sexo: 'f', dica: 'Busque uma estrela escondida no Pico do Floco.', pelo: '#1d2b55', dentro: '#7fe0c8', olhos: ['#9bf3e0', '#9bf3e0'], patas: '#2a3d72', pata: '#9bf3e0', nariz: '#c9a7ff', linha: '#cfe7ff',
+    aurora: 1, fofo: 1, peito: '#243668', olhoBrilho: 'estrela', raboPonta: { tipo: 'floco', cor: '#e8fbff' }, coleira: '#5fd4b8', pingente: 'estrela', aura: '#6ff0c8', brilho: 1.4, brilhos: 'aurora' },
+  { raca: 'gato cristal', id: 'cristal', nomeGato: 'Cristal', sexo: 'm', dica: 'Resgate muitos felinos épicos.', pelo: '#e8f3ff', dentro: '#bfe6ff', orelha: '#bfe6ff', olhos: ['#5ab8f0', '#5ab8f0'], patas: '#f5faff', pata: '#bfe6ff', nariz: '#9fc8f0', linha: '#4f6a9a',
+    cristalBrilho: 1, marca: { tipo: 'cristal', cor: '#7fd0ff' }, olhoBrilho: 'cristal', raboPonta: { tipo: 'cristal', cor: '#9fdcff' }, coleira: '#7fd0ff', pingente: 'cristal', aura: '#bfe6ff', brilho: 1.3, brilhos: 'cristal' },
   { raca: 'gato galáxia', id: 'galaxia', nomeGato: 'Órion', sexo: 'm', dica: 'Encontre todas as raças do álbum, inclusive os outros secretos.', pelo: '#22123d', dentro: '#8b5cf6', olhos: ['#ffe07a'], patas: '#3a2466', pata: '#b48cff', nariz: '#c9a7ff', linha: '#d6c9ff',
     nebulosa: 1, fofo: 1, peito: '#2e1a52', marca: { tipo: 'lua', cor: '#ffd84a' }, olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#8b5cf6', pingente: 'estrela', aura: '#7b4dff', brilho: 1.6, brilhos: 'estrela' }
 ];
@@ -1399,6 +1467,11 @@ function ganharSecreto(id) {
   salvar();
   return t;
 }
+const idxAurora = () => REGIOES.findIndex(r => r.nome === 'Pico do Floco');
+/* Gato Floral: todas as flores e plantas da loja colocadas nos seus lugares */
+const FLORES_DEC = () => DECOR.filter(d => d.flor && d.premio == null);
+const floresTodas = () => { const pos = {}; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) pos[d.id] = 1; return FLORES_DEC().every(d => pos[d.id]); };
+const floresFeitas = () => { const pos = {}; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) pos[d.id] = 1; return FLORES_DEC().filter(d => pos[d.id]).length; };
 const racaCompleta = () => TIPOS.some(t => { if (t.secreto) return false; const l = varsDe(t); return l.length > 0 && l.every(k => temVar(t.raca, k)); });
 function checarSecretos(info) {
   if (!save.secretos || typeof save.secretos !== 'object') save.secretos = {};
@@ -1407,6 +1480,9 @@ function checarSecretos(info) {
   if (!save.secretos.sortudo && info && info.guizos >= Math.max(1, Math.round(A('sortudoGuizos')))) ganha('sortudo');
   if (!save.secretos.arcoiris && racaCompleta()) ganha('arcoiris');
   if (!save.secretos.fantasma && info && info.madrugada) ganha('fantasma');
+  if (!save.secretos.cristal && (save.epicosPegos || 0) >= Math.max(1, Math.round(A('cristalEpicos')))) ganha('cristal');
+  if (!save.secretos.aurora && info && info.rIdx === idxAurora() && (save.estrelas[info.rIdx] || 0) >= 3 && info.pontos >= A('auroraMeta')) ganha('aurora');
+  if (!save.secretos.floral && floresTodas()) ganha('floral');
   /* Gato Galáxia: todas as raças do álbum, inclusive os outros secretos */
   if (!save.secretos.galaxia && TIPOS.every(t => t.id === 'galaxia' || save.album[t.raca])) ganha('galaxia');
   return novos;
@@ -1419,6 +1495,9 @@ const TEXTO_SECRETO = {
   sortudo: 'Você pegou um monte de gatos com guizo numa patrulha só e o Trevo, o Gato Sortudo, apareceu com um trevo de quatro folhas na testa. Ele veio morar na sua casa e entrou no álbum, na parte de Secretos.',
   arcoiris: 'Você encontrou todos os jeitos de uma mesma raça e a Íris, a Gata Arco-íris, apareceu com as cores do céu depois da chuva. Ela veio morar na sua casa e entrou no álbum, na parte de Secretos.',
   fantasma: 'Uma patrulha à meia-noite... e o Boo, o Gato Fantasma, apareceu flutuando atrás do carro! Ele é meio transparente, mas muito carinhoso, e veio morar na sua casa. Ele também entrou no álbum, na parte de Secretos.',
+  floral: 'Você encheu seus cantinhos de flores e a Flora, a Gata Floral, apareceu no meio das pétalas. Ela veio morar na sua casa e entrou no álbum, na parte de Secretos.',
+  aurora: 'No alto do Pico do Floco o céu se acendeu em verde e roxo, e a Aurora desceu junto com a luz. Ela veio morar na sua casa e entrou no álbum, na parte de Secretos.',
+  cristal: 'De tanto resgatar felinos épicos, você achou o Cristal, um gato que brilha como pedra preciosa. Ele veio morar na sua casa e entrou no álbum, na parte de Secretos.',
   galaxia: 'Você encontrou todas as raças do álbum, até os outros gatos secretos, e o Órion, o Gato Galáxia, desceu do céu da madrugada para morar com você. Ele é o segredo mais difícil do jogo e agora brilha no seu álbum.',
   estrela: 'Você conquistou todas as estrelas e a Estrela, um gato que brilha como o céu da madrugada, veio morar na sua casa. Ele também entrou no álbum, na parte de Secretos.',
   amor: 'Você fez carinho em tantos gatos diferentes que o Xodó, o Gato do Amor, apareceu com um coração no pelo e veio morar na sua casa. Ele também entrou no álbum, na parte de Secretos.'
@@ -1524,6 +1603,9 @@ function auraFelino(k, x, y, raio, g, t) {
       if (g.mitico || g.cosmico) k.fillStyle = coresM[q % 3];
       const an = t * (g.mitico ? 2.1 : 1.6) + q * 6.283 / nq, px = x + Math.cos(an) * raio * 0.72, py = y + Math.sin(an) * raio * 0.55, r = raio * 0.06 * (0.7 + 0.3 * Math.sin(t * 6 + q));
       if (g.brilhos === 'coracao' || g.brilhos === 'trevo') { desenhaMarca(k, g.brilhos, px, py, r * 0.8, (g.brilhos === 'coracao' ? ['#ff7fa8', '#ffd1e0', '#ff5d8f'] : ['#7ed957', '#ffd84a', '#3fae4a'])[q % 3], true); continue; }
+      if (g.brilhos === 'petala') { desenhaMarca(k, q % 3 === 0 ? 'flor' : 'petala', px, py, r * 0.75, ['#ff8fb1', '#ffd1e0', '#b38ce0', '#ffffff', '#ffd84a'][q % 5], true); continue; }
+      if (g.brilhos === 'aurora') { if (q % 2) { desenhaMarca(k, 'floco', px, py, r * 0.7, '#e8fbff', true); continue; } k.fillStyle = ['#6ff0c8', '#9b7bff', '#7fd8ff'][q % 3]; }
+      if (g.brilhos === 'cristal') { desenhaMarca(k, 'cristal', px, py, r * 0.8, ['#bfe6ff', '#ffffff', '#ffc4e8', '#9fdcff'][q % 4], true); continue; }
       if (g.brilhos === 'chama' || g.brilhos === 'fogoAzul') { desenhaMarca(k, 'chama', px, py, r * 0.9, (g.brilhos === 'chama' ? ['#ff8a2a', '#ffd84a', '#ff5a2a'] : ['#7fc8ff', '#bfe6ff', '#4f9cff'])[q % 3]); continue; }
       if (g.brilhos === 'arco') k.fillStyle = ARCO[q % ARCO.length];
       k.beginPath(); for (let v = 0; v < 8; v++) { const rr = v % 2 ? r * 0.38 : r, aa = v * Math.PI / 4; k.lineTo(px + Math.cos(aa) * rr, py + Math.sin(aa) * rr); } k.fill();
@@ -1769,6 +1851,7 @@ function caminhoEstrela(c, x, y, R, ri) {
   c.closePath();
 }
 function pingente(c, x, y, s, tipo) {
+  if (tipo === 'flor' || tipo === 'cristal') { c.save(); c.fillStyle = tipo === 'flor' ? '#ff7fa8' : '#7fd0ff'; desenhaMarca(c, tipo, x, y, s * 0.85, c.fillStyle); c.restore(); return; }
   if (tipo === 'folha') { c.save(); c.translate(x, y); c.rotate(0.35); c.fillStyle = '#e8742f'; c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.1); c.beginPath(); c.moveTo(0, s * 0.95); c.quadraticCurveTo(-s * 0.85, s * 0.1, 0, -s * 0.95); c.quadraticCurveTo(s * 0.85, s * 0.1, 0, s * 0.95); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#9a4a1c'; c.lineWidth = Math.max(0.6, s * 0.07); c.beginPath(); c.moveTo(0, s * 0.8); c.lineTo(0, -s * 0.6); c.stroke(); c.restore(); return; }
   if (tipo === 'coracao' || tipo === 'trevo') { c.save(); c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.12); if (tipo === 'coracao') { caminhoCoracao(c, x, y, s * 0.85); c.stroke(); } desenhaMarca(c, tipo, x, y, s * 0.85, tipo === 'coracao' ? '#ff5d8f' : '#3fae4a'); c.restore(); return; }
   c.save(); c.lineJoin = 'round'; c.lineCap = 'round';
@@ -1863,14 +1946,22 @@ function rostoEm(c, x, y, r, g, op) {
     c.beginPath(); c.ellipse(x + t.x * r, y + t.y * r, t.rx * r, t.ry * r, t.g || 0, 0, 7); c.fill();
   }
   felinoEstampa(c, x, y, r * 1.06, r * 0.92, g);
-  if (g.arcoIris || g.nebulosa) {
+  if (g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral) {
     c.save(); c.beginPath(); c.ellipse(x, y, r * 1.06, r * 0.92, 0, 0, 7); c.clip();
+    if (g.aurora) pintaAurora(c, x, y, r * 1.06, r * 0.92);
+    if (g.cristalBrilho) pintaCristal(c, x, y, r * 1.06, r * 0.92);
+    if (g.floral) for (const [fx, fy, k, cor] of [[-0.55, -0.15, 0.1, '#ff8fb1'], [0.62, 0.05, 0.085, '#b38ce0'], [-0.3, 0.55, 0.07, '#ffd84a'], [0.42, -0.62, 0.065, '#ffffff']]) desenhaMarca(c, 'flor', x + fx * r, y + fy * r, r * k, cor, true);
     if (g.nebulosa) pintaGalaxia(c, x, y, r * 1.06, r * 0.92, r * 0.035);
     if (g.arcoIris) pintaArco(c, x, y + r * 0.18, r * 1.12, r * 0.095, Math.PI * 1.08, Math.PI * 1.92);
     c.restore(); c.strokeStyle = '#2a2230'; c.lineWidth = S * 0.03; c.beginPath(); c.ellipse(x, y, r * 1.06, r * 0.92, 0, 0, 7); c.stroke();
   }
   if (g.marcasRaposa) { c.strokeStyle = g.marcasRaposa; c.lineCap = 'round'; c.lineWidth = r * 0.07; for (const d of [-1, 1]) for (const [oy, len] of [[0.12, 0.34], [0.26, 0.28]]) { c.beginPath(); c.moveTo(x + d * r * 1.02, y + r * oy); c.quadraticCurveTo(x + d * r * (1.02 - len * 0.6), y + r * (oy - 0.06), x + d * r * (1.02 - len), y + r * (oy + 0.01)); c.stroke(); } }
-  if (g.marca) desenhaMarca(c, g.marca.tipo, x, y - r * 0.5, r * (g.marca.tipo === 'lua' ? 0.17 : 0.22), g.marca.cor);
+  if (g.marca) desenhaMarca(c, g.marca.tipo, x, y - r * 0.5, r * (g.marca.tipo === 'lua' ? 0.17 : g.marca.tipo === 'cristal' ? 0.16 : 0.22), g.marca.cor);
+  if (g.floral) { /* coroa de flores entre as orelhas */
+    const cores = ['#ff7fa8', '#ffd84a', '#b38ce0', '#ffffff', '#ff9f6b', '#7fc8ff', '#ff7fa8'];
+    c.fillStyle = '#5fbf6a'; c.beginPath(); c.ellipse(x, y - r * 0.82, r * 0.62, r * 0.12, 0, Math.PI, 0); c.fill();
+    cores.forEach((cor, q) => { const a = Math.PI * (1.12 + q * 0.127); desenhaMarca(c, 'flor', x + Math.cos(a) * r * 0.66, y - r * 0.4 + Math.sin(a) * r * 0.5, r * 0.11, cor, true); });
+  }
   if (g.focinho) { c.fillStyle = g.focinho; c.beginPath(); c.ellipse(x, y + r * 0.42, r * 0.52, r * 0.4, 0, 0, 7); c.fill(); }
   lagrimas(c, x, y, r * 1.06, r * 0.92, g);
   c.strokeStyle = g.listra; c.lineWidth = S * 0.035;
@@ -2039,10 +2130,13 @@ function assustarGatos(k0) {
   return n;
 }
 function virarFilhote(g) { g.filhote = 1; delete g.alto; g.corpoTipo = ''; delete g.corpo; return g; }
+/* filhote só vem se tiver onde morar: gatos comuns precisam do Berçário, felinos precisam da Toca */
+const regiaoTemComuns = () => { const R = regiaoAtual(); return !!(R.tiposGatos && R.tiposGatos.length); };
+const caixaPode = () => (regiaoTemComuns() && bercoOk()) || tocaOk();
 function novoFilhote() {
-  /* mesma chance da região: sem a Toca dos Filhotes, os felinos não vêm na caixa */
-  for (let q = 0; q < 20; q++) { const g = gatoAleatorio(); if (!g.colecao || tocaOk()) return virarFilhote(g); }
-  const R = regiaoAtual(), lista = (R.tiposGatos && R.tiposGatos.length ? R.tiposGatos : COMUNS);
+  for (let q = 0; q < 20; q++) { const g = gatoAleatorio(); if (g.colecao ? tocaOk() : bercoOk()) return virarFilhote(g); }
+  if (!regiaoTemComuns() || !bercoOk()) return null;
+  const R = regiaoAtual(), lista = R.tiposGatos;
   let tot = 0; for (const t of lista) tot += t.peso; let sr = Math.random() * tot, tipo = lista[0];
   for (const t of lista) { sr -= t.peso; if (sr <= 0) { tipo = t; break; } }
   return virarFilhote(gatoDoTipo(tipo));
@@ -2059,7 +2153,7 @@ function sortearObjeto(g, nivel) {
     if (rnd() < Math.min(0.5, 0.22 + (nivel || 1) * 0.04)) g.sp.push({ t: 'pep', o: faixas[(f + 1 + Math.floor(rnd() * 2)) % 3], hit: false });
   }
   else if (sorte < 0.74) g.sp.push({ t: 'pep', o: faixas[f], hit: false });
-  else if (bercoOk() && caixasPista < 1 && sorte < 0.74 + Math.max(0, A('chanceCaixa'))) { caixasPista++; g.sp.push({ t: 'caixaF', o: faixas[f], hit: false }); }
+  else if (caixaPode() && caixasPista < 1 && sorte < 0.74 + Math.max(0, A('chanceCaixa'))) { caixasPista++; g.sp.push({ t: 'caixaF', o: faixas[f], hit: false }); }
   else {
     /* entre os itens, cada um tem a sua chance, sorteada à parte */
     const r = rnd() * 0.26, tipo = r < 0.05 * fi ? 'sache' : r < 0.095 * fi ? 'escova' : r < 0.135 * fi ? 'guizo' : 'fish';
@@ -2555,14 +2649,20 @@ function terminar() {
   }
   let sobra = 0, ganhoSobra = 0;
   const colecionados = []; let natN = 0, autoN = 0, filN = 0, tocaFil = 0, tocaCheia = 0;
+  const contReg = { nat: 0, moedas: 0, casa: 0, parc: 0 };
   const santEra = save.santInfo.ok;
   if (pegos.some(g => g.colecao)) { atualizarCaixa(); save.santInfo.ok = 1; }
   for (const g of pegos) {
     save.album[g.raca] = (save.album[g.raca] || 0) + 1; registrarVar(g);
+    if (g.colecao && g.rc === 'epico') save.epicosPegos = (save.epicosPegos || 0) + 1;
     if (g.colecao) {
       colecionados.push(g);
       const reg = { id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo };
-      if (g.filhote) { reg.fi = 1; reg.nasc = Date.now(); if (tocaN() < tocaMax()) { save.sant.push(reg); tocaFil++; } else { tocaCheia++; save.felFila.push(reg); } continue; }
+      if (g.filhote) { reg.fi = 1; reg.nasc = Date.now(); }
+      const regra = aplicarRegra(reg, tipoRaca(g.raca), contReg);
+      if (regra && regra !== 'guardar') continue;
+      if (g.filhote) { if (tocaN() < tocaMax()) { save.sant.push(reg); tocaFil++; } else { tocaCheia++; save.felFila.push(reg); } continue; }
+      if (regra === 'guardar') { if (santAdultos() < santMax()) { save.sant.push(reg); autoN++; } else { natN++; save.felFila.push(reg); } continue; }
       /* raça nova no santuário: o primeiro vai direto; os outros você escolhe */
       if (!save.sant.some(r => tipoFel(r) === tipoFel(reg)) && santAdultos() < santMax()) { save.sant.push(reg); autoN++; }
       else { natN++; save.felFila.push(reg); }
@@ -2583,6 +2683,8 @@ function terminar() {
   if (sobra) txtFim.push(sobra + (sobra === 1 ? ' gato não coube' : ' gatos não couberam') + ' no abrigo · +' + ganhoSobra + ' moedas');
   if (!santEra && save.santInfo.ok) { const r0 = save.sant.find(r => pegos.some(g => g.colecao && g.raca === r.r)); save.santNovo = r0 ? r0.id : 1; }
   if (autoN) txtFim.push(autoN + (autoN === 1 ? ' felino novo foi' : ' felinos novos foram') + ' para o Santuário');
+  { const tr = textoRegras(contReg); if (tr) txtFim.push(tr); }
+  { const np = atualizarParc(true); if (np) txtFim.push(np === 1 ? 'chegou 1 pedido de parceiro no santuário' : 'chegaram ' + np + ' pedidos de parceiros no santuário'); }
   if (natN) txtFim.push('escolha para onde ' + (natN === 1 ? 'vai 1 felino' : 'vão ' + natN + ' felinos'));
   if (filN) txtFim.push('berçário cheio: escolha onde ' + (filN === 1 ? 'fica 1 filhote' : 'ficam ' + filN + ' filhotes'));
   const nFil = pegos.filter(g => g.filhote && !g.colecao).length; if (nFil && !filN) txtFim.push(nFil + (nFil === 1 ? ' filhote foi' : ' filhotes foram') + ' para o berçário');
@@ -2621,7 +2723,7 @@ function terminar() {
     else if (save.felFila.length) mostrarFilaFel();
   };
   const depois2 = () => { if (subiu.length) mostrarNivelNovo(subiu, depois); else depois(); };
-  setTimeout(() => { mostrarSecretos(checarSecretos({ guizos: guizosCorrida, madrugada }), depois2); }, 900);
+  setTimeout(() => { mostrarSecretos(checarSecretos({ guizos: guizosCorrida, madrugada, rIdx, pontos }), depois2); }, 900);
 }
 $('jogar').addEventListener('click', () => { initSom(); origemPreparar = 'menu'; abrirPreparar(); });
 $('nivelMenu').addEventListener('click', () => { initSom(); mostrarInfoNivel(); });
@@ -2640,6 +2742,7 @@ function montarAjuda() {
   document.querySelector('#ajuda .ajVagas').textContent = vagasCarro() + '/' + vagasCarro();
   document.querySelector('#ajuda .corpo').scrollTop = 0;
 }
+$('abrirHotel').addEventListener('click', () => janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas', fechar: true, texto: 'Em breve! Um hotel de 7 andares, cada um com um tema e gatos especiais para colecionar.', okTxt: 'Mal posso esperar!' }));
 $('abrirAjuda').addEventListener('click', () => { montarAjuda(); menu.hidden = true; telaAjuda.hidden = false; });
 $('fecharAjuda').addEventListener('click', irMenu);
 $('som').addEventListener('click', () => {
@@ -2759,9 +2862,9 @@ function update(dt) {
           if (charge < precisa()) { charge++; if (charge === precisa()) pop('Turbo pronto!', '#ffd84a'); }
           somPeixe();
         } else if (s.t === 'caixaF') {
-          const n = 1 + Math.floor(Math.random() * 5);
-          for (let q = 0; q < n; q++) { const gf = novoFilhote(); if (guizoT > 0) Object.assign(gf, { premio: 1, coleira: '#c0392b', guizo: true }); caixaF.push(gf); pontos += gf.pts * (gf.premio ? 2 : 1); if (!save.album[gf.raca] && novasRacas.indexOf(gf.raca) < 0) novasRacas.push(gf.raca); }
-          pop('Caixa de filhotes! +' + n, '#ffb3d1'); somItem(); shake = Math.max(shake, 0.25);
+          let n = 0;
+          for (let q = 0, tot = 1 + Math.floor(Math.random() * 5); q < tot; q++) { const gf = novoFilhote(); if (!gf) continue; n++; if (guizoT > 0) Object.assign(gf, { premio: 1, coleira: '#c0392b', guizo: true }); caixaF.push(gf); pontos += gf.pts * (gf.premio ? 2 : 1); if (!save.album[gf.raca] && novasRacas.indexOf(gf.raca) < 0) novasRacas.push(gf.raca); }
+          if (n) { pop('Caixa de filhotes! +' + n, '#ffb3d1'); somItem(); shake = Math.max(shake, 0.25); }
           for (let q = 0; q < Math.min(n, 3); q++) saltos.push({ g: caixaF[caixaF.length - 1 - q], t: -q * 0.12, x0: 0.5 + (s.o - px) * 0.46, lado: q % 2 ? -1 : 1 });
         } else if (s.t === 'sache' || s.t === 'escova' || s.t === 'guizo') {
           ativarItem(s.t);
@@ -3242,7 +3345,7 @@ function gatoRua(x, y, s, g, pula, semSombra, fecha) {
   }
   if (g.fofo && s > 10) felpa(ctx, x, y - s * 0.25, s * 0.075, s * 0.03, 0, Math.PI, 4, s * 0.03, g.peito || g.pelo, null);
   if (g.branco && !(g.peitoCoracao && s > 10)) { ctx.fillStyle = '#fbf7ef'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.14, s * 0.08 * (g.corpo || 1), s * 0.12, 0, 0, 7); ctx.fill(); }
-  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa)) corpoSecreto(x, y, s, g);
+  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral)) corpoSecreto(x, y, s, g);
   frenteMitico(x, y, s, g);
   if (estica) ctx.restore();
   if (!pularCabeca) cabecaGato(x, y - s * (g.filhote ? 0.35 : 0.4 + 0.3 * (al - 1)), s * 0.15 * (g.filhote ? 1.32 : 1), g, fecha);
@@ -3252,6 +3355,9 @@ function corpoSecreto(x, y, s, g) {
   const cw = g.corpo || 1;
   ctx.save(); ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15 * cw, s * 0.16, 0, 0, 7); ctx.clip();
   if (g.nebulosa) pintaGalaxia(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16, s * 0.006);
+  if (g.aurora) pintaAurora(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
+  if (g.cristalBrilho) pintaCristal(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
+  if (g.floral) for (const [fx, fy, k, cor] of [[-0.6, -0.4, 0.024, '#ff8fb1'], [0.55, -0.15, 0.02, '#b38ce0'], [-0.2, 0.3, 0.018, '#ffd84a'], [0.3, -0.62, 0.016, '#ffffff']]) desenhaMarca(ctx, 'flor', x + fx * s * 0.15 * cw, y - s * 0.16 + fy * s * 0.16, s * k, cor, true);
   if (g.arcoIris) pintaArco(ctx, x, y + s * 0.02, s * 0.19, s * 0.016, Math.PI * 1.05, Math.PI * 1.95);
   if (g.peitoCoracao) desenhaMarca(ctx, 'coracao', x, y - s * 0.15, s * 0.085, '#fbf7ef', true);
   if (g.coracoesCorpo) for (const [d, oy, k] of [[-1, -0.22, 1], [1, -0.17, 0.8], [-1, -0.08, 0.7]]) desenhaMarca(ctx, 'coracao', x + d * s * 0.112 * cw, y + oy * s, s * 0.022 * k, g.coracoesCorpo, true);
@@ -4005,6 +4111,7 @@ const ICO = {
   guizo: sv('<ellipse cx="12" cy="6.5" rx="8" ry="2.4" fill="#c0392b"/><circle cx="12" cy="13" r="7" fill="#ffd84a" stroke="#b8860b" stroke-width="1.4"/><path d="M6.8 14.6h10.4" stroke="#b8860b" stroke-width="1.4"/><circle cx="12" cy="16.6" r="1.1" fill="#7a5a10"/>'),
   vagas: sv('<path d="M4 15.5 5.8 10a2 2 0 0 1 1.9-1.4h8.6a2 2 0 0 1 1.9 1.4l1.8 5.5v3h-16z" fill="#ff7a5c" stroke="#2a2230" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 11.5h10l1 3.2H6z" fill="#bfe6f5"/><circle cx="7.5" cy="18.5" r="1.9" fill="#2a2230"/><circle cx="16.5" cy="18.5" r="1.9" fill="#2a2230"/><path d="M9.5 8.6 9 6.5l1.6 1M14.5 8.6l.5-2.1-1.6 1" fill="#2a2230"/>'),
   mapa: sv('<path d="M3 6.5 8.5 4l7 2.5L21 4v13.5L15.5 20l-7-2.5L3 20z" fill="#9fd19c" stroke="#2a2230" stroke-width="1.3" stroke-linejoin="round"/><path d="M8.5 4v13.5M15.5 6.5V20" stroke="#2a2230" stroke-width="1.3"/><path d="M12 9.2c0 2.2-2.4 4.6-2.4 4.6S7.2 11.4 7.2 9.2a2.4 2.4 0 0 1 4.8 0z" fill="#ff5d73"/>'),
+  hotel: sv('<path d="M5 21V6l7-3 7 3v15z" fill="#b38ce0" stroke="#2a2230" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 8h2v2H8zm6 0h2v2h-2zm-6 4h2v2H8zm6 0h2v2h-2z" fill="#fff6d6"/><path d="M10 21v-4h4v4" fill="#ffd84a" stroke="#2a2230" stroke-width="1.4"/><text x="12" y="6.6" font-size="4.2" font-weight="900" text-anchor="middle" fill="#fff">7</text>'),
   casa: sv('<path d="M4 11 12 4l8 7v9H4z" fill="#57c7b6"/><path d="M2.5 12 12 4l9.5 8" fill="none" stroke="#2a2230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18.5s-3.6-2.2-3.6-4.6a2 2 0 0 1 3.6-1.2 2 2 0 0 1 3.6 1.2c0 2.4-3.6 4.6-3.6 4.6z" fill="#ff5d73"/>'),
   trazer: sv('<path d="M4 11 12 4l8 7v9H4z" fill="#ffd84a"/><path d="M2.5 12 12 4l9.5 8" fill="none" stroke="#2a2230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 10v7M8.8 14l3.2 3.2 3.2-3.2" fill="none" stroke="#2a2230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'),
   config: sv('<path d="M19.55 9.67L22.19 9.93L22.19 14.07L19.55 14.33A7.9 7.9 0 0 1 18.99 15.69L20.67 17.75L17.75 20.67L15.69 18.99A7.9 7.9 0 0 1 14.33 19.55L14.07 22.19L9.93 22.19L9.67 19.55A7.9 7.9 0 0 1 8.31 18.99L6.25 20.67L3.33 17.75L5.01 15.69A7.9 7.9 0 0 1 4.45 14.33L1.81 14.07L1.81 9.93L4.45 9.67A7.9 7.9 0 0 1 5.01 8.31L3.33 6.25L6.25 3.33L8.31 5.01A7.9 7.9 0 0 1 9.67 4.45L9.93 1.81L14.07 1.81L14.33 4.45A7.9 7.9 0 0 1 15.69 5.01L17.75 3.33L20.67 6.25L18.99 8.31A7.9 7.9 0 0 1 19.55 9.67z" fill="#57c7b6" stroke="#2a2230" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="12" r="5.2" fill="#3aa897" stroke="#2a2230" stroke-width="1.1"/><circle cx="12" cy="12" r="2.6" fill="#fff3df" stroke="#2a2230" stroke-width="1.1"/><path d="M8.2 7.4a6 6 0 0 1 3.8-1.5" stroke="#fff" stroke-opacity=".6" stroke-width="1.3" fill="none" stroke-linecap="round"/>'),
@@ -4026,6 +4133,8 @@ function icoEsp(e) {
   return sv('<g transform="rotate(-35 12 12)"><rect x="2" y="8.5" width="20" height="7" rx="1.5" fill="' + e.cor + '" stroke="#2a2230" stroke-width=".6"/><rect x="7" y="8.5" width="10" height="7" fill="' + e.clara + '"/><rect x="2" y="8.5" width="2" height="7" fill="' + e.clara + '" opacity=".7"/><rect x="20" y="8.5" width="2" height="7" fill="' + e.clara + '" opacity=".7"/><g transform="rotate(35 12 12)">' + sim + '</g></g><path d="' + ESTRELA_SVG(19.6, 4.4, 2.6, 1.1) + '" fill="#ffd84a" stroke="#2a2230" stroke-width=".5"/>');
 }
 for (const e of SACHES_ESP) ICO[e.id] = icoEsp(e);
+ICO.prancheta = sv('<rect x="5" y="4" width="14" height="17" rx="2.2" fill="#fff3df" stroke="#2a2230" stroke-width="1.2"/><rect x="8.5" y="2.6" width="7" height="3.6" rx="1.2" fill="#9a7fd1" stroke="#2a2230" stroke-width="1.1"/><path d="M8 10.2l1.3 1.3 2.2-2.4M8 15.2l1.3 1.3 2.2-2.4" fill="none" stroke="#2fa58b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 10.3h3.4M13 15.3h3.4" stroke="#2a2230" stroke-width="1.2" stroke-linecap="round"/>');
+ICO.parceiros = sv('<path d="M3.5 18.5V10l4.5-3.5L12.5 10v8.5z" fill="#ffd27a" stroke="#2a2230" stroke-width="1.1" stroke-linejoin="round"/><path d="M11.5 18.5V8.5L16 5l4.5 3.5v10z" fill="#9be0d3" stroke="#2a2230" stroke-width="1.1" stroke-linejoin="round"/><rect x="6.6" y="14" width="2.8" height="4.5" fill="#c0703a"/><rect x="14.6" y="13.6" width="2.8" height="4.9" fill="#3d8fd1"/><path d="M2 18.8h20" stroke="#2a2230" stroke-width="1.2" stroke-linecap="round"/><path d="M12 4.2c-.9-1.3-2.9-.6-2.4 1 .3 1 2.4 2.2 2.4 2.2s2.1-1.2 2.4-2.2c.5-1.6-1.5-2.3-2.4-1z" fill="#ff5d8f"/>');
 ICO.sEsp = sv('<g transform="rotate(-35 12 12)"><rect x="2" y="8.5" width="20" height="7" rx="1.5" fill="#9a7fd1" stroke="#2a2230" stroke-width=".6"/><rect x="2" y="8.5" width="5" height="7" fill="#f27aa8"/><rect x="17" y="8.5" width="5" height="7" fill="#3d8fd1"/><rect x="7" y="8.5" width="10" height="7" fill="#fff3df"/><rect x="7" y="11" width="10" height="2" fill="#ee8a1e"/></g><path d="' + ESTRELA_SVG(19.4, 4.6, 2.8, 1.2) + ESTRELA_SVG(4.2, 19, 1.8, .8) + '" fill="#ffd84a" stroke="#2a2230" stroke-width=".5"/>');
 
 function vitrine() {
@@ -4124,6 +4233,16 @@ function desenhaMarca(c, tipo, x, y, s, cor, semBrilho) {
     c.bezierCurveTo(x + s * 0.15, y - s * 0.5, x + s * 0.85, y - s * 0.25, x + s * 0.6, y + s * 0.35);
     c.quadraticCurveTo(x + s * 0.4, y + s * 0.8, x, y + s * 0.8); c.closePath(); c.fill();
     if (!semBrilho) { c.fillStyle = 'rgba(255,255,255,.5)'; c.beginPath(); c.moveTo(x, y + s * 0.62); c.bezierCurveTo(x - s * 0.4, y + s * 0.5, x - s * 0.25, y, x + tremor * 0.5, y - s * 0.45); c.bezierCurveTo(x + s * 0.1, y, x + s * 0.4, y + s * 0.2, x + s * 0.28, y + s * 0.45); c.closePath(); c.fill(); }
+  } else if (tipo === 'flor' || tipo === 'petala') {
+    if (tipo === 'petala') { c.beginPath(); c.ellipse(x, y, s * 0.55, s * 0.32, relogio * 0.8 + x * 0.05, 0, 7); c.fill(); }
+    else { for (let q = 0; q < 5; q++) { const a = q * Math.PI * 0.4 - Math.PI / 2; c.beginPath(); c.ellipse(x + Math.cos(a) * s * 0.5, y + Math.sin(a) * s * 0.5, s * 0.42, s * 0.3, a, 0, 7); c.fill(); }
+      c.fillStyle = '#ffd84a'; c.beginPath(); c.arc(x, y, s * 0.3, 0, 7); c.fill(); }
+  } else if (tipo === 'floco') {
+    c.strokeStyle = cor; c.lineWidth = Math.max(0.8, s * 0.16); c.lineCap = 'round';
+    for (let q = 0; q < 3; q++) { const a = q * Math.PI / 3; c.beginPath(); c.moveTo(x - Math.cos(a) * s, y - Math.sin(a) * s); c.lineTo(x + Math.cos(a) * s, y + Math.sin(a) * s); c.stroke(); }
+  } else if (tipo === 'cristal') {
+    c.beginPath(); c.moveTo(x, y - s); c.lineTo(x + s * 0.62, y - s * 0.2); c.lineTo(x, y + s); c.lineTo(x - s * 0.62, y - s * 0.2); c.closePath(); c.fill();
+    if (!semBrilho) { c.fillStyle = 'rgba(255,255,255,.65)'; c.beginPath(); c.moveTo(x, y - s); c.lineTo(x - s * 0.62, y - s * 0.2); c.lineTo(x - s * 0.1, y - s * 0.1); c.closePath(); c.fill(); c.strokeStyle = 'rgba(42,34,48,.5)'; c.lineWidth = Math.max(0.6, s * 0.08); c.beginPath(); c.moveTo(x, y - s); c.lineTo(x + s * 0.62, y - s * 0.2); c.lineTo(x, y + s); c.lineTo(x - s * 0.62, y - s * 0.2); c.closePath(); c.stroke(); }
   } else if (tipo === 'arco') {
     c.lineWidth = s * 0.2; c.lineCap = 'round';
     ARCO.forEach((k, q) => { c.strokeStyle = k; c.beginPath(); c.arc(x, y + s * 0.4, s * (1 - q * 0.14), Math.PI * 1.1, Math.PI * 1.9); c.stroke(); });
@@ -4142,6 +4261,26 @@ function pintaGalaxia(c, x, y, rx, ry, tam) {
     if (q % 3 === 0) { caminhoEstrela(c, x + px * rx, y + py * ry, r * 1.7, r * 0.6); c.fill(); }
     else { c.beginPath(); c.arc(x + px * rx, y + py * ry, r * 0.75, 0, 7); c.fill(); }
   });
+}
+/* aurora boreal: faixas onduladas verdes, azuis e roxas que andam devagar */
+function pintaAurora(c, x, y, rx, ry) {
+  const cores = ['rgba(111,240,200,.55)', 'rgba(127,216,255,.45)', 'rgba(155,123,255,.5)'];
+  c.lineCap = 'round';
+  cores.forEach((cor, q) => {
+    c.strokeStyle = cor; c.lineWidth = ry * (0.26 - q * 0.04); c.beginPath();
+    for (let i = 0; i <= 12; i++) { const t = i / 12, px = x - rx + t * rx * 2, py = y - ry * 0.45 + q * ry * 0.38 + Math.sin(t * 6 + relogio * 1.2 + q * 1.7) * ry * 0.12; if (i) c.lineTo(px, py); else c.moveTo(px, py); }
+    c.stroke();
+  });
+  c.fillStyle = 'rgba(232,251,255,.85)';
+  for (const [px, py, k] of [[-0.55, -0.6, 1], [0.35, -0.75, 0.8], [0.7, -0.2, 0.7], [-0.25, 0.1, 0.6]]) { c.beginPath(); c.arc(x + px * rx, y + py * ry, Math.max(0.6, rx * 0.03 * k), 0, 7); c.fill(); }
+}
+/* cristal: facetas claras e um brilho que atravessa o pelo de tempos em tempos */
+function pintaCristal(c, x, y, rx, ry) {
+  c.fillStyle = 'rgba(159,220,255,.35)';
+  for (const [a, b, d] of [[-0.9, -0.2, -0.3], [0.2, -0.95, 0.5], [0.5, 0.2, 0.95]]) { c.beginPath(); c.moveTo(x + a * rx, y + b * ry); c.lineTo(x + (a + 0.35) * rx, y + (b + 0.25) * ry); c.lineTo(x + d * rx, y + (b + 0.55) * ry); c.closePath(); c.fill(); }
+  const t = ((relogio * 0.45) % 2.2) - 0.6, gx = x - rx + t * rx * 2;
+  const gr = c.createLinearGradient(gx - rx * 0.3, y, gx + rx * 0.3, y); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  c.save(); c.translate(gx, y); c.rotate(0.5); c.fillStyle = gr; c.translate(-gx, -y); c.fillRect(gx - rx * 0.3, y - ry * 1.6, rx * 0.6, ry * 3.2); c.restore();
 }
 /* faixas de arco-íris: arcos concêntricos recortados na forma */
 function pintaArco(c, x, y, R, larg, a0, a1) {
@@ -4236,6 +4375,7 @@ function abrirAlbum() {
       const b = cria('div', 'bloco');
       b.appendChild(cria('h3', '', titulo + ' · ' + achados + '/' + lista.length));
       b.appendChild(cria('p', 'nota', nota));
+      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + (save.epicosPegos || 0) + ' · Flores e plantas colocadas: ' + floresFeitas() + '/' + FLORES_DEC().length));
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
       b.appendChild(g); raiz.appendChild(b);
     }
@@ -4401,7 +4541,11 @@ let MODS = ['entrada', 'janela', 'arvore', 'cantinho'];
 let decorVer = 0, OBST_CASA = [];
 const DECOR = [
   { id: 'quadro', local: 'abrigo', nome: 'Quadro', preco: 20, max: 4, onde: 'parede', desc: 'Enfeita a parede' },
-  { id: 'planta', local: 'abrigo', nome: 'Vaso de planta', preco: 25, max: 4, onde: 'chao', desc: 'Deixa tudo mais verde; os gatos cheiram as folhas' },
+  { id: 'planta', local: 'abrigo', nome: 'Vaso de planta', preco: 25, max: 4, onde: 'chao', flor: 1, desc: 'Deixa tudo mais verde; os gatos cheiram as folhas' },
+  { id: 'vasoLavanda', base: 'florVaso', flor: 'lavanda', local: 'abrigo', nome: 'Vaso de lavanda', preco: 45, max: 2, onde: 'chao', cores: ['#b38ce0'], desc: 'Raminhos roxos e cheirosos' },
+  { id: 'vasoMargarida', base: 'florVaso', flor: 'margarida', local: 'abrigo', nome: 'Vaso de margaridas', preco: 45, max: 2, onde: 'chao', cores: ['#5aa9e6'], desc: 'Margaridas branquinhas de miolo amarelo' },
+  { id: 'cactos', base: 'florVaso', flor: 'cacto', local: 'abrigo', nome: 'Cactos fofinhos', preco: 40, max: 2, onde: 'chao', cores: ['#d9704a'], desc: 'Cactos redondinhos com florzinha rosa (não espetam)' },
+  { id: 'jardineira', flor: 1, local: 'abrigo', nome: 'Jardineira de parede', preco: 55, max: 2, onde: 'parede', desc: 'Caixinha de flores pendurada na parede' },
   { id: 'tapete', local: 'abrigo', nome: 'Tapetinho coral', preco: 35, max: 2, onde: 'chao', plano: 1, cores: ['#ff7a5c', '#d85f45', '#ffc9b8'], desc: 'Um gato se espreguiça nele' },
   { id: 'almofada', local: 'abrigo', nome: 'Almofada lilás', preco: 40, max: 3, onde: 'chao', cores: ['#b38ce0', '#9370c4', '#e4d4f7'], desc: 'Um gato cochila nela' },
   { id: 'prateleira', local: 'abrigo', nome: 'Prateleira', preco: 50, max: 3, onde: 'parede', desc: 'Um gato sobe e deita nela' },
@@ -4443,7 +4587,10 @@ const DECOR = [
   { id: 'retrato', local: 'casa', nome: 'Retrato da família', preco: 40, max: 1, onde: 'parede', desc: 'Moldura dourada com seus gatos' },
   { id: 'relogio', local: 'casa', nome: 'Relógio cuco', preco: 45, max: 1, onde: 'parede', desc: 'Um relógio de casinha com pêndulo' },
   { id: 'rede', local: 'casa', nome: 'Rede de parede', preco: 90, max: 1, onde: 'parede', desc: 'Um gato deita balançando nela' },
-  { id: 'vaso', local: 'casa', nome: 'Vaso de flores', preco: 35, max: 2, onde: 'chao', desc: 'Flores para alegrar a casa' },
+  { id: 'vaso', local: 'casa', nome: 'Vaso de flores', preco: 35, max: 2, onde: 'chao', flor: 1, desc: 'Flores para alegrar a casa' },
+  { id: 'roseira', base: 'florVaso', flor: 'rosa', local: 'casa', nome: 'Vaso de rosas', preco: 60, max: 2, onde: 'chao', cores: ['#fff3df'], desc: 'Rosas vermelhas num vaso de porcelana' },
+  { id: 'vasoTulipas', base: 'florVaso', flor: 'tulipa', local: 'casa', nome: 'Vaso de tulipas', preco: 55, max: 2, onde: 'chao', cores: ['#ffd84a'], desc: 'Tulipas coloridas num vaso amarelo' },
+  { id: 'orquidea', base: 'florVaso', flor: 'orquidea', local: 'casa', nome: 'Orquídea', preco: 70, max: 1, onde: 'chao', cores: ['#ffffff'], desc: 'Orquídea rosa num vaso branco' },
   { id: 'cesta', local: 'casa', nome: 'Cesto de vime', preco: 70, max: 2, onde: 'chao', desc: 'Um gato dorme enroladinho' },
   { id: 'poltrona', local: 'casa', nome: 'Poltrona', preco: 120, max: 1, onde: 'fundo', alt: 0.22, desc: 'Encostada na parede; um gato sobe e senta' },
   { id: 'aquarioPe', local: 'casa', nome: 'Aquário com peixes', preco: 150, max: 1, onde: 'fundo', alt: 0.28, desc: 'Os gatos sentam na frente para olhar os peixes' },
@@ -4463,8 +4610,10 @@ const DECOR = [
   { id: 'dPlaca', local: 'abrigo', nome: 'Placa de estrada', preco: 0, max: 1, onde: 'chao', premio: 5, desc: 'Prêmio da Grande Rota Selvagem' },
   { id: 'dCristal', local: 'abrigo', nome: 'Cristais brilhantes', preco: 0, max: 1, onde: 'chao', premio: 6, desc: 'Prêmio do Vale dos Raros' },
   { id: 'dTrofeu', local: 'abrigo', nome: 'Troféu lendário', preco: 0, max: 1, onde: 'chao', premio: 7, desc: 'Prêmio da Trilha Lendária' },
-  { id: 'flores', local: 'santuario', nome: 'Canteiro de flores', preco: 60, max: 3, onde: 'chao', desc: 'Flores do campo com borboletas; os felinos cheiram' },
-  { id: 'arbusto', local: 'santuario', nome: 'Arbusto florido', preco: 70, max: 3, onde: 'chao', desc: 'Moita cheia de flores para o santuário' },
+  { id: 'flores', local: 'santuario', nome: 'Canteiro de flores', preco: 60, max: 3, onde: 'chao', flor: 1, desc: 'Flores do campo com borboletas; os felinos cheiram' },
+  { id: 'arbusto', local: 'santuario', nome: 'Arbusto florido', preco: 70, max: 3, onde: 'chao', flor: 1, desc: 'Moita cheia de flores para o santuário' },
+  { id: 'canteiroGirassol', base: 'florVaso', flor: 'girassol', local: 'santuario', nome: 'Canteiro de girassóis', preco: 90, max: 2, onde: 'chao', cores: ['#8a5a34'], desc: 'Girassóis altos que viram para o sol' },
+  { id: 'cerejeira', flor: 1, local: 'santuario', nome: 'Cerejeira', preco: 220, max: 1, onde: 'fundo', alt: 0.3, desc: 'Árvore de flores rosa; as pétalas caem no chão e um felino descansa na sombra' },
   { id: 'ninho', local: 'santuario', nome: 'Ninho de capim', preco: 90, max: 3, onde: 'chao', desc: 'Um felino tira uma soneca nele' },
   { id: 'poca', local: 'santuario', nome: 'Laguinho', preco: 110, max: 2, onde: 'chao', plano: 1, desc: 'Água com vitórias-régias; um felino bebe nele' },
   { id: 'troncoArr', local: 'santuario', nome: 'Tronco de arranhar', preco: 130, max: 2, onde: 'chao', desc: 'Tronco grosso; os felinos afiam as garras' },
@@ -4595,6 +4744,8 @@ function extrasDecor(lista) {
       case 'ninho': sp({ x, y: y - 0.004, cama: 1, nome: 'no ninho de capim' }); ob(0.11); break;
       case 'rochaQuente': sp({ x, y: y - 0.026, cama: 1, nome: 'na rocha quentinha' }); ob(0.11); break;
       case 'piscina': sp({ x, y: y + 0.004, piscina: 1, nome: 'Brincando na piscina de bolinhas' }); ob(0.12); break;
+      case 'florVaso': sp({ x: x + 0.075, y: y + 0.012, olhar: 1, dir: -1, nome: 'Cheirando as flores' }); ob(0.06); break;
+      case 'cerejeira': sp({ x: x + 0.02, y: y + 0.03, cama: 1, nome: 'na sombra da cerejeira' }); ob(0.06, -0.07, 0.02); break;
       case 'planta': case 'vaso': case 'dGirassol': sp({ x: x + 0.075, y: y + 0.012, olhar: 1, dir: -1, nome: d.id === 'vaso' ? 'Cheirando as flores' : 'Cheirando a planta' }); ob(0.06); break;
       case 'flores': sp({ x: x - 0.09, y: y + 0.01, olhar: 1, dir: 1, nome: 'Cheirando as flores' }); ob(0.07, -0.03, 0.02); break;
       case 'arbusto': sp({ x: x + 0.1, y: y + 0.012, olhar: 1, dir: -1, nome: 'Cheirando o arbusto' }); ob(0.08); break;
@@ -4615,7 +4766,7 @@ function extrasDecor(lista) {
       case 'escadinha': sp({ x: x + 0.065, y: y - 0.135, alto: 1, nome: 'no topo da escadinha' }); ob(0.11, -0.06, 0.02); break;
     }
     /* a área atrás de um móvel de chão também fica bloqueada, na altura dele: assim nenhum gato fica "dentro" do desenho */
-    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dCogumelo: 0.14, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
+    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, florVaso: 0.2, cerejeira: 0.34, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dCogumelo: 0.14, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
     if (ALT_VIS[bid] != null) for (const o of obst) if (o.dec === d.slot) { o.y0 = Math.min(o.y0, y - ALT_VIS[bid] - 0.02); o.x0 -= 0.025; o.x1 += 0.025; }
     const zDe = { bolinhas: -0.03, ratinho: -0.03, peixeChute: -0.03, varinha: -0.035, circuito: -0.035, bolaCipo: -0.03, caixaDec: -0.04, tunel: -0.03, troncoOco: -0.07, ursinho: -0.02, caminha: -0.045, almofada: -0.03, bercinho: -0.045, iglu: -0.004, casinha: -0.004, tocaPedra: -0.004, fonte: 0, cesta: -0.04, luxo: -0.05, ninho: -0.04, rochaQuente: -0.06, piscina: -0.04, torre: -0.004, plataforma: -0.004, redeCipo: -0.004, poltrona: -0.004, aquarioPe: -0.004 };
     const def = defDecor(d.id);
@@ -5580,6 +5731,65 @@ function vasoFlores(c, k, X, Y, cx, cy) {
   c.fillStyle = 'rgba(255,255,255,.35)'; elipse(c, k, X, Y, cx - 0.02, cy - 0.05, 0.006, 0.022); c.fill();
   c.fillStyle = '#2f6fa6'; elipse(c, k, X, Y, cx, cy - 0.092, 0.024, 0.006); c.fill(); contornar(c, k, 0.8);
 }
+/* vasos de flores novos: lavanda, margarida, cacto, rosa, tulipa, orquídea e girassol */
+function florVaso(c, k, X, Y, cx, cy, tipo, cor) {
+  sombraPe(c, k, X, Y, cx, cy + 0.005, 0.05, 0.012);
+  const topo = cy - 0.06;
+  if (tipo === 'lavanda') {
+    for (const [dx, h] of [[-0.024, 0.12], [-0.01, 0.15], [0.006, 0.135], [0.02, 0.16], [0.032, 0.11]]) {
+      c.strokeStyle = '#4f9a5a'; c.lineWidth = Math.max(1, k * 0.003); c.beginPath(); c.moveTo(X(cx + dx * 0.4), Y(topo)); c.lineTo(X(cx + dx), Y(topo - h)); c.stroke();
+      c.fillStyle = '#9a6fd6'; for (let q = 0; q < 6; q++) { c.beginPath(); c.ellipse(X(cx + dx + (q % 2 ? 0.004 : -0.004)), Y(topo - h + q * 0.008), k * 0.005, k * 0.007, 0, 0, 7); c.fill(); }
+    }
+  } else if (tipo === 'margarida' || tipo === 'tulipa' || tipo === 'girassol') {
+    const fl = tipo === 'girassol' ? [[-0.03, -0.16], [0.01, -0.21], [0.04, -0.15]] : [[-0.03, -0.12], [0.0, -0.155], [0.03, -0.118], [-0.012, -0.095], [0.02, -0.09]];
+    c.strokeStyle = '#3a9a5c'; c.lineWidth = Math.max(1, k * 0.004);
+    for (const [dx, dy] of fl) { c.beginPath(); c.moveTo(X(cx), Y(topo)); c.quadraticCurveTo(X(cx + dx * 0.5), Y(topo + dy * 0.5), X(cx + dx), Y(topo + dy)); c.stroke(); }
+    folha(c, k, X, Y, cx - 0.004, topo - 0.03, 0.04, 0.011, -2.3, '#3fae6a'); folha(c, k, X, Y, cx + 0.004, topo - 0.04, 0.04, 0.011, -0.7, '#55c27c');
+    fl.forEach(([dx, dy], q) => {
+      const px = cx + dx, py = topo + dy;
+      if (tipo === 'margarida') florzinha(c, k, X, Y, px, py, 0.013, '#ffffff', '#ffd84a', 8);
+      else if (tipo === 'girassol') florzinha(c, k, X, Y, px, py, 0.022, '#ffd84a', '#7a4a26', 12);
+      else { c.fillStyle = ['#ff5d6c', '#ffd84a', '#ff9eb3', '#b38ce0', '#ff9f43'][q % 5]; c.beginPath(); c.moveTo(X(px - 0.012), Y(py - 0.012)); c.lineTo(X(px - 0.006), Y(py - 0.004)); c.lineTo(X(px), Y(py - 0.014)); c.lineTo(X(px + 0.006), Y(py - 0.004)); c.lineTo(X(px + 0.012), Y(py - 0.012)); c.quadraticCurveTo(X(px + 0.014), Y(py + 0.012), X(px), Y(py + 0.012)); c.quadraticCurveTo(X(px - 0.014), Y(py + 0.012), X(px - 0.012), Y(py - 0.012)); c.fill(); }
+    });
+  } else if (tipo === 'rosa') {
+    c.strokeStyle = '#2f7a46'; c.lineWidth = Math.max(1, k * 0.004);
+    const fl = [[-0.026, -0.11], [0.004, -0.15], [0.03, -0.1], [-0.006, -0.085]];
+    for (const [dx, dy] of fl) { c.beginPath(); c.moveTo(X(cx), Y(topo)); c.lineTo(X(cx + dx), Y(topo + dy)); c.stroke(); }
+    folha(c, k, X, Y, cx - 0.01, topo - 0.05, 0.03, 0.01, -2.4, '#3a8a50'); folha(c, k, X, Y, cx + 0.012, topo - 0.06, 0.03, 0.01, -0.6, '#3a8a50');
+    for (const [dx, dy] of fl) { const px = X(cx + dx), py = Y(topo + dy), r = k * 0.014; c.fillStyle = '#d9304a'; c.beginPath(); c.arc(px, py, r, 0, 7); c.fill(); c.strokeStyle = '#9a1f33'; c.lineWidth = Math.max(0.8, k * 0.002); c.beginPath(); c.arc(px, py, r * 0.55, 0.5, 5.2); c.stroke(); c.beginPath(); c.arc(px + r * 0.15, py - r * 0.1, r * 0.25, 0, 4); c.stroke(); }
+  } else if (tipo === 'orquidea') {
+    c.strokeStyle = '#6b8a4a'; c.lineWidth = Math.max(1, k * 0.003); c.beginPath(); c.moveTo(X(cx), Y(topo)); c.quadraticCurveTo(X(cx + 0.02), Y(topo - 0.14), X(cx + 0.045), Y(topo - 0.13)); c.stroke();
+    folha(c, k, X, Y, cx, topo - 0.004, 0.045, 0.014, -2.9, '#3fae6a'); folha(c, k, X, Y, cx, topo - 0.006, 0.045, 0.014, -0.25, '#55c27c');
+    for (const [dx, dy] of [[0.012, -0.135], [0.03, -0.14], [0.046, -0.125]]) florzinha(c, k, X, Y, cx + dx, topo + dy, 0.012, '#ff9ec4', '#d9406a', 5);
+  } else if (tipo === 'cacto') {
+    for (const [dx, h, w2] of [[-0.022, 0.06, 0.017], [0.008, 0.085, 0.021], [0.03, 0.05, 0.015]]) {
+      c.fillStyle = '#5fbf6a'; retRed(c, X(cx + dx - w2), Y(topo - h), k * w2 * 2, k * h, k * w2); c.fill(); contornar(c, k, 0.8);
+      c.strokeStyle = 'rgba(255,255,255,.45)'; c.lineWidth = Math.max(0.8, k * 0.002); c.beginPath(); c.moveTo(X(cx + dx), Y(topo - h + 0.008)); c.lineTo(X(cx + dx), Y(topo - 0.004)); c.stroke();
+    }
+    florzinha(c, k, X, Y, cx + 0.008, topo - 0.09, 0.011, '#ff8fb1', '#ffd84a', 5);
+  }
+  /* vaso */
+  const esc = (() => { const h = (cor || '#d9704a').replace('#', ''); const v = [0, 2, 4].map(i => Math.round(parseInt(h.slice(i, i + 2), 16) * 0.78)); return 'rgb(' + v.join(',') + ')'; })();
+  c.fillStyle = cor; c.beginPath(); c.moveTo(X(cx - 0.042), Y(topo)); c.lineTo(X(cx + 0.042), Y(topo)); c.lineTo(X(cx + 0.032), Y(cy)); c.lineTo(X(cx - 0.032), Y(cy)); c.closePath(); c.fill(); contornar(c, k);
+  c.fillStyle = 'rgba(255,255,255,.22)'; c.beginPath(); c.moveTo(X(cx - 0.034), Y(topo + 0.008)); c.lineTo(X(cx - 0.022), Y(topo + 0.008)); c.lineTo(X(cx - 0.018), Y(cy - 0.006)); c.lineTo(X(cx - 0.027), Y(cy - 0.006)); c.closePath(); c.fill();
+  c.fillStyle = esc; retRed(c, X(cx - 0.047), Y(topo - 0.01), k * 0.094, k * 0.016, k * 0.004); c.fill(); contornar(c, k);
+}
+function jardineira(c, k, X, Y, cx, cy) {
+  const flores = [['#ff7fa8', -0.05], ['#ffd84a', -0.025], ['#b38ce0', 0], ['#ffffff', 0.025], ['#ff9f6b', 0.05]];
+  c.strokeStyle = '#8a5a34'; c.lineWidth = Math.max(1, k * 0.004); c.beginPath(); c.moveTo(X(cx - 0.06), Y(cy + 0.02)); c.lineTo(X(cx - 0.05), Y(cy + 0.05)); c.moveTo(X(cx + 0.06), Y(cy + 0.02)); c.lineTo(X(cx + 0.05), Y(cy + 0.05)); c.stroke();
+  for (const [cor, dx] of flores) { folha(c, k, X, Y, cx + dx, cy, 0.025, 0.009, -1.9 + dx * 6, '#3fae6a'); florzinha(c, k, X, Y, cx + dx, cy - 0.022 - Math.abs(dx) * 0.2, 0.012, cor, '#ffb347'); }
+  c.fillStyle = '#c0703a'; retRed(c, X(cx - 0.07), Y(cy - 0.002), k * 0.14, k * 0.04, k * 0.006); c.fill(); contornar(c, k);
+  c.fillStyle = '#a85d2e'; c.fillRect(X(cx - 0.07), Y(cy + 0.018), k * 0.14, k * 0.004);
+}
+function cerejeira(c, k, X, Y, cx, cy) {
+  sombraPe(c, k, X, Y, cx, cy + 0.01, 0.13, 0.025);
+  c.fillStyle = '#ffc4d8'; for (let q = 0; q < 9; q++) { c.beginPath(); c.ellipse(X(cx - 0.12 + q * 0.03), Y(cy + 0.012 - (q % 3) * 0.006), k * 0.008, k * 0.004, q, 0, 7); c.fill(); }
+  c.fillStyle = '#7a4a2c'; c.beginPath(); c.moveTo(X(cx - 0.018), Y(cy)); c.quadraticCurveTo(X(cx - 0.01), Y(cy - 0.12), X(cx - 0.05), Y(cy - 0.2)); c.lineTo(X(cx - 0.035), Y(cy - 0.205)); c.quadraticCurveTo(X(cx + 0.002), Y(cy - 0.15), X(cx + 0.03), Y(cy - 0.22)); c.lineTo(X(cx + 0.045), Y(cy - 0.21)); c.quadraticCurveTo(X(cx + 0.01), Y(cy - 0.12), X(cx + 0.018), Y(cy)); c.closePath(); c.fill(); contornar(c, k);
+  for (const [dx, dy, r, cor] of [[-0.08, -0.25, 0.07, '#ffb3cf'], [0.07, -0.27, 0.075, '#ffc4d8'], [0, -0.31, 0.08, '#ffd6e5'], [-0.03, -0.22, 0.06, '#ffa3c4'], [0.04, -0.21, 0.055, '#ffb3cf']]) { c.fillStyle = cor; c.beginPath(); c.arc(X(cx + dx), Y(cy + dy), k * r, 0, 7); c.fill(); }
+  c.fillStyle = '#ffffff'; for (const [dx, dy] of [[-0.09, -0.28], [0.02, -0.34], [0.09, -0.26], [-0.02, -0.24], [0.05, -0.3]]) florzinha(c, k, X, Y, cx + dx, cy + dy, 0.008, '#ffffff', '#ff8fb1', 5);
+  const t = relogio * 0.5; c.fillStyle = '#ffc4d8';
+  for (let q = 0; q < 4; q++) { const f = (t + q * 0.25) % 1; c.beginPath(); c.ellipse(X(cx - 0.1 + q * 0.06 + Math.sin(f * 6 + q) * 0.012), Y(cy - 0.24 + f * 0.24), k * 0.006, k * 0.0035, f * 6, 0, 7); c.fill(); }
+}
 function tapeteP(c, k, X, Y, cx, cy, cor, cla) {
   c.fillStyle = tom(cor, -0.25); elipse(c, k, X, Y, cx, cy + 0.006, 0.142, 0.043); c.fill();
   c.fillStyle = cor; elipse(c, k, X, Y, cx, cy, 0.14, 0.042); c.fill(); contornar(c, k);
@@ -6086,6 +6296,9 @@ function desenharItemDecor(c, k, X, Y, d, soFrente) {
     case 'relogio': relogioCuco(c, k, X, Y, d.x, d.y); break;
     case 'rede': redeGato(c, k, X, Y, d.x, d.y); break;
     case 'vaso': vasoFlores(c, k, X, Y, d.x, d.y); break;
+    case 'florVaso': florVaso(c, k, X, Y, d.x, d.y, def.flor, cor); break;
+    case 'jardineira': jardineira(c, k, X, Y, d.x, d.y); break;
+    case 'cerejeira': cerejeira(c, k, X, Y, d.x, d.y); break;
     case 'cesta': cesta(c, k, X, Y, d.x, d.y, def.base ? '#7fb8ea' : null); break;
     case 'poltrona': poltrona(c, k, X, Y, d.x, d.y, def.cores && cor); break;
     case 'aquarioPe': aquarioPe(c, k, X, Y, d.x, d.y); break;
@@ -6238,6 +6451,9 @@ function gatoDeitado(x, y, s, g, dir) {
   ctx.save(); ctx.beginPath(); ctx.ellipse(bx, by, rx, ry, 0, 0, 7); ctx.clip();
   if (g.manchas) for (const m of g.manchas) { ctx.fillStyle = m.cor; ctx.beginPath(); ctx.ellipse(bx + m.x * rx * 0.9, by + m.y * ry * 1.4, m.rx * rx * 0.8, m.ry * ry * 1.6, 0, 0, 7); ctx.fill(); }
   if (g.nebulosa) pintaGalaxia(ctx, bx, by, rx, ry, s * 0.006);
+  if (g.aurora) pintaAurora(ctx, bx, by, rx, ry);
+  if (g.cristalBrilho) pintaCristal(ctx, bx, by, rx, ry);
+  if (g.floral) for (const [fx, fy, k, cor] of [[-0.5, -0.3, 0.022, '#ff8fb1'], [0.1, -0.5, 0.018, '#b38ce0'], [0.5, -0.2, 0.02, '#ffd84a']]) desenhaMarca(ctx, 'flor', bx + fx * rx, by + fy * ry, s * k, cor, true);
   if (g.arcoIris) pintaArco(ctx, bx - dir * rx * 0.1, by + ry * 1.6, ry * 2.5, ry * 0.2, Math.PI * 1.15, Math.PI * 1.85);
   if (g.coracoesCorpo) for (const [t, oy, k] of [[-0.35, -0.3, 1], [0.05, -0.5, 0.8], [0.42, -0.25, 0.9]]) desenhaMarca(ctx, 'coracao', bx + dir * t * rx, by + oy * ry, ry * 0.28 * k, g.coracoesCorpo, true);
   if (g.trevoPeito) desenhaMarca(ctx, 'trevo', bx + dir * rx * 0.1, by - ry * 0.3, ry * 0.3, g.trevoPeito);
@@ -6815,6 +7031,7 @@ function sairEdicao() {
   if (!editando) return;
   editando = null; $('palcoSala').classList.remove('editando'); $('barraDecor').hidden = true; $('folhaDecor').hidden = true;
   atualizarBtnDecorar();
+  if (save.secretos && !save.secretos.floral && floresTodas()) { const t = ganharSecreto('floral'); if (t) setTimeout(() => mostrarSecreto(t, () => { if (modoSala === 'casa' && !telaAbrigo.hidden) { criarMoradores(); montarListas(); } atualizarMenu(); }), 300); }
 }
 function atualizarBarraDecor() {
   const L = slotsLugar(modoSala), liv = L.filter(s => !s.bloq), usados = colocados(modoSala).length, bloq = L.length - liv.length;
@@ -6930,7 +7147,7 @@ function desenharSala(dt) {
     else if (camIr != null) { camX += (camIr - camX) * Math.min(1, dt * 5); if (Math.abs(camIr - camX) < 0.004) camIr = null; }
     else if (Math.abs(camVel) > 0.001) { camX += camVel * dt; camVel *= Math.pow(0.04, dt); }
   } else camIr = null;
-  atualizarIrBerco(); atualizarBtnDecorar();
+  atualizarIrBerco(); atualizarBtnDecorar(); atualizarSantBtns();
   if (editando && telaAbrigo.hidden) sairEdicao();
   camX = vwSala >= MUNDO ? (MUNDO - vwSala) / 2 : Math.max(0, Math.min(MUNDO - vwSala, camX));
   let alvoY = 0;
@@ -7347,6 +7564,262 @@ function montarListasSant() {
   if (abaAberta) tituloFolha();
   salvar();
 }
+/* ===== Regras do Santuário: quais variações de cada felino guardar, e para onde vai o resto ===== */
+const SLOTS_REG = [['m', '♂ Macho'], ['mg', '♂ Macho com guizo'], ['f', '♀ Fêmea'], ['fg', '♀ Fêmea com guizo'], ['fi', 'Filhote']];
+const SLOT_CURTO = { m: '♂', mg: '♂ + guizo', f: '♀', fg: '♀ + guizo', fi: 'Filhote' };
+const DESTINOS_REG = [['natureza', 'Natureza', 'Volta para a natureza e rende moedas'], ['casa', 'Casa', 'Vai morar na sua casa (se tiver vaga)'], ['parceiros', 'Parceiros', 'Fica guardado para os pedidos dos parceiros'], ['perguntar', 'Perguntar', 'O jogo pergunta a cada vez, como antes']];
+if (!save.regras || typeof save.regras !== 'object') save.regras = { on: 0, dest: 'natureza', padrao: ['m', 'mg', 'f', 'fg', 'fi'], quer: {} };
+if (!Array.isArray(save.regras.padrao)) save.regras.padrao = ['m', 'mg', 'f', 'fg', 'fi'];
+if (!save.regras.quer || typeof save.regras.quer !== 'object') save.regras.quer = {};
+if (!Array.isArray(save.parcEspera)) save.parcEspera = [];
+const slotDe = r => r.fi ? 'fi' : (r.s === 'f' ? 'f' : 'm') + (r.pr ? 'g' : '');
+const querSlot = (raca, sl) => (save.regras.quer[raca] || save.regras.padrao).indexOf(sl) >= 0;
+const temSlot = (raca, sl) => save.sant.concat(save.casa).some(r => r.r === raca && !r.pilot && slotDe(r) === sl);
+const felinosRegra = () => FELINOS.filter(t => !t.secreto);
+/* decide o que fazer com um felino que chegou da patrulha; devolve null se segue o caminho normal */
+function aplicarRegra(reg, t, cont) {
+  if (!save.regras.on || !t || t.secreto) return null;
+  const sl = slotDe(reg);
+  if (querSlot(reg.r, sl) && !temSlot(reg.r, sl)) return 'guardar';
+  let d = save.regras.dest;
+  if (d === 'perguntar') return null;
+  if (d === 'casa') { if (noCasa() < casaMax()) { save.casa.push(reg); cont.casa++; return 'casa'; } d = 'natureza'; }
+  if (d === 'parceiros') { if (t.rc === 'epico' && save.parcEspera.length < A('parcGuarda')) { save.parcEspera.push(reg); cont.parc++; return 'parc'; } d = 'natureza'; }
+  const v = valorNatureza(t); save.moedas += v; cont.moedas += v; cont.nat++;
+  save.natureza[reg.r] = (save.natureza[reg.r] || 0) + 1;
+  return 'natureza';
+}
+function textoRegras(c) {
+  const p = [];
+  if (c.nat) p.push(c.nat + (c.nat === 1 ? ' felino repetido voltou' : ' felinos repetidos voltaram') + ' para a natureza (+' + c.moedas + ' moedas)');
+  if (c.casa) p.push(c.casa + (c.casa === 1 ? ' foi' : ' foram') + ' para a sua casa');
+  if (c.parc) p.push(c.parc + (c.parc === 1 ? ' ficou guardado' : ' ficaram guardados') + ' para os parceiros');
+  return p.length ? 'Regras do santuário: ' + p.join(', ') : '';
+}
+
+function abrirRegras() {
+  montarRegras(); $('telaRegras').hidden = false;
+  tentarTut('regras', tourRegras, 350);
+}
+let regrasGrupo = 'todos';
+function montarRegras() {
+  const corpo = $('regrasCorpo'), topo = corpo.scrollTop; corpo.textContent = '';
+  const R = save.regras;
+  const b0 = cria('div', 'bloco');
+  b0.appendChild(cria('p', 'nota regrasIntro', 'Escolha quais felinos você quer guardar: um de cada jeito (macho, fêmea, com guizo, filhote). Quando chegar um que você já tem, ele vai para o destino que você escolher.'));
+  const l0 = cria('div', 'lista'), it = cria('label', 'item'); it.id = 'regrasChave';
+  it.innerHTML = '<span class="ico">' + ICO.prancheta + '</span><div><b>Usar as regras</b>' + (R.on ? 'Ligado: o santuário segue as suas escolhas' : 'Desligado: tudo funciona como antes') + '</div>';
+  const sw = document.createElement('input'); sw.type = 'checkbox'; sw.className = 'switch'; sw.checked = !!R.on;
+  sw.addEventListener('change', () => { R.on = sw.checked ? 1 : 0; salvar(); montarRegras(); });
+  it.appendChild(sw); l0.appendChild(it); b0.appendChild(l0); corpo.appendChild(b0);
+
+  const b1 = cria('div', 'bloco'); b1.id = 'regrasDestino'; b1.appendChild(cria('h3', '', 'Para onde vão os que sobram'));
+  const ch = cria('div', 'regrasChips');
+  for (const [k, nome, desc] of DESTINOS_REG) {
+    const c = cria('button', 'regraChip' + (R.dest === k ? ' on' : ''), nome); c.type = 'button'; c.title = desc;
+    c.addEventListener('click', () => { R.dest = k; salvar(); montarRegras(); });
+    ch.appendChild(c);
+  }
+  b1.appendChild(ch);
+  b1.appendChild(cria('p', 'nota', (DESTINOS_REG.find(d => d[0] === R.dest) || DESTINOS_REG[0])[2] + '.' + (R.dest === 'parceiros' ? ' Só felinos épicos; os outros vão para a natureza.' : R.dest === 'casa' ? ' Se a casa estiver cheia, vai para a natureza.' : '')));
+  corpo.appendChild(b1);
+
+  const b2 = cria('div', 'bloco'); b2.id = 'regrasAtalhos'; b2.appendChild(cria('h3', '', 'Atalhos'));
+  const gr = cria('div', 'regrasChips');
+  for (const [k, nome] of [['todos', 'Todos'], ['epico', 'Épicos'], ['lendario', 'Lendários'], ['mitico', 'Míticos']]) {
+    const c = cria('button', 'regraChip mini2' + (regrasGrupo === k ? ' on' : ''), nome); c.type = 'button';
+    c.addEventListener('click', () => { regrasGrupo = k; montarRegras(); }); gr.appendChild(c);
+  }
+  b2.appendChild(gr);
+  const ac = cria('div', 'regrasAcoes');
+  const aplica = lista => { for (const t of felinosRegra()) if (regrasGrupo === 'todos' || t.rc === regrasGrupo) R.quer[t.raca] = lista.slice(); if (regrasGrupo === 'todos') R.padrao = lista.slice(); salvar(); montarRegras(); };
+  for (const [nome, lista] of [['Um de cada', ['m', 'mg', 'f', 'fg', 'fi']], ['Só macho e fêmea', ['m', 'f']], ['Um de cada, sem filhote', ['m', 'mg', 'f', 'fg']]]) {
+    const a = cria('button', 'mini claro', nome); a.type = 'button'; a.addEventListener('click', () => aplica(lista)); ac.appendChild(a);
+  }
+  b2.appendChild(ac); corpo.appendChild(b2);
+
+  const NOMES = { epico: 'Épicos', lendario: 'Lendários', mitico: 'Míticos' };
+  for (const rc of ['epico', 'lendario', 'mitico']) {
+    const lista = felinosRegra().filter(t => t.rc === rc); if (!lista.length) continue;
+    const b = cria('div', 'bloco'); b.appendChild(cria('h3', '', NOMES[rc]));
+    const l = cria('div', 'lista');
+    for (const t of lista) {
+      const visto = save.album[t.raca] > 0, linha = cria('div', 'item regraLinha r-' + t.rc);
+      const cv = carinha(visto ? amostra(t) : Object.assign(amostra(t), { pelo: '#cfc6d6', orelha: '#cfc6d6', manchas: null, listra: null }), 56); linha.appendChild(cv);
+      const d = cria('div', 'regraInfo');
+      const tem = SLOTS_REG.filter(([k]) => temSlot(t.raca, k)).length;
+      d.appendChild(cria('b', '', visto ? t.raca : '???'));
+      d.appendChild(cria('small', '', visto ? 'Você tem ' + tem + ' de 5 jeitos' : 'Ainda não encontrado'));
+      const cs = cria('div', 'regraSlots');
+      for (const [k] of SLOTS_REG) {
+        const on = querSlot(t.raca, k), ja = temSlot(t.raca, k);
+        const c = cria('button', 'regraSlot' + (on ? ' on' : '') + (ja ? ' tem' : ''), SLOT_CURTO[k]); c.type = 'button';
+        c.setAttribute('aria-pressed', on ? 'true' : 'false'); c.title = (on ? 'Guardar ' : 'Não guardar ') + SLOTS_REG.find(s => s[0] === k)[1].toLowerCase() + (ja ? ' (você já tem)' : '');
+        c.addEventListener('click', () => { const q = (R.quer[t.raca] || R.padrao).slice(), i = q.indexOf(k); if (i >= 0) q.splice(i, 1); else q.push(k); R.quer[t.raca] = q; salvar(); montarRegras(); });
+        cs.appendChild(c);
+      }
+      d.appendChild(cs); linha.appendChild(d); l.appendChild(linha);
+    }
+    b.appendChild(l); corpo.appendChild(b);
+  }
+  const leg = cria('p', 'nota', 'Roxo = guardar esse jeito · ✓ = você já tem um assim no santuário ou na casa.'); corpo.appendChild(leg);
+  corpo.scrollTop = topo;
+}
+function tourRegras() {
+  if ($('telaRegras').hidden) return;
+  tour([
+    { titulo: 'Regras do Santuário', texto: 'Aqui você escolhe quais felinos guardar, para o santuário não lotar de repetidos.' },
+    { el: () => $('regrasChave'), titulo: 'Ligar as regras', texto: 'Com as regras ligadas, o santuário segue as suas escolhas. Desligadas, tudo funciona como antes.' },
+    { el: () => document.querySelector('.regraLinha .regraSlots'), titulo: 'Jeitos de cada felino', texto: 'Toque para marcar quais jeitos guardar: macho, fêmea, com guizo e filhote. O ✓ mostra os que você já tem.' },
+    { el: () => $('regrasAtalhos'), titulo: 'Atalhos', texto: 'Para não marcar um por um: escolha o grupo e aplique o mesmo jeito em todos.' },
+    { el: () => $('regrasDestino'), titulo: 'Os que sobram', texto: 'Quando chegar um repetido, ele vai para cá: natureza (rende moedas), casa, parceiros ou o jogo pergunta.' }
+  ], () => marcarTut('regras'));
+}
+
+/* ===== Pedidos dos parceiros: outros santuários pedem felinos épicos ===== */
+const PARCEIROS = ['Santuário da Serra', 'Reserva do Pantanal', 'Refúgio da Mata Atlântica', 'Parque das Araucárias', 'Santuário do Cerrado', 'Reserva da Caatinga', 'Refúgio do Pampa', 'Estação da Amazônia'];
+if (!save.parc || typeof save.parc !== 'object') save.parc = { lista: [], ult: Date.now(), patr: 0, feitos: 0, novos: 0 };
+if (!Array.isArray(save.parc.lista)) save.parc.lista = [];
+const PARC_MAX = 3;
+function novoPedidoParc() {
+  const epicos = FELINOS.filter(t => t.rc === 'epico' && !t.secreto && save.album[t.raca] > 0);
+  const lista = epicos.length ? epicos : FELINOS.filter(t => t.rc === 'epico' && !t.secreto);
+  if (!lista.length) return null;
+  const livres = lista.filter(t => !save.parc.lista.some(p => p.raca === t.raca)), pool = livres.length ? livres : lista;
+  const t = pool[Math.floor(Math.random() * pool.length)], q = Math.random();
+  const usados = save.parc.lista.map(p => p.de), deLivres = PARCEIROS.filter(n => usados.indexOf(n) < 0);
+  const p = { id: novoId(), de: deLivres[Math.floor(Math.random() * deLivres.length)] || PARCEIROS[0], raca: t.raca, s: q < 0.25 ? 'm' : q < 0.5 ? 'f' : '', fi: tocaOk() && Math.random() < 0.2 ? 1 : 0 };
+  p.moedas = Math.round(A('parcMoedas') * (1 + (p.s ? 0.2 : 0) + (p.fi ? 0.4 : 0)) / 10) * 10;
+  return p;
+}
+/* pedidos chegam com o tempo (também com o jogo fechado) e com as patrulhas */
+function atualizarParc(patrulha) {
+  if (!save.santInfo.ok) { save.parc.ult = Date.now(); return 0; }
+  const P = save.parc, passo = Math.max(0.1, A('parcHoras')) * 3600e3; let n = 0;
+  if (patrulha) P.patr = (P.patr || 0) + 1;
+  const porTempo = Math.floor((Date.now() - P.ult) / passo);
+  if (porTempo > 0) P.ult += porTempo * passo;
+  let novos = porTempo + (P.patr >= Math.max(1, A('parcPatr')) ? 1 : 0);
+  if (P.patr >= Math.max(1, A('parcPatr'))) P.patr = 0;
+  while (novos-- > 0 && P.lista.length < PARC_MAX) { const p = novoPedidoParc(); if (!p) break; P.lista.push(p); n++; }
+  if (P.lista.length >= PARC_MAX) P.ult = Math.max(P.ult, Date.now() - passo * 0.999);
+  if (n) { P.novos = (P.novos || 0) + n; salvar(); }
+  return n;
+}
+const serveParc = (p, r) => r.r === p.raca && !r.pilot && (!p.s || r.s === p.s) && (!!p.fi === !!r.fi);
+const candidatosParc = p => save.parcEspera.map(r => ({ r, de: 'guardado' })).concat(save.sant.filter(r => serveParc(p, r)).map(r => ({ r, de: 'santuário' })), save.casa.filter(r => serveParc(p, r)).map(r => ({ r, de: 'casa' }))).filter(c => serveParc(p, c.r));
+const nomePedido = p => p.raca + (p.fi ? ' filhote' : '') + (p.s === 'm' ? ' macho' : p.s === 'f' ? ' fêmea' : '');
+function abrirParceiros() {
+  atualizarParc(false); save.parc.novos = 0; salvar(); atualizarSantBtns(true);
+  montarParceiros(); $('telaParc').hidden = false;
+  tentarTut('parceiros', tourParceiros, 350);
+}
+function montarParceiros() {
+  const corpo = $('parcCorpo'); corpo.textContent = '';
+  const P = save.parc;
+  const b0 = cria('div', 'bloco'); b0.id = 'parcIntro';
+  b0.appendChild(cria('p', 'nota regrasIntro', 'Outros santuários pedem felinos épicos. Entregue para ganhar moedas, ou recuse o pedido. Chegam pedidos novos com o tempo e a cada patrulha (até ' + PARC_MAX + ').'));
+  corpo.appendChild(b0);
+  const b1 = cria('div', 'bloco'); b1.appendChild(cria('h3', '', 'Pedidos (' + P.lista.length + '/' + PARC_MAX + ')'));
+  const l = cria('div', 'parcLista'); l.id = 'parcLista';
+  if (!P.lista.length) l.appendChild(cria('p', 'nota', 'Nenhum pedido agora. O próximo chega em ' + proxParcTxt() + '.'));
+  for (const p of P.lista) {
+    const t = tipoRaca(p.raca), card = cria('div', 'parcCard r-' + (t ? t.rc : 'epico'));
+    const g = Object.assign(amostra(t), { sexo: p.s || 'm' }); if (p.fi) virarFilhote(g);
+    card.appendChild(carinha(g, 72));
+    const d = cria('div', 'parcInfo');
+    d.appendChild(cria('small', '', p.de + ' pede:'));
+    d.appendChild(cria('b', '', nomePedido(p)));
+    d.appendChild(cria('span', 'parcPremio', '+' + p.moedas + ' moedas'));
+    const cands = candidatosParc(p), ac = cria('div', 'parcAcoes');
+    const e = cria('button', 'mini', cands.length ? 'Entregar' : 'Não tenho'); e.type = 'button'; e.disabled = !cands.length;
+    e.addEventListener('click', () => escolherEntrega(p));
+    const r = cria('button', 'mini claro', 'Recusar'); r.type = 'button';
+    r.addEventListener('click', () => { P.lista = P.lista.filter(x => x !== p); salvar(); montarParceiros(); atualizarSantBtns(true); });
+    ac.appendChild(e); ac.appendChild(r); d.appendChild(ac);
+    card.appendChild(d); l.appendChild(card);
+  }
+  b1.appendChild(l); corpo.appendChild(b1);
+  const b2 = cria('div', 'bloco'); b2.id = 'parcGuardados'; b2.appendChild(cria('h3', '', 'Guardados para os parceiros (' + save.parcEspera.length + '/' + A('parcGuarda') + ')'));
+  if (!save.parcEspera.length) b2.appendChild(cria('p', 'nota', 'Nas Regras do Santuário, escolha "Parceiros" como destino para guardar os felinos épicos repetidos aqui.'));
+  else {
+    const gr = cria('div', 'felGrade');
+    for (const r of save.parcEspera) { const g2 = gatoDe(r), b = cria('div', 'cg r-' + g2.rc); b.appendChild(carinha(g2, 64)); b.appendChild(cria('small', '', g2.raca + ' ' + SLOT_CURTO[slotDe(r)])); gr.appendChild(b); }
+    b2.appendChild(gr);
+    const v = save.parcEspera.reduce((a, r) => a + valorNatureza(tipoRaca(r.r)), 0);
+    const s = cria('button', 'mini claro', 'Devolver todos à natureza +' + v); s.type = 'button';
+    s.addEventListener('click', () => { for (const r of save.parcEspera) save.natureza[r.r] = (save.natureza[r.r] || 0) + 1; save.moedas += v; save.parcEspera = []; salvar(); somMoeda(); montarParceiros(); });
+    b2.appendChild(s);
+  }
+  corpo.appendChild(b2);
+  corpo.appendChild(cria('p', 'nota', 'Pedidos entregues: ' + (P.feitos || 0)));
+}
+function proxParcTxt() {
+  const passo = Math.max(0.1, A('parcHoras')) * 3600e3, falta = Math.max(0, save.parc.ult + passo - Date.now()), h = Math.floor(falta / 3600e3), m = Math.ceil((falta % 3600e3) / 60e3);
+  const pt = Math.max(1, A('parcPatr')) - (save.parc.patr || 0);
+  return (h ? h + ' h ' : '') + m + ' min ou ' + pt + (pt === 1 ? ' patrulha' : ' patrulhas');
+}
+function escolherEntrega(p) {
+  const cands = candidatosParc(p); if (!cands.length) return;
+  const corpo = $('parcCorpo'); corpo.textContent = '';
+  const b = cria('div', 'bloco'); b.appendChild(cria('h3', '', 'Qual vai para o ' + p.de + '?'));
+  const gr = cria('div', 'felGrade');
+  for (const c of cands) {
+    const g2 = gatoDe(c.r), bt = cria('button', 'cg r-' + g2.rc); bt.type = 'button';
+    bt.appendChild(carinha(g2, 64)); bt.appendChild(nomeEl('b', '', g2)); bt.appendChild(cria('small', '', SLOT_CURTO[slotDe(c.r)] + ' · ' + c.de));
+    bt.addEventListener('click', () => entregarParc(p, c));
+    gr.appendChild(bt);
+  }
+  b.appendChild(gr);
+  const v = cria('button', 'sec', 'Voltar'); v.type = 'button'; v.addEventListener('click', montarParceiros); b.appendChild(v);
+  corpo.appendChild(b); corpo.scrollTop = 0;
+}
+function entregarParc(p, c) {
+  if (c.de === 'guardado') save.parcEspera = save.parcEspera.filter(r => r !== c.r);
+  else if (c.de === 'santuário') { atualizarCaixa(); save.sant = save.sant.filter(r => r !== c.r); }
+  else save.casa = save.casa.filter(r => r !== c.r);
+  save.parc.lista = save.parc.lista.filter(x => x !== p); save.parc.feitos = (save.parc.feitos || 0) + 1;
+  save.moedas += p.moedas; salvar(); somMoeda();
+  if (!telaAbrigo.hidden) { criarMoradores(); montarListas(); }
+  const g = gatoDe(c.r);
+  janelaAviso({ gato: g, titulo: 'Pedido entregue!', texto: g.nome + ' foi morar no ' + p.de + '. Eles mandaram ' + p.moedas + ' moedas de agradecimento.', okTxt: 'Oba!', ok: () => { montarParceiros(); atualizarSantBtns(true); atualizarMenu(); } });
+}
+function tourParceiros() {
+  if ($('telaParc').hidden) return;
+  tourFiltrado([
+    { el: () => $('parcIntro'), titulo: 'Pedidos dos parceiros', texto: 'Outros santuários pedem felinos épicos. Cada pedido entregue rende moedas.' },
+    { el: () => document.querySelector('.parcCard'), se: () => !!document.querySelector('.parcCard'), titulo: 'Um pedido', texto: '"Entregar" abre os felinos que servem. Se não quiser, toque em "Recusar" e ele some.' },
+    { el: () => $('parcGuardados'), titulo: 'Guardados', texto: 'Felinos que as Regras do Santuário guardaram para os parceiros ficam aqui, prontos para entregar.' }
+  ], () => marcarTut('parceiros'));
+}
+let santBtnsChave = '', santBtnsT = 0;
+function atualizarSantBtns(forca) {
+  const box = $('santBtns'); if (!box) return;
+  const ocupado = editando || $('folha').classList.contains('aberta') || !$('ficha').hidden;
+  const mostrar = !telaAbrigo.hidden && modoSala === 'santuario' && !!save.santInfo.ok && !ocupado;
+  const agora = performance.now();
+  if (!forca && mostrar && agora - santBtnsT < 500 && santBtnsChave.charAt(0) === '1') return;
+  santBtnsT = agora;
+  const n = save.parc.lista.length, pode = mostrar && save.parc.lista.some(p => candidatosParc(p).length);
+  const chave = (mostrar ? 1 : 0) + '|' + n + '|' + pode;
+  if (chave === santBtnsChave && !forca) return;
+  santBtnsChave = chave; box.hidden = !mostrar;
+  const bdg = $('parcBadge'); bdg.hidden = !n; bdg.textContent = n; bdg.classList.toggle('pronto', pode);
+}
+function tourSantBtns() {
+  if (telaAbrigo.hidden || modoSala !== 'santuario' || $('santBtns').hidden) return;
+  tour([
+    { el: () => $('btnRegras'), titulo: 'Regras do Santuário', texto: 'Escolha quais felinos guardar. Os repetidos vão para a natureza, para casa ou para os parceiros.' },
+    { el: () => $('btnParc'), titulo: 'Pedidos dos parceiros', texto: 'Outros santuários pedem felinos épicos em troca de moedas. Chegam pedidos novos com o tempo.' }
+  ], () => marcarTut('santBtns'));
+}
+
+atualizarParc(false);
+$('btnRegras').addEventListener('click', abrirRegras);
+$('btnParc').addEventListener('click', abrirParceiros);
+$('fecharRegras').addEventListener('click', () => { $('telaRegras').hidden = true; if (!telaAbrigo.hidden) { criarMoradores(); montarListas(); } atualizarSantBtns(true); });
+$('fecharParc').addEventListener('click', () => { $('telaParc').hidden = true; atualizarSantBtns(true); });
+
 /* ----- santuário cheio: escolher o destino do felino novo ----- */
 let felTrocando = false;
 function mostrarFilaFel() {
@@ -7950,7 +8423,7 @@ function escolherHistoria() {
   initSom();
   janelaAviso({ ico: 'album', titulo: 'Historinhas', texto: 'Quer rever como tudo começou?' + (save.santInfo.ok ? ' Também dá para rever a história do santuário.' : ''),
     okTxt: 'O começo do abrigo', ok: () => contarHistoria('abrigo'),
-    outroTxt: save.santInfo.ok ? 'O santuário' : '', outro: () => contarHistoria('santuario') });
+    outroTxt: save.santInfo.ok ? 'O santuário' : '', outro: () => contarHistoria('santuario'), fechar: true });
 }
 
 /* ----- aviso genérico (janela com ícone, texto e botões) ----- */
@@ -8024,6 +8497,7 @@ function janelaAviso(o) {
   b1.textContent = o.okTxt || 'Entendi'; b2.textContent = o.outroTxt || ''; b2.hidden = !o.outroTxt;
   b1.onclick = () => { t.hidden = true; if (o.ok) o.ok(); };
   b2.onclick = () => { t.hidden = true; if (o.outro) o.outro(); };
+  $('avisoFechar').hidden = !o.fechar; $('avisoFechar').onclick = () => { t.hidden = true; if (typeof o.fechar === 'function') o.fechar(); };
   t.hidden = false;
 }
 
@@ -8068,7 +8542,7 @@ $('tourProx').addEventListener('click', () => {
 });
 
 /* ===== tutoriais: tour de cada tela na primeira vez + treino guiado na pista ===== */
-const TUT_NOMES = [['menu', 'Tela inicial'], ['abrigo', 'Abrigo'], ['casa', 'Casa'], ['santuario', 'Santuário'], ['loja', 'Loja'], ['album', 'Álbum'], ['preparar', 'Escolher gato e região'], ['corrida', 'Treino na pista']];
+const TUT_NOMES = [['menu', 'Tela inicial'], ['abrigo', 'Abrigo'], ['casa', 'Casa'], ['santuario', 'Santuário'], ['loja', 'Loja'], ['album', 'Álbum'], ['preparar', 'Escolher gato e região'], ['corrida', 'Treino na pista'], ['regras', 'Regras do Santuário'], ['parceiros', 'Pedidos dos parceiros']];
 const tutLivre = () => $('tour').hidden && $('telaAviso').hidden && $('telaHist').hidden && $('telaNome').hidden && $('telaFel').hidden && (!$('splash') || $('splash').hidden);
 function tentarTut(qual, fn, espera) {
   if (save.tut[qual]) return;
@@ -8262,7 +8736,7 @@ $('treinoPular').addEventListener('click', () => { if (!treino) return; fimTrein
 function montarCfgTut() {
   const box = $('cfgTutBtns'); if (!box) return; box.textContent = '';
   for (const [id, nome] of TUT_NOMES) {
-    if (id === 'santuario' && !save.santInfo.ok) continue;
+    if ((id === 'santuario' || id === 'regras' || id === 'parceiros') && !save.santInfo.ok) continue;
     const b = cria('button', 'mini claro', nome); b.type = 'button';
     b.addEventListener('click', () => repetirTut(id)); box.appendChild(b);
   }
@@ -8273,6 +8747,7 @@ function montarCfgTut() {
 function repetirTut(id) {
   save.tut[id] = 0; salvar();
   if (id === 'santuario') { navegar('santuario'); return; }
+  if (id === 'regras' || id === 'parceiros') { navegar('santuario'); setTimeout(id === 'regras' ? abrirRegras : abrirParceiros, 300); return; }
   if (id === 'menu') { irMenu(); tentarTut('menu', tourMenu, 300); }
   else if (id === 'abrigo') navegar('abrigo');
   else if (id === 'casa') navegar('casa');
@@ -8310,7 +8785,7 @@ function tourSantuario() {
     { el: () => $('abaPedidos'), titulo: 'Ingressos', texto: 'Os visitantes pagam ingresso para ver seus felinos, mesmo com o jogo fechado. Toque aqui para coletar as moedas. Felinos com guizo rendem o dobro.' },
     { el: () => $('abaGatos'), titulo: 'Felinos', texto: 'A lista de quem mora aqui. O número mostra quantos felinos cabem no santuário.' },
     { el: dockLoja, titulo: 'Mais espaço', texto: 'Para caber mais felinos, amplie o santuário na Loja, na aba Santuário. Lá também fica a decoração do santuário.' }
-  ], () => { save.santVisto = 1; save.tut.santuario = 1; salvar(); atualizarMenu(); });
+  ], () => { save.santVisto = 1; save.tut.santuario = 1; save.tut.santBtns = 0; salvar(); atualizarMenu(); tentarTut('santBtns', tourSantBtns, 400); });
 }
 function abrirAbrigo() { abrirSala('abrigo'); if (!save.nomeOk) setTimeout(() => { if (!telaAbrigo.hidden && modoSala === 'abrigo' && !save.nomeOk && $('telaHist').hidden) abrirNome('abrigo', true, () => tentarTut('abrigo', tourAbrigo, 350)); }, 450); else tentarTut('abrigo', tourAbrigo); }
 function abrirCasa() { abrirSala('casa'); tentarTut('casa', tourCasa); }
@@ -8318,6 +8793,7 @@ function abrirSantuario() {
   abrirSala('santuario');
   if (save.santInfo.ok && !save.santVisto) setTimeout(() => { if (!telaAbrigo.hidden && modoSala === 'santuario' && $('telaAviso').hidden && $('telaFel').hidden && $('telaHist').hidden) introSantuario(); }, 500);
   else if (save.santInfo.ok && save.tut.santuario === 0) tentarTut('santuario', () => { if (!telaAbrigo.hidden && modoSala === 'santuario') tourSantuario(); });
+  else if (save.santInfo.ok && save.santVisto) { atualizarParc(false); atualizarSantBtns(true); tentarTut('santBtns', tourSantBtns, 700); }
 }
 
 function linhaLoja(lista, ico, nome, desc, rotulo, ativo, classe, acao) {
@@ -8340,6 +8816,7 @@ const CATS_DECOR = [
   { id: 'cama', nome: 'Camas e casinhas', titulo: 'Camas e casinhas' },
   { id: 'chao', nome: 'Chão', titulo: 'Móveis e enfeites de chão' },
   { id: 'brinq', nome: 'Brinquedos', titulo: 'Brinquedos' },
+  { id: 'flores', nome: 'Flores e plantas', titulo: 'Flores e plantas' },
   { id: 'filhote', nome: 'Filhotes', titulo: 'Para os filhotes (berçário)' },
   { id: 'premio', nome: 'Prêmios', titulo: 'Prêmios das estrelas' }
 ];
@@ -8349,6 +8826,7 @@ function catDecor(d) {
   if (d.premio != null) return 'premio';
   if (d.local === 'abrigo' && DECOR_FILHOTE.indexOf(d.id) >= 0) return 'filhote';
   if (d.brinq || b === 'piscina') return 'brinq';
+  if (d.flor) return 'flores';
   if (d.onde === 'parede') return 'parede';
   if (CAMAS_DECOR.indexOf(b) >= 0) return 'cama';
   return 'chao';
@@ -8559,7 +9037,8 @@ function aplicarPrecos() {
 }
 function aplicarAdmin() { salvarAdm(); aplicarPrecos(); prepararAbrigo(); aplicarDecor(); hudAnt = ''; bolsaChave = ''; atualizarMenu(); }
 const CAMPOS_ADM = [
-  ['Gatos secretos', [['carinhoSecreto', 'Gato do Amor: carinho em quantos gatos diferentes', 1, 500], ['sortudoGuizos', 'Gato Sortudo: gatos com guizo numa patrulha', 1, 100]]],
+  ['Parceiros do santuário', [['parcMoedas', 'Moedas por pedido (base)', 0, 99999], ['parcHoras', 'Horas para chegar pedido novo', 0.1, 72], ['parcPatr', 'Patrulhas para chegar pedido novo', 1, 50], ['parcGuarda', 'Felinos guardados para parceiros (máx.)', 0, 60]]],
+  ['Gatos secretos', [['carinhoSecreto', 'Gato do Amor: carinho em quantos gatos diferentes', 1, 500], ['sortudoGuizos', 'Gato Sortudo: gatos com guizo numa patrulha', 1, 100], ['cristalEpicos', 'Gato Cristal: felinos épicos resgatados', 1, 2000], ['auroraMeta', 'Gato Aurora: pontos da Estrela da Aurora (Pico do Floco)', 1, 9999]]],
   ['Pedidos de adoção', [['pedMax', 'Pedidos ao mesmo tempo', 0, 10], ['pedGatos', 'Máximo de gatos por pedido', 1, 8], ['bonusPacote', 'Bônus por gato extra no pedido (%)', 0, 500],
     ['espComumMin', 'Espera comum mínima (s)'], ['espComumMax', 'Espera comum máxima (s)'], ['espIncMin', 'Espera incomum mínima (s)'], ['espIncMax', 'Espera incomum máxima (s)'],
     ['espRaroMin', 'Espera raro mínima (s)'], ['espRaroMax', 'Espera raro máxima (s)'], ['valComum', 'Valor de adoção: comum'], ['valIncomum', 'Valor de adoção: incomum'], ['valRaro', 'Valor de adoção: raro']]],
@@ -8800,7 +9279,12 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
       const mb = save.melhorReg[idx]; linha.appendChild(cria('small', 'regMelhor', (save.estrelas[idx] || 0) >= 3 ? 'Completa!' : mb ? 'Melhor: ' + mb + ' pts' : ok ? 'Ainda sem pontos aqui' : '')); card.appendChild(linha);
       const pl = cria('div', 'regPremios'); pl.appendChild(cria('small', '', 'Prêmios:'));
       for (let q = 0; q < 3; q++) { const pr = premioDaEstrela(idx, q), tem = (save.estrelas[idx] || 0) > q, it = cria('span', 'regPremio' + (tem ? ' ok' : '')); it.innerHTML = icoPremio(pr); it.title = ESTRELA_ORD[q] + ' estrela: ' + pr.nome; pl.appendChild(it); }
-      card.appendChild(pl); }
+      card.appendChild(pl);
+      if (idx === idxAurora() && (save.estrelas[idx] || 0) >= 3) {
+        const au = cria('div', 'regAurora' + (save.secretos && save.secretos.aurora ? ' ok' : ''));
+        au.innerHTML = '<span class="auEst">' + ICO.estrela + '</span><div><b>Estrela da Aurora</b><small>' + (save.secretos && save.secretos.aurora ? 'Conquistada! O céu se acendeu.' : 'Faça ' + Math.round(A('auroraMeta')) + ' pts e algo especial acontece no céu…') + '</small></div>';
+        card.appendChild(au);
+      } }
     const todos = r.tiposGatos.concat(r.tiposE, r.tiposL, r.tiposM).sort((a, b) => ORDEM_RAR[a.rc] - ORDEM_RAR[b.rc]);
     const ch = chancesRacas(r);
     const resumoCh = cria('div', 'regChances');
