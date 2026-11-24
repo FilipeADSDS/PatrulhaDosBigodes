@@ -1167,7 +1167,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.2.1';
+const VERSAO = '3.2.2';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1467,6 +1467,8 @@ function ganharSecreto(id) {
   salvar();
   return t;
 }
+/* felinos épicos já resgatados: lê o álbum (vale também para o que foi pego antes da atualização que criou o contador) */
+const epicosTotal = () => Math.max(save.epicosPegos || 0, FELINOS.reduce((n, t) => n + (t.rc === 'epico' && !t.secreto ? (save.album[t.raca] || 0) : 0), 0));
 const idxAurora = () => REGIOES.findIndex(r => r.nome === 'Pico do Floco');
 /* Gato Floral: todas as flores e plantas da loja colocadas nos seus lugares */
 const FLORES_DEC = () => DECOR.filter(d => d.flor && d.premio == null);
@@ -1482,7 +1484,7 @@ function checarSecretos(info) {
   if (!save.secretos.sortudo && info && info.guizos >= Math.max(1, Math.round(A('sortudoGuizos')))) ganha('sortudo');
   if (!save.secretos.arcoiris && racaCompleta()) ganha('arcoiris');
   if (!save.secretos.fantasma && info && info.madrugada) ganha('fantasma');
-  if (!save.secretos.cristal && (save.epicosPegos || 0) >= Math.max(1, Math.round(A('cristalEpicos')))) ganha('cristal');
+  if (!save.secretos.cristal && epicosTotal() >= Math.max(1, Math.round(A('cristalEpicos')))) ganha('cristal');
   if (!save.secretos.aurora && info && info.rIdx === idxAurora() && (save.estrelas[info.rIdx] || 0) >= 3 && info.pontos >= A('auroraMeta')) ganha('aurora');
   if (!save.secretos.floral && floresTodas()) ganha('floral');
   /* Gato Galáxia: todas as raças do álbum, inclusive os outros secretos */
@@ -2656,7 +2658,6 @@ function terminar() {
   if (pegos.some(g => g.colecao)) { atualizarCaixa(); save.santInfo.ok = 1; }
   for (const g of pegos) {
     save.album[g.raca] = (save.album[g.raca] || 0) + 1; registrarVar(g);
-    if (g.colecao && g.rc === 'epico') save.epicosPegos = (save.epicosPegos || 0) + 1;
     if (g.colecao) {
       colecionados.push(g);
       const reg = { id: novoId(), n: g.nome, r: g.raca, o: g.olho, f: 0, pr: g.premio ? 1 : 0, s: g.sexo };
@@ -4377,7 +4378,7 @@ function abrirAlbum() {
       const b = cria('div', 'bloco');
       b.appendChild(cria('h3', '', titulo + ' · ' + achados + '/' + lista.length));
       b.appendChild(cria('p', 'nota', nota));
-      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + (save.epicosPegos || 0) + ' · Flores e plantas compradas: ' + floresCompradas() + '/' + FLORES_DEC().length + ' · colocadas: ' + Math.min(floresColocadas(), FLORES_MIN) + '/' + FLORES_MIN));
+      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + epicosTotal() + ' · Flores e plantas compradas: ' + floresCompradas() + '/' + FLORES_DEC().length + ' · colocadas: ' + Math.min(floresColocadas(), FLORES_MIN) + '/' + FLORES_MIN));
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
       b.appendChild(g); raiz.appendChild(b);
     }
