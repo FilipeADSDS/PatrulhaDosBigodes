@@ -1183,7 +1183,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3';
+const VERSAO = '3.3.1';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -9723,14 +9723,21 @@ function montarConta(msg, erro) {
     b.appendChild(cria('p', 'nota', 'Com uma conta, seu progresso fica salvo na nuvem. Você pode jogar no Android e no site do iPhone com os mesmos gatos, moedas e coleções. Só os pilotos mudam de um para o outro.'));
     const em = cria('input', 'campoTexto'); em.type = 'email'; em.placeholder = 'Seu e-mail'; em.autocomplete = 'email'; em.value = (conta && conta.email) || '';
     const se = cria('input', 'campoTexto'); se.type = 'password'; se.placeholder = 'Senha (pelo menos 6 caracteres)'; se.autocomplete = 'current-password';
-    [em, se].forEach(i => { i.addEventListener('focus', () => contaDigitando = true); i.addEventListener('blur', () => contaDigitando = false); });
-    b.appendChild(em); b.appendChild(se); b.appendChild(aviso);
+    const se2 = cria('input', 'campoTexto'); se2.type = 'password'; se2.placeholder = 'Confirmar a senha'; se2.autocomplete = 'new-password'; se2.hidden = true; se2.id = 'contaSenha2';
+    [em, se, se2].forEach(i => { i.addEventListener('focus', () => contaDigitando = true); i.addEventListener('blur', () => contaDigitando = false); });
+    const ver = cria('button', 'linkConta', 'Mostrar senha'); ver.type = 'button'; ver.id = 'contaVer';
+    ver.addEventListener('click', () => { const mostrar = se.type === 'password'; se.type = se2.type = mostrar ? 'text' : 'password'; ver.textContent = mostrar ? 'Ocultar senha' : 'Mostrar senha'; });
+    b.appendChild(em); b.appendChild(se); b.appendChild(se2); b.appendChild(ver); b.appendChild(aviso);
     const linha = cria('div', 'contaBtns');
     const bEntrar = cria('button', 'mini', 'Entrar'), bCriar = cria('button', 'mini claro', 'Criar conta');
     bEntrar.type = bCriar.type = 'button';
     const ir = async (criar) => {
       const e = em.value.trim(), s = se.value;
       if (!e || !s) { aviso.hidden = false; aviso.className = 'contaMsg erro'; aviso.textContent = 'Digite o e-mail e a senha.'; return; }
+      if (criar) {
+        if (se2.hidden) { se2.hidden = false; se2.focus(); aviso.hidden = false; aviso.className = 'contaMsg'; aviso.textContent = 'Digite a senha de novo para confirmar e toque em Criar conta.'; return; }
+        if (se2.value !== s) { aviso.hidden = false; aviso.className = 'contaMsg erro'; aviso.textContent = 'As senhas não são iguais.'; return; }
+      }
       bEntrar.disabled = bCriar.disabled = true; aviso.hidden = false; aviso.className = 'contaMsg'; aviso.textContent = criar ? 'Criando a conta…' : 'Entrando…';
       try {
         const r = await entrarConta(criar, e, s);
@@ -9739,7 +9746,7 @@ function montarConta(msg, erro) {
         else if (r === 'perguntar') montarConta('Escolha qual progresso usar.');
       } catch (er) { if (conta && !conta.id) conta = null; aviso.className = 'contaMsg erro'; aviso.textContent = erroNuvem(er); bEntrar.disabled = bCriar.disabled = false; }
     };
-    bEntrar.addEventListener('click', () => ir(false)); bCriar.addEventListener('click', () => ir(true));
+    bEntrar.addEventListener('click', () => { se2.hidden = true; se2.value = ''; ir(false); }); bCriar.addEventListener('click', () => ir(true));
     linha.appendChild(bEntrar); linha.appendChild(bCriar); b.appendChild(linha);
     const esq = cria('button', 'linkConta', 'Esqueci a senha'); esq.type = 'button';
     esq.addEventListener('click', async () => {
