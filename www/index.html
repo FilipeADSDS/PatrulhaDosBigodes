@@ -442,6 +442,17 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .r-mitico{background:linear-gradient(90deg,#ff9ef0,#a9b8ff,#7fe7ff);color:#4a1650}
 .raca.col-mitico{background:linear-gradient(180deg,#ffe9fb,#eef6ff 70%,#fff);box-shadow:0 0 0 2px #ff9ef0,0 0 16px rgba(255,120,220,.5)}
 .raca.falta.col-mitico{background:#f1ecf6;box-shadow:0 0 0 2px var(--linha) inset}
+.r-amigo{background:linear-gradient(100deg,#12b8cc,#ff9f1c 40%,#ff5f9e 60%,#12b8cc);background-size:220% 100%;animation:brAmigo 3.4s linear infinite;color:#fff}
+@keyframes brAmigo{to{background-position:-220% 0}}
+@keyframes cintAmigo{0%,100%{box-shadow:0 0 0 2px #ff9f1c,0 0 10px rgba(18,184,204,.45)}50%{box-shadow:0 0 0 2px #ff5f9e,0 0 20px rgba(255,159,28,.75)}}
+.raca.col-amigo:not(.falta){position:relative;overflow:hidden;animation:cintAmigo 2.6s ease-in-out infinite}
+.raca.col-amigo:not(.falta)::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-18deg);animation:varAmigo 3.2s ease-in-out infinite}
+@keyframes varAmigo{0%,55%{left:-60%}100%{left:130%}}
+.vagaAmigo{opacity:.7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px}
+.vagaInterro{font-size:44px;font-weight:900;color:#12b8cc;line-height:1}
+.raca.col-amigo{background:linear-gradient(180deg,#d9f7ff,#fff1d6);box-shadow:0 0 0 2px #ff9f1c,0 0 14px rgba(18,184,204,.4)}
+.cg.r-amigo{border-top-color:#ff9f1c}
+.medalha.r-amigo{box-shadow:0 0 0 2px #ff9f1c}
 .r-secreto{background:radial-gradient(circle at 12% 28%,#fff 0 1px,transparent 1.7px),radial-gradient(circle at 34% 72%,#fff6c8 0 1px,transparent 1.7px),radial-gradient(circle at 58% 18%,#fff 0 .8px,transparent 1.5px),radial-gradient(circle at 79% 60%,#ffd84a 0 1.1px,transparent 1.8px),radial-gradient(circle at 92% 22%,#fff 0 .8px,transparent 1.5px),radial-gradient(circle at 48% 48%,#d9c9ff 0 .7px,transparent 1.3px),linear-gradient(120deg,#24164f,#5b2fa8 55%,#2c2a78);color:#fff6c8;animation:brilhaSec 3.5s ease-in-out infinite}
 .raca.col-secreto{background:radial-gradient(circle at 14% 10%,#fff 0 1.4px,transparent 2.2px),radial-gradient(circle at 80% 8%,#ffd84a 0 1.6px,transparent 2.4px),radial-gradient(circle at 30% 34%,#fff6c8 0 1.1px,transparent 1.9px),radial-gradient(circle at 88% 30%,#fff 0 1.2px,transparent 2px),radial-gradient(circle at 60% 4%,#d9c9ff 0 1px,transparent 1.8px),radial-gradient(circle at 8% 42%,#fff 0 1px,transparent 1.8px),linear-gradient(180deg,#24164f,#5b2fa8 38%,#e9e0ff 52%,#fff);box-shadow:0 0 0 2px #8b5cf6,0 0 18px rgba(139,92,246,.6)}
 .raca.falta.col-secreto{background:linear-gradient(180deg,#e7e0f5,#f4f0fa);box-shadow:0 0 0 2px #b9a6e6 inset}
@@ -929,6 +940,9 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
         <div class="bloco"><h3>Conta</h3>
           <div class="lista"><div class="item"><span class="ico" data-ico="nuvem"></span><div><b>Salvar na nuvem</b><span id="cfgContaTxt"></span></div><button class="mini" id="cfgConta" type="button">Entrar</button></div></div>
         </div>
+        <div class="bloco"><h3>Código de resgate</h3>
+          <div class="lista"><div class="item"><span class="ico" data-ico="estrela"></span><div><b>Tem um código?</b><span id="cfgCodMsg">Digite para liberar algo especial.</span><input type="text" class="campoTexto" id="cfgCod" maxlength="24" placeholder="Código" autocomplete="off" autocapitalize="characters" spellcheck="false"></div><button class="mini" id="cfgCodBtn" type="button">Resgatar</button></div></div>
+        </div>
         <div class="bloco"><h3>Som</h3>
           <div class="lista">
             <label class="item" for="cfgLigado"><span class="ico" data-ico="alto"></span><div><b>Som ligado</b>Liga ou desliga todos os sons do jogo</div><input type="checkbox" class="switch" id="cfgLigado"></label>
@@ -1183,7 +1197,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3.1';
+const VERSAO = '3.3.2';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1229,6 +1243,8 @@ try {
     if (lido.secretos && typeof lido.secretos === 'object') save.secretos = lido.secretos;
     if (typeof lido.epicosPegos === 'number') save.epicosPegos = lido.epicosPegos;
     if (lido.convNuvem) save.convNuvem = 1;
+    if (lido.amigos && typeof lido.amigos === 'object') save.amigos = lido.amigos;
+    if (lido.amigosPil) save.amigosPil = lido.amigosPil;
     if (lido.regras && typeof lido.regras === 'object') save.regras = lido.regras;
     if (lido.parc && typeof lido.parc === 'object') save.parc = lido.parc;
     if (Array.isArray(lido.parcEspera)) save.parcEspera = lido.parcEspera;
@@ -1351,7 +1367,7 @@ for (const a of save.abrigo.concat(save.casa || [], save.sant)) if (a && !a.id) 
 save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
 function salvar() { gravar('pegagatos.save', JSON.stringify(save)); }
 const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
-  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 3, parcPatr: 4, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
+  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 0.5, parcPatr: 2, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
   santBase: 10, santNivel: 5, santTeto: 40, nomeEpico: 500, nomeLend: 1500, nomeMit: 4000, bercoFracao: 0.5, tocaFracao: 0.5, chanceFilhote: 0.15, chanceCaixa: 0.009, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
 let ADM = { v: {}, precos: {}, corpos: {}, pelos: {}, chances: {} };
 try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; if (a.pelos && typeof a.pelos === 'object') ADM.pelos = a.pelos; if (a.chances && typeof a.chances === 'object') ADM.chances = a.chances; } } catch (e) {}
@@ -1475,6 +1491,49 @@ for (const f of SECRETOS) {
   f.raridade = 'secreto'; f.rc = 'secreto'; f.pts = f.id === 'galaxia' ? 300 : 150; f.aura = f.aura || '#8b5cf6'; f.brilho = f.brilho || 1.3; f.cosmico = 1;
   TIPOS.push(f);
 }
+/* gatos personalizados para amigos: só aparecem depois de resgatar um código (Configurações) */
+const AMIGOS = [
+  { raca: 'Mangato Louco', id: 'mangato', nomeGato: 'Mango', sexo: 'm', cod: 4456213177523716, louco: 1, fofo: 2, pelo: '#ff9f1c', orelha: '#12b8cc', dentro: '#ff5f9e', focinho: '#ffe7a8', peito: '#ffe7a8', olhos: ['#19e0f0', '#ffd23f'], nariz: '#d6336c', rabo: '#12b8cc', estampa: 'tigre', estampaCor: '#d9780a' },
+  { raca: 'Gatattoo', id: 'gatattoo', nomeGato: 'Tatu', sexo: 'f', cod: 3098870155963400, tatuadora: 1, fofo: 1, pelo: '#f3e3d0', orelha: '#2a2430', dentro: '#a8586e', focinho: '#fff6ea', peito: '#fff6ea', pata: '#fff3df', olhos: ['#8a6a55', '#5a4a52'], nariz: '#c43a55', rabo: '#e9d3bb', bochecha: '#e8b1a5' }
+];
+for (const f of AMIGOS) {
+  f.colecao = true; f.secreto = 1; f.amigo = 1; f.peso = 0; f.orelha = f.orelha || f.pelo;
+  f.raridade = 'amigo'; f.rc = 'amigo'; f.pts = 0; f.aura = f.aura || '#ffb35c'; f.brilho = 1.1;
+  TIPOS.push(f);
+}
+function hashCodigo(txt) {
+  const t = String(txt || '').toUpperCase().replace(/[^A-Z0-9]/g, '') + '|pb';
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < t.length; i++) { const c = t.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+}
+/* os amigos também viram novos pilotos (aba Pilotos, nas Configurações) */
+function pilotoAmigo(t) {
+  if (!Array.isArray(save.pilotos)) save.pilotos = [];
+  const id = 'amigo-' + t.id;
+  if (!save.pilotos.some(x => x.id === id)) save.pilotos.push({ id, raca: t.raca, nome: t.nomeGato, sexo: t.sexo, olho: t.olhos[0] });
+}
+if (save.amigos && save.amigos.tatuagata) { /* o nome mudou de Tatuagata para Gatattoo */
+  delete save.amigos.tatuagata; save.amigos.gatattoo = 1; save.pilotos = (save.pilotos || []).filter(x => x.id !== 'amigo-tatuagata');
+  if (save.album.Tatuagata) { save.album.Gatattoo = save.album.Tatuagata; delete save.album.Tatuagata; }
+  for (const l of [save.casa, save.abrigo, save.sant]) for (const r of l || []) if (r && r.r === 'Tatuagata') r.r = 'Gatattoo';
+  save.amigosPil = 0;
+}
+if (!save.amigosPil) { for (const t of AMIGOS) if (save.amigos && save.amigos[t.id]) pilotoAmigo(t); save.amigosPil = 1; }
+const temAmigos = () => !!(save.amigos && Object.keys(save.amigos).length);
+function resgatarCodigo(txt) {
+  if (!String(txt || '').replace(/[^A-Za-z0-9]/g, '')) return { erro: 'Digite o código.' };
+  const t = AMIGOS.find(a => a.cod === hashCodigo(txt));
+  if (!t) return { erro: 'Código inválido. Confira e tente de novo.' };
+  if (!save.amigos || typeof save.amigos !== 'object') save.amigos = {};
+  if (save.amigos[t.id]) return { erro: 'Você já resgatou este código.' };
+  save.amigos[t.id] = 1; save.album[t.raca] = (save.album[t.raca] || 0) + 1;
+  save.casa.push({ id: novoId(), n: t.nomeGato, r: t.raca, o: t.olhos[0], f: 0, s: t.sexo });
+  pilotoAmigo(t);
+  salvar(); return { t };
+}
 function ganharSecreto(id) {
   if (!save.secretos || typeof save.secretos !== 'object') save.secretos = {};
   const t = SECRETOS.find(x => x.id === id); if (!t || save.secretos[id]) return null;
@@ -1505,7 +1564,7 @@ function checarSecretos(info) {
   if (!save.secretos.aurora && info && info.rIdx === idxAurora() && (save.estrelas[info.rIdx] || 0) >= 3 && info.pontos >= A('auroraMeta')) ganha('aurora');
   if (!save.secretos.floral && floresTodas()) ganha('floral');
   /* Gato Galáxia: todas as raças do álbum, inclusive os outros secretos */
-  if (!save.secretos.galaxia && TIPOS.every(t => t.id === 'galaxia' || save.album[t.raca])) ganha('galaxia');
+  if (!save.secretos.galaxia && TIPOS.every(t => t.id === 'galaxia' || t.amigo || save.album[t.raca])) ganha('galaxia');
   return novos;
 }
 function mostrarSecretos(lista, depois) {
@@ -1660,7 +1719,79 @@ function tufo(k, tx, ty, d, R, cor) {
   k.fillStyle = cor; k.beginPath(); k.moveTo(tx - d * R * 0.06, ty + R * 0.04); k.lineTo(tx + d * R * 0.06, ty - R * 0.42); k.lineTo(tx + d * R * 0.12, ty + R * 0.06); k.closePath(); k.fill();
 }
 const PONTOS = [[-0.72, -0.4], [0.72, -0.4], [-0.4, -0.72], [0.4, -0.72], [0, -0.82], [-0.9, 0.1], [0.9, 0.1], [-0.72, 0.5], [0.72, 0.5], [-0.18, -0.55], [0.18, -0.55]];
+/* caveirinha estilizada (festa dos mortos): crânio, olhos, nariz e dentes */
+function caveiraMini(c, x, y, s, cor, tinta, anel, det) {
+  c.save(); c.lineJoin = 'round'; c.strokeStyle = tinta; c.lineWidth = Math.max(1, s * 0.11);
+  c.fillStyle = cor; c.beginPath(); c.ellipse(x, y - s * 0.12, s * 0.88, s * 0.78, 0, 0, 7); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(x - s * 0.5, y + s * 0.4); c.lineTo(x - s * 0.46, y + s * 0.98); c.lineTo(x + s * 0.46, y + s * 0.98); c.lineTo(x + s * 0.5, y + s * 0.4); c.closePath(); c.fill(); c.stroke();
+  if (det) { /* caveira mexicana: pétalas em volta dos olhos, pontinhos na testa, coração no nariz e dentes costurados */
+    const cores = ['#ff5f9e', '#19e0f0', '#ffd23f'];
+    for (const d of [-1, 1]) for (let q = 0; q < 8; q++) { const a = q * Math.PI / 4, ex = x + d * s * 0.4, ey = y - s * 0.1; c.fillStyle = cores[q % 3]; c.beginPath(); c.ellipse(ex + Math.cos(a) * s * 0.4, ey + Math.sin(a) * s * 0.44, s * 0.09, s * 0.14, a + Math.PI / 2, 0, 7); c.fill(); }
+    c.fillStyle = '#ff5f9e'; for (let q = -2; q <= 2; q++) { c.beginPath(); c.arc(x + q * s * 0.17, y - s * 0.66 + Math.abs(q) * s * 0.06, s * 0.05, 0, 7); c.fill(); }
+    c.strokeStyle = '#19e0f0'; c.lineWidth = Math.max(1, s * 0.05); c.beginPath(); c.moveTo(x - s * 0.5, y + s * 0.52); c.quadraticCurveTo(x - s * 0.62, y + s * 0.3, x - s * 0.74, y + s * 0.42); c.moveTo(x + s * 0.5, y + s * 0.52); c.quadraticCurveTo(x + s * 0.62, y + s * 0.3, x + s * 0.74, y + s * 0.42); c.stroke();
+  }
+  for (const d of [-1, 1]) { c.fillStyle = tinta; c.beginPath(); c.ellipse(x + d * s * 0.4, y - s * 0.1, s * 0.27, s * 0.32, d * 0.15, 0, 7); c.fill(); if (anel) { c.strokeStyle = anel; c.lineWidth = Math.max(1, s * 0.07); c.stroke(); } }
+  c.fillStyle = det ? '#d6336c' : tinta; if (det) caminhoCoracao(c, x, y + s * 0.3, s * 0.13); else { c.beginPath(); c.moveTo(x, y + s * 0.18); c.lineTo(x - s * 0.13, y + s * 0.42); c.lineTo(x + s * 0.13, y + s * 0.42); c.closePath(); } c.fill();
+  c.strokeStyle = tinta; c.lineWidth = Math.max(1, s * 0.06); c.beginPath();
+  for (const d of [-0.3, -0.1, 0.1, 0.3]) { c.moveTo(x + d * s, y + s * 0.62); c.lineTo(x + d * s, y + s * 0.98); }
+  c.moveTo(x - s * 0.5, y + s * 0.66); c.lineTo(x + s * 0.5, y + s * 0.66); c.stroke();
+  c.restore();
+}
+function felinoEnfeite(k, x, y, rx, ry, g) {
+  if (!g.louco && !g.tatuadora) return;
+  const R = Math.min(rx, ry), tinta = '#1d2b53';
+  if (g.louco) { /* tufos macios nas bochechas, sem contorno */
+    for (const d of [-1, 1]) for (const [oy, len, cor] of [[0.2, 0.22, g.pelo], [0.45, 0.26, '#ffe7a8']]) {
+      k.fillStyle = cor; k.beginPath(); k.moveTo(x + d * rx * 0.9, y + ry * (oy - 0.12)); k.quadraticCurveTo(x + d * rx * (1 + len), y + ry * (oy + 0.02), x + d * rx * (1 + len * 0.7), y + ry * (oy + 0.16)); k.quadraticCurveTo(x + d * rx * 1.0, y + ry * (oy + 0.2), x + d * rx * 0.88, y + ry * (oy + 0.22)); k.closePath(); k.fill();
+    }
+  }
+  if (g.tatuadora) { /* argolas nas orelhas, gargantilha e correntes */
+    for (const d of [-1, 1]) { k.strokeStyle = '#c9ccd6'; k.lineWidth = Math.max(1.2, R * 0.06); k.beginPath(); k.arc(x + d * rx * 1.0, y + ry * 0.48, R * 0.24, 0, 7); k.stroke(); }
+    k.strokeStyle = '#17141c'; k.lineWidth = R * 0.14; k.lineCap = 'round'; k.beginPath(); k.ellipse(x, y + ry * 0.02, rx * 0.97, ry * 0.97, 0, Math.PI * 0.22, Math.PI * 0.78); k.stroke();
+    k.fillStyle = '#c9ccd6'; for (let q = 0; q < 7; q++) { const a = Math.PI * (0.25 + q * 0.083); k.beginPath(); k.arc(x + Math.cos(a) * rx * 0.97, y + ry * 0.02 + Math.sin(a) * ry * 0.97, R * 0.025, 0, 7); k.fill(); }
+    k.strokeStyle = '#b8bcc8'; k.lineWidth = Math.max(1, R * 0.045); k.setLineDash([R * 0.09, R * 0.05]); k.beginPath(); k.ellipse(x, y - ry * 0.05, rx * 0.9, ry * 1.12, 0, Math.PI * 0.2, Math.PI * 0.8); k.stroke(); k.setLineDash([]);
+  }
+  k.save(); k.beginPath(); k.ellipse(x, y, rx, ry, 0, 0, 7); k.clip(); k.lineCap = 'round'; k.lineJoin = 'round';
+  if (g.louco) {
+    const dg = k.createLinearGradient(0, y - ry, 0, y + ry * 0.55); dg.addColorStop(0, 'rgba(20,190,230,.95)'); dg.addColorStop(0.3, 'rgba(110,150,235,.7)'); dg.addColorStop(0.6, 'rgba(255,110,150,.35)'); dg.addColorStop(1, 'rgba(255,159,28,0)');
+    k.fillStyle = dg; k.fillRect(x - rx * 1.1, y - ry * 1.1, rx * 2.2, ry * 1.8);
+    /* marcas de pelo: listras de gato rajado, sombra turquesa suave em volta dos olhos e o M de gato rajado na testa */
+    k.lineWidth = R * 0.07;
+    for (const d of [-1, 1]) for (const [oy, len] of [[-0.46, 0.3], [-0.22, 0.36], [0.02, 0.3]]) { k.strokeStyle = 'rgba(190,100,10,.55)'; k.beginPath(); k.moveTo(x + d * rx * 1.04, y + oy * ry); k.quadraticCurveTo(x + d * rx * (1 - len * 0.5), y + (oy - 0.03) * ry, x + d * rx * (1 - len), y + (oy + 0.08) * ry); k.stroke(); }
+    for (const d of [-1, 1]) { const gr = k.createRadialGradient(x + d * rx * 0.44, y - ry * 0.02, 0, x + d * rx * 0.44, y - ry * 0.02, rx * 0.42); gr.addColorStop(0, 'rgba(18,184,204,.5)'); gr.addColorStop(1, 'rgba(18,184,204,0)'); k.fillStyle = gr; k.beginPath(); k.arc(x + d * rx * 0.44, y - ry * 0.02, rx * 0.42, 0, 7); k.fill(); }
+    const w = R * 0.2, h = R * 0.16, cy = y - ry * 0.56; k.lineJoin = 'round'; k.lineCap = 'round';
+    for (const [cor, lw] of [['rgba(190,100,10,.55)', R * 0.1], ['rgba(18,150,170,.75)', R * 0.055]]) { k.strokeStyle = cor; k.lineWidth = lw; k.beginPath(); k.moveTo(x - w, cy + h); k.lineTo(x - w * 1.0, cy - h * 0.6); k.lineTo(x, cy + h * 0.1); k.lineTo(x + w, cy - h * 0.6); k.lineTo(x + w, cy + h); k.stroke(); }
+    k.strokeStyle = 'rgba(190,100,10,.5)'; k.lineWidth = R * 0.05; for (const d of [-0.5, 0.5]) { k.beginPath(); k.moveTo(x + d * w, cy - h * 0.9); k.lineTo(x + d * w * 0.9, cy - h * 1.5); k.stroke(); }
+    /* detalhes de caveira: espirais nas bochechas e dentes no queixo */
+    for (const d of [-1, 1]) {
+      const ex = x + d * rx * 0.44, ey = y - ry * 0.02;
+      k.strokeStyle = 'rgba(18,150,170,.8)'; k.lineWidth = Math.max(1, R * 0.03); k.beginPath();
+      for (let q = 0; q < 22; q++) { const a2 = q * 0.5, rr = R * (0.01 + q * 0.0045), px = x + d * rx * 0.8 + Math.cos(a2) * rr * d, py = y + ry * 0.36 + Math.sin(a2) * rr; q ? k.lineTo(px, py) : k.moveTo(px, py); } k.stroke();
+    }
+    k.fillStyle = '#fff0c4'; k.strokeStyle = 'rgba(59,51,80,.85)'; k.lineWidth = Math.max(1, R * 0.025); k.beginPath(); k.roundRect ? k.roundRect(x - rx * 0.3, y + ry * 0.86, rx * 0.6, ry * 0.16, R * 0.03) : k.rect(x - rx * 0.3, y + ry * 0.86, rx * 0.6, ry * 0.16); k.fill(); k.stroke();
+    k.beginPath(); for (let q = 1; q < 5; q++) { k.moveTo(x - rx * 0.3 + q * rx * 0.12, y + ry * 0.86); k.lineTo(x - rx * 0.3 + q * rx * 0.12, y + ry * 1.02); } k.stroke();
+
+  }
+  if (g.tatuadora) {
+    /* rosto claro, franja repicada preta, sobrancelhas e delineado em asa */
+    k.fillStyle = '#efdacd'; k.beginPath(); k.ellipse(x, y + ry * 0.2, rx * 0.8, ry * 0.76, 0, 0, 7); k.fill();
+    k.fillStyle = '#17141c'; k.beginPath(); k.moveTo(x - rx * 1.1, y - ry * 1.1); k.lineTo(x + rx * 1.1, y - ry * 1.1); k.lineTo(x + rx * 1.1, y - ry * 0.1);
+    for (let q = 0; q <= 8; q++) { const t = q / 8, px = x + rx * (0.95 - t * 1.9), py = y - ry * (0.34 + (q % 2 ? 0.04 : 0.2) - (t < 0.4 ? t * 0.35 : 0) + (t > 0.75 ? 0.05 : 0)); k.lineTo(px, py); }
+    k.lineTo(x - rx * 1.1, y - ry * 0.1); k.closePath(); k.fill();
+    k.strokeStyle = '#17141c'; k.lineWidth = Math.max(1.5, R * 0.07);
+    for (const d of [-1, 1]) {
+      k.beginPath(); k.moveTo(x + d * rx * 0.2, y - ry * 0.26); k.quadraticCurveTo(x + d * rx * 0.45, y - ry * 0.38, x + d * rx * 0.68, y - ry * 0.24); k.stroke();
+      k.lineWidth = Math.max(1.5, R * 0.09); k.beginPath(); k.moveTo(x + d * rx * 0.24, y + ry * 0.04); k.quadraticCurveTo(x + d * rx * 0.46, y - ry * 0.1, x + d * rx * 0.66, y - ry * 0.04); k.lineTo(x + d * rx * 0.9, y - ry * 0.2); k.stroke(); k.lineWidth = Math.max(1.5, R * 0.07);
+    }
+    k.fillStyle = '#c9ccd6'; k.beginPath(); k.arc(x - rx * 0.62, y - ry * 0.3, R * 0.03, 0, 7); k.fill();
+    k.fillStyle = '#e8b1a5'; for (const d of [-1, 1]) { k.beginPath(); k.ellipse(x + d * rx * 0.55, y + ry * 0.32, rx * 0.14, ry * 0.08, 0, 0, 7); k.fill(); }
+    /* tatuagem pequena no rosto */
+    desenhaMarca(k, 'estrela', x + rx * 0.7, y + ry * 0.62, R * 0.07, '#3a3550', true);
+  }
+  k.restore();
+}
 function felinoEstampa(k, x, y, rx, ry, g) {
+  felinoEnfeite(k, x, y, rx, ry, g);
   if (!g.estampa && !g.lagrima) return;
   const c = g.estampaCor, R = Math.min(rx, ry);
   k.save(); k.beginPath(); k.ellipse(x, y, rx, ry, 0, 0, 7); k.clip();
@@ -2564,7 +2695,7 @@ function atualizarMenu() {
   $('menuMoedas').textContent = save.moedas;
   { const nv = nivelDe(save.xp); $('menuNivel').textContent = nv.n; $('menuNivelTxt').textContent = 'Nível ' + nv.n; $('menuNivelXp').textContent = nv.atual + '/' + nv.prox + ' XP'; $('menuNivelBarra').style.width = (nv.atual / nv.prox * 100).toFixed(1) + '%'; $('menuEstrelas').textContent = totalEstrelas() + '/' + REGIOES.length * 3; }
   $('tAbrigo').textContent = adultos() + '/' + cap() + ' gatos' + (bercoOk() ? ' · ' + filhotesN() + ' filhotes' : '');
-  $('tAlbum').textContent = TIPOS.filter(t => save.album[t.raca]).length + '/' + TIPOS.length + ' raças';
+  $('tAlbum').textContent = TIPOS.filter(t => !t.amigo && save.album[t.raca]).length + '/' + TIPOS.filter(t => !t.amigo).length + ' raças';
   $('tCasa').textContent = (save.casa.length + save.casaPilotos.length) + '/' + casaMax() + ' gatos';
   $('tSant').textContent = save.santInfo.ok ? santAdultos() + '/' + santMax() + ' felinos' + (tocaOk() ? ' · ' + tocaN() + ' filhotes' : '') : 'Bloqueado';
   $('trancaSant').hidden = !!save.santInfo.ok; $('novoSant').hidden = !save.santInfo.ok || !!save.santVisto; $('abrirSant').classList.toggle('trancado', !save.santInfo.ok); $('abrirSant').disabled = !save.santInfo.ok; $('cfgHistSant').disabled = !save.santInfo.ok;
@@ -3307,17 +3438,40 @@ function escova(x, y, s) {
 }
 let pularRabo = false, pularCabeca = false;
 function caudasLeque(bx, by, L, a0, a1, g, s) {
-  const n = g.caudas, bw = Math.max(1, s * 0.014), lw = s * 0.058, pts = [];
-  for (let q = 0; q < n; q++) {
-    const a = a0 + (a1 - a0) * q / (n - 1), bal = Math.sin(relogio * 2.2 + q * 0.9 + bx * 0.01) * 0.08;
-    const tx = bx + Math.cos(a + bal) * L, ty = by + Math.sin(a + bal) * L, cx = bx + Math.cos(a - 0.35) * L * 0.55, cy = by + Math.sin(a - 0.35) * L * 0.55;
-    pts.push([tx, ty, cx, cy]);
-  }
+  const n = g.caudas, am = (a0 + a1) / 2;
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-  const cam = p => { ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo(p[2], p[3], p[0], p[1]); };
-  for (const p of pts) { cam(p); ctx.strokeStyle = 'rgba(42,34,48,.85)'; ctx.lineWidth = lw + bw * 2; ctx.stroke(); }
-  for (const p of pts) { cam(p); ctx.strokeStyle = g.pelo; ctx.lineWidth = lw; ctx.stroke(); }
-  if (s > 6) for (const p of pts) { ctx.fillStyle = g.rabo || g.pelo; ctx.beginPath(); ctx.arc(p[0], p[1], lw * 0.48, 0, 7); ctx.fill(); }
+  const ang = q => a0 + (a1 - a0) * q / (n - 1);
+  if (s <= 6) {
+    for (let q = 0; q < n; q++) { const a = ang(q); ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo(bx + Math.cos(a - 0.35) * L * 0.55, by + Math.sin(a - 0.35) * L * 0.55, bx + Math.cos(a) * L, by + Math.sin(a) * L); ctx.strokeStyle = g.pelo; ctx.lineWidth = s * 0.05; ctx.stroke(); }
+    ctx.lineCap = 'butt'; return;
+  }
+  /* caudas de raposa: compridas, em forma de chama, abertas em leque, com a ponta clara e fina */
+  const corpo = g.rabo || g.pelo, ponta = g.pelo, N = 14, W = L * 0.32, bw = Math.max(1, s * 0.013);
+  const ordem = []; for (let q = 0; q < n; q++) ordem.push(q);
+  ordem.sort((x, y) => Math.abs(y - (n - 1) / 2) - Math.abs(x - (n - 1) / 2));
+  const forma = (q, t0, t1) => {
+    const a = ang(q), bal = Math.sin(relogio * 2 + q * 0.9) * 0.05, ac = a - (a - am) * 0.5 + bal, comp = L * 1.4 * (1 - Math.abs(q - (n - 1) / 2) * 0.04);
+    const cx = bx + Math.cos(ac) * comp * 0.55, cy = by + Math.sin(ac) * comp * 0.55, tx = bx + Math.cos(a + bal * 1.5) * comp, ty = by + Math.sin(a + bal * 1.5) * comp;
+    const E = [], D = [];
+    for (let i = 0; i <= N; i++) {
+      const t = t0 + (t1 - t0) * i / N, u = 1 - t, x = u * u * bx + 2 * u * t * cx + t * t * tx, y = u * u * by + 2 * u * t * cy + t * t * ty;
+      const dx = 2 * u * (cx - bx) + 2 * t * (tx - cx), dy = 2 * u * (cy - by) + 2 * t * (ty - cy), m = Math.hypot(dx, dy) || 1;
+      const w = W * Math.pow(Math.sin(Math.PI * Math.pow(t, 0.7)), 0.9) * (0.35 + 0.65 * Math.min(1, t * 4)) * 0.5 + (t > 0.97 ? 0 : 0);
+      E.push([x - dy / m * w, y + dx / m * w]); D.push([x + dy / m * w, y - dx / m * w]);
+    }
+    return E.concat(D.reverse());
+  };
+  const traca = P => { ctx.beginPath(); P.forEach((k, i) => i ? ctx.lineTo(k[0], k[1]) : ctx.moveTo(k[0], k[1])); ctx.closePath(); };
+  for (const q of ordem) {
+    const T = forma(q, 0, 1); traca(T);
+    ctx.fillStyle = corpo; ctx.fill();
+    const P = forma(q, 0.74, 1); /* ponta clara, com recorte em V */
+    const mid = P.length / 2, ini = P[0], fim = P[P.length - 1], cen = [(ini[0] + fim[0]) / 2, (ini[1] + fim[1]) / 2], bico = P[Math.floor(mid) - 0];
+    const dirx = (P[Math.floor(mid) - 1][0] - cen[0]), diry = (P[Math.floor(mid) - 1][1] - cen[1]), mm = Math.hypot(dirx, diry) || 1;
+    P.splice(P.length, 0, [cen[0] + dirx / mm * W * 0.2, cen[1] + diry / mm * W * 0.2]);
+    traca(P); ctx.fillStyle = ponta; ctx.fill();
+    traca(T); ctx.strokeStyle = 'rgba(42,34,48,.9)'; ctx.lineWidth = bw; ctx.stroke();
+  }
   ctx.lineCap = 'butt';
 }
 function raboGato(x, y, s, g) {
@@ -3328,7 +3482,16 @@ function raboGato(x, y, s, g) {
   const caminho = () => { ctx.beginPath(); ctx.moveTo(x + s * 0.12, y - s * 0.06); ctx.quadraticCurveTo(x + s * 0.36, y - s * 0.07, rx, ry); };
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   if (s > 5) { caminho(); ctx.strokeStyle = 'rgba(42,34,48,.85)'; ctx.lineWidth = lw + bw * 2; ctx.stroke(); }
-  caminho(); ctx.strokeStyle = g.patas && g.mascara ? g.orelha : g.pelo; ctx.lineWidth = lw; ctx.stroke();
+  caminho(); if (g.louco) { const tg = ctx.createLinearGradient(x + s * 0.12, y - s * 0.06, rx, ry); tg.addColorStop(0, g.pelo); tg.addColorStop(1, '#12b8cc'); ctx.strokeStyle = tg; } else ctx.strokeStyle = g.patas && g.mascara ? g.orelha : g.pelo; ctx.lineWidth = lw; ctx.stroke();
+  if (g.louco && s > 6) {
+    const px0 = x + s * 0.12, py0 = y - s * 0.06, cx0 = x + s * 0.36, cy0 = y - s * 0.07;
+    for (let q = 1; q <= 4; q++) {
+      const t = q / 5.4, u = 1 - t, qx = u * u * px0 + 2 * u * t * cx0 + t * t * rx, qy = u * u * py0 + 2 * u * t * cy0 + t * t * ry;
+      const dx = 2 * u * (cx0 - px0) + 2 * t * (rx - cx0), dy = 2 * u * (cy0 - py0) + 2 * t * (ry - cy0), m = Math.hypot(dx, dy) || 1, nx = -dy / m, ny = dx / m, w = lw * 0.48;
+      ctx.strokeStyle = 'rgba(190,100,10,.6)'; ctx.lineWidth = Math.max(1, s * 0.016); ctx.beginPath(); ctx.moveTo(qx - nx * w, qy - ny * w); ctx.lineTo(qx + nx * w, qy + ny * w); ctx.stroke();
+    }
+    ctx.fillStyle = '#12b8cc'; ctx.beginPath(); ctx.arc(rx, ry, lw * 0.52, 0, 7); ctx.fill();
+  }
   if (g.arcoIris && s > 6) { const gr = ctx.createLinearGradient(x + s * 0.12, y - s * 0.06, rx, ry); ARCO.forEach((k, q) => gr.addColorStop(q / (ARCO.length - 1), k)); caminho(); ctx.strokeStyle = gr; ctx.lineWidth = lw * 0.62; ctx.stroke(); }
   if (g.raboPonta && s > 6) desenhaMarca(ctx, g.raboPonta.tipo, rx, ry - s * 0.01, s * 0.04, g.raboPonta.cor);
   else if (g.raboDragao && s > 6) {
@@ -3337,7 +3500,7 @@ function raboGato(x, y, s, g) {
   } else if (g.crina && s > 6) {
     g.crina.slice(0, 4).forEach((cor, q) => { const a = -1.9 + q * 0.75; ctx.fillStyle = '#2a2230'; ctx.beginPath(); ctx.arc(rx + Math.cos(a) * s * 0.03, ry + Math.sin(a) * s * 0.03, s * 0.032 + bw, 0, 7); ctx.fill(); });
     g.crina.slice(0, 4).forEach((cor, q) => { const a = -1.9 + q * 0.75; ctx.fillStyle = cor; ctx.beginPath(); ctx.arc(rx + Math.cos(a) * s * 0.03, ry + Math.sin(a) * s * 0.03, s * 0.032, 0, 7); ctx.fill(); });
-  } else if (g.rabo && s > 6) { ctx.fillStyle = g.rabo; ctx.beginPath(); ctx.arc(rx, ry, s * (g.juba ? 0.045 : 0.035), 0, 7); ctx.fill(); }
+  } else if (g.rabo && s > 6 && !g.louco) { ctx.fillStyle = g.rabo; ctx.beginPath(); ctx.arc(rx, ry, s * (g.juba ? 0.045 : 0.035), 0, 7); ctx.fill(); }
   ctx.lineCap = 'butt';
 }
 function gatoRua(x, y, s, g, pula, semSombra, fecha) {
@@ -3365,7 +3528,7 @@ function gatoRua(x, y, s, g, pula, semSombra, fecha) {
   }
   if (g.fofo && s > 10) felpa(ctx, x, y - s * 0.25, s * 0.075, s * 0.03, 0, Math.PI, 4, s * 0.03, g.peito || g.pelo, null);
   if (g.branco && !(g.peitoCoracao && s > 10)) { ctx.fillStyle = '#fbf7ef'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.14, s * 0.08 * (g.corpo || 1), s * 0.12, 0, 0, 7); ctx.fill(); }
-  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral)) corpoSecreto(x, y, s, g);
+  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral || g.louco || g.tatuadora)) corpoSecreto(x, y, s, g);
   frenteMitico(x, y, s, g);
   if (estica) ctx.restore();
   if (!pularCabeca) cabecaGato(x, y - s * (g.filhote ? 0.35 : 0.4 + 0.3 * (al - 1)), s * 0.15 * (g.filhote ? 1.32 : 1), g, fecha);
@@ -3382,6 +3545,25 @@ function corpoSecreto(x, y, s, g) {
   if (g.peitoCoracao) desenhaMarca(ctx, 'coracao', x, y - s * 0.15, s * 0.085, '#fbf7ef', true);
   if (g.coracoesCorpo) for (const [d, oy, k] of [[-1, -0.22, 1], [1, -0.17, 0.8], [-1, -0.08, 0.7]]) desenhaMarca(ctx, 'coracao', x + d * s * 0.112 * cw, y + oy * s, s * 0.022 * k, g.coracoesCorpo, true);
   if (g.trevoPeito) desenhaMarca(ctx, 'trevo', x, y - s * 0.09, s * 0.028, g.trevoPeito);
+  if (g.louco) {
+    const bg = ctx.createLinearGradient(0, y - s * 0.32, 0, y); bg.addColorStop(0, 'rgba(110,150,235,.5)'); bg.addColorStop(0.5, 'rgba(255,110,150,.2)'); bg.addColorStop(1, 'rgba(255,159,28,0)');
+    ctx.fillStyle = bg; ctx.fillRect(x - s * 0.2 * cw, y - s * 0.33, s * 0.4 * cw, s * 0.34);
+    ctx.fillStyle = '#ffe7a8'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.13, s * 0.085 * cw, s * 0.12, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.globalAlpha = 0.9; caveiraMini(ctx, x, y - s * 0.15, s * 0.06, '#fff1d6', '#3b3350', '#12b8cc', true); ctx.restore();
+    ctx.strokeStyle = 'rgba(59,51,80,.55)'; ctx.lineWidth = Math.max(1, s * 0.005); ctx.lineCap = 'round';
+    for (const d of [-1, 1]) for (let q = 0; q < 3; q++) { const yy = y - s * (0.115 - q * 0.03); ctx.beginPath(); ctx.moveTo(x + d * s * 0.015, yy); ctx.quadraticCurveTo(x + d * s * 0.05 * cw, yy - s * 0.012, x + d * s * 0.07 * cw, yy + s * 0.012); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(59,51,80,.4)'; ctx.lineWidth = Math.max(1, s * 0.0035);
+    for (let q = 0; q < 4; q++) { const a2 = Math.PI * (0.52 + q * 0.12); ctx.beginPath(); ctx.moveTo(x + s * 0.15 * cw, y - s * 0.3); ctx.lineTo(x + s * 0.15 * cw + Math.cos(a2) * s * 0.11, y - s * 0.3 + Math.sin(a2) * s * 0.11); ctx.stroke(); }
+    for (let q = 1; q < 4; q++) { ctx.beginPath(); ctx.arc(x + s * 0.15 * cw, y - s * 0.3, s * 0.03 * q, Math.PI * 0.5, Math.PI * 0.86); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(190,100,10,.6)'; ctx.lineWidth = Math.max(1, s * 0.013); ctx.lineCap = 'round';
+    for (const d of [-1, 1]) for (const [oy, len] of [[-0.3, 0.07], [-0.2, 0.09], [-0.1, 0.08]]) { ctx.beginPath(); ctx.moveTo(x + d * s * 0.15 * cw, y + oy * s); ctx.quadraticCurveTo(x + d * s * (0.15 - len * 0.5) * cw, y + (oy - 0.02) * s, x + d * s * (0.15 - len) * cw, y + (oy + 0.025) * s); ctx.stroke(); }
+  }
+  if (g.tatuadora) {
+    ctx.strokeStyle = '#3a3550'; ctx.lineWidth = Math.max(1, s * 0.008); ctx.lineCap = 'round';
+    for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(x + d * s * 0.13 * cw, y - s * 0.3); ctx.quadraticCurveTo(x + d * s * 0.06 * cw, y - s * 0.27, x + d * s * 0.11 * cw, y - s * 0.22); ctx.quadraticCurveTo(x + d * s * 0.16 * cw, y - s * 0.17, x + d * s * 0.1 * cw, y - s * 0.1); ctx.stroke(); }
+    desenhaMarca(ctx, 'flor', x - s * 0.085 * cw, y - s * 0.2, s * 0.03, '#c0394f', true); desenhaMarca(ctx, 'coracao', x + s * 0.08 * cw, y - s * 0.14, s * 0.02, '#3a3550', true);
+    ctx.strokeStyle = '#b8bcc8'; ctx.lineWidth = Math.max(1, s * 0.006); ctx.beginPath(); ctx.ellipse(x, y - s * 0.31, s * 0.095 * cw, s * 0.085, 0, Math.PI * 0.1, Math.PI * 0.9); ctx.stroke();
+  }
   ctx.restore();
   ctx.strokeStyle = 'rgba(42,34,48,.85)'; ctx.lineWidth = Math.max(1, s * 0.014); ctx.beginPath(); ctx.ellipse(x, y - s * 0.16, s * 0.15 * cw, s * 0.16, 0, 0, 7); ctx.stroke();
 }
@@ -4372,7 +4554,8 @@ function cartaoAlbum(t) {
 function abrirAlbum() {
   const raiz = $('albumGrade'); raiz.textContent = '';
   const abas = cria('div', 'abasLoja albumAbas');
-  for (const [id, nome, ic] of [['racas', 'Raças', 'album'], ['variacoes', 'Variações', 'gato'], ['tudo', 'Tudo', 'estrela']]) {
+  if (albumAba === 'amigos' && !temAmigos()) albumAba = 'racas';
+  for (const [id, nome, ic] of [['racas', 'Raças', 'album'], ['variacoes', 'Variações', 'gato'], ['tudo', 'Tudo', 'estrela']].concat(temAmigos() ? [['amigos', 'Amigos', 'parceiros']] : [])) {
     const b = cria('button', 'abaLoja'); b.type = 'button'; b.setAttribute('aria-pressed', albumAba === id ? 'true' : 'false');
     b.innerHTML = (ICO[ic] || '') + '<span>' + nome + '</span>';
     b.addEventListener('click', () => { albumAba = id; abrirAlbum(); const corpo = document.querySelector('#telaAlbum .corpo'); if (corpo.scrollTop > abas.offsetTop) corpo.scrollTop = abas.offsetTop - 4; });
@@ -4389,7 +4572,16 @@ function abrirAlbum() {
     ['Comuns', COMUNS.filter(t => t.rc === 'comum'), 'Os mais vistos na rua. Vão para o abrigo.']
   ];
   const tv = totaisVar();
-  if (albumAba === 'racas') {
+  if (albumAba === 'amigos') {
+    const meus = AMIGOS.filter(t => save.amigos && save.amigos[t.id]);
+    const VAGAS = Math.max(6, AMIGOS.length);
+    const b = cria('div', 'bloco'); b.appendChild(cria('h3', '', 'Amigos · ' + meus.length + ' de ' + VAGAS));
+    b.appendChild(cria('p', 'nota', 'Gatos personalizados feitos para amigos. Novos amigos chegam com novos códigos de resgate, nas Configurações. Cada um vira um novo piloto.'));
+    const g = cria('div', 'gradeAlbum'); for (const t of meus) g.appendChild(cartaoAlbum(t));
+    for (let q = meus.length; q < VAGAS; q++) { const v = cria('div', 'raca falta col-amigo vagaAmigo'); v.appendChild(cria('div', 'vagaInterro', '?')); v.appendChild(cria('b', '', 'Em breve')); g.appendChild(v); }
+    b.appendChild(g); raiz.appendChild(b);
+    $('albumTotal').textContent = meus.length + ' de ' + VAGAS; $('albumTotalTxt').textContent = 'amigos'; $('albumBarra').style.width = Math.round(meus.length / VAGAS * 100) + '%';
+  } else if (albumAba === 'racas') {
     let tem = 0;
     for (const [titulo, lista, nota] of grupos) {
       const achados = lista.filter(t => save.album[t.raca]).length; tem += achados;
@@ -4400,8 +4592,8 @@ function abrirAlbum() {
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
       b.appendChild(g); raiz.appendChild(b);
     }
-    $('albumTotal').textContent = tem + ' de ' + TIPOS.length; $('albumTotalTxt').textContent = 'raças encontradas';
-    $('albumBarra').style.width = (tem / TIPOS.length * 100).toFixed(1) + '%';
+    const NT = TIPOS.filter(t => !t.amigo).length; $('albumTotal').textContent = tem + ' de ' + NT; $('albumTotalTxt').textContent = 'raças encontradas';
+    $('albumBarra').style.width = (tem / NT * 100).toFixed(1) + '%';
   } else if (albumAba === 'variacoes') {
     raiz.appendChild(cria('p', 'nota', 'Cada gato pode vir de um jeito diferente: mais magrinho, comprido, gordinho, peludinho, filhote, com guizo... Aqui você vê quantas raças já encontrou de cada jeito.' + (liberada(REGIOES[REG_ESP]) ? ' Os sachês especiais da loja ajudam: cada um faz vir só gatos de um jeito.' : '')));
     for (const gr of VAR_GRUPOS) {
@@ -4692,7 +4884,10 @@ function slotsLugar(onde) {
   if (onde === 'abrigo') return slotsAbrigo(MODS);
   if (onde === 'casa') { const nv = save.up.casa || 0; return SLOTS_CASA.map(s => Object.assign({}, s, { bloq: nv < (s.nv || 0) })); }
   const nv = save.santInfo.nv || 0, L = SLOTS_SANT.map(s => Object.assign({}, s, { bloq: nv < (s.nv || 0) }));
-  if (tocaOk()) for (const s of SLOTS_TOCA) L.push(Object.assign({}, s));
+  if (tocaOk()) {
+    for (const s of SLOTS_TOCA) L.push(Object.assign({}, s));
+    for (let q = 1; q < tocaMods(); q++) { const b = 4 + q, i = 4 * q; L.push({ id: 't' + (i + 1), tipo: 'fundo', x: b + 0.22, y: 0.72, toca: 1 }, { id: 't' + (i + 2), tipo: 'fundo', x: b + 0.8, y: 0.72, toca: 1 }, { id: 't' + (i + 3), tipo: 'chao', x: b + 0.3, y: 0.92, toca: 1 }, { id: 't' + (i + 4), tipo: 'chao', x: b + 0.74, y: 0.93, toca: 1 }); }
+  }
   return L;
 }
 const cabeNoSlot = (d, s) => !!d && !!s && (d.onde === 'parede' ? s.tipo === 'parede' : s.tipo !== 'parede' && (d.onde !== 'fundo' || (s.tipo === 'fundo' && (!s.h || (d.alt || 0) <= s.h + 0.001))));
@@ -4827,7 +5022,7 @@ let SPOTS_ABRIGO = [];
 const ehBerco = t => t === 'bercario' || t === 'bercario2' || t === 'bercario3';
 function zonaFilhotes() {
   if (modoSala === 'abrigo') { const b = MODS.findIndex(ehBerco); return b >= 0 ? [b, MODS.length] : null; }
-  if (modoSala === 'santuario' && tocaOk()) return [MUNDO_SANT, MUNDO_SANT + 1];
+  if (modoSala === 'santuario' && tocaOk()) return [MUNDO_SANT, MUNDO_SANT + tocaMods()];
   return null;
 }
 const bercoIni = () => MODS.findIndex(ehBerco);
@@ -4836,7 +5031,7 @@ function modulosAbrigo() {
   const n = Math.max(4, Math.min(30, Math.ceil(cap() / 8)));
   const ciclo = ['janela', 'arvore', 'cantinho', 'brincar'], l = ['entrada'];
   for (let q = 1; q < n; q++) l.push(ciclo[(q - 1) % ciclo.length]);
-  if (bercoOk()) { const nb = Math.max(1, Math.min(5, Math.ceil(bercoMax() / 10))); for (let q = 0; q < nb; q++) l.push(q === 0 ? 'bercario' : q % 2 ? 'bercario2' : 'bercario3'); }
+  if (bercoOk()) { const nb = Math.max(1, Math.min(8, Math.ceil(bercoMax() / 6))); for (let q = 0; q < nb; q++) l.push(q === 0 ? 'bercario' : q % 2 ? 'bercario2' : 'bercario3'); }
   return l;
 }
 function spotsDosModulos(mods) {
@@ -4933,7 +5128,8 @@ const valorNatureza = t => Math.round(t && t.mitico ? A('natMit') : t && t.lenda
 const ingressoDe = t => t && t.mitico ? A('ingMit') : t && t.lendario ? A('ingLend') : A('ingEpico');
 const ingressoReg = r => { const tp = tipoRaca(r.r); return tp ? ingressoDe(tp) * (r.pr ? 2 : 1) * (r.fi ? 1.5 : 1) : 0; };
 const tocaMax = () => tocaOk() ? Math.max(1, Math.round(santMax() * A('tocaFracao'))) : 0;
-const mundoSant = () => MUNDO_SANT + (tocaOk() ? 1 : 0);
+const tocaMods = () => tocaOk() ? Math.max(1, Math.min(4, Math.ceil(tocaMax() / 6))) : 0;
+const mundoSant = () => MUNDO_SANT + tocaMods();
 const tipoFel = r => r.r + (r.pr ? '|guizo' : '') + (r.fi ? '|filhote' : '');
 function taxaSant() { let t = 0; for (const r of save.sant) t += ingressoReg(r); return Math.round(t); }
 function atualizarCaixa() {
@@ -5067,13 +5263,14 @@ function zonaDe(m) {
 function lugarLivre(m, raio) {
   const z = zonaDe(m);
   let melhor = null, bd = -1;
-  for (let q = 0; q < 12; q++) {
-    let x = m && raio ? Math.max(0.08, Math.min(MUNDO - 0.08, m.x + rnd(-raio, raio))) : rndX(); const y = rndY();
+  const sant = modoSala === 'santuario', tent = sant ? 28 : 12, rr = raio && sant ? raio * 1.8 : raio;
+  for (let q = 0; q < tent; q++) {
+    let x = m && rr ? Math.max(0.08, Math.min(MUNDO - 0.08, m.x + rnd(-rr, rr))) : rndX(); const y = rndY();
     if (z && (x < z[0] || x > z[1])) x = rnd(z[0], z[1]);
     if (bloqueado(x, y)) continue;
     const d = distLivre(x, y, m);
     if (d > bd) { bd = d; melhor = { x, y }; }
-    if (d > 0.22) break;
+    if (d > (sant ? 0.4 : 0.22)) break;
   }
   return melhor || { x: z ? rnd(z[0], z[1]) : m ? m.x : rndX(), y: rndY() };
 }
@@ -6828,7 +7025,17 @@ function cenarioSantuario(c, k, X, Y) {
   const sav2 = c.createLinearGradient(X(3.05), 0, X(2.75), 0);
   sav2.addColorStop(0, noite ? 'rgba(150,130,60,.55)' : 'rgba(226,196,98,.75)'); sav2.addColorStop(1, 'rgba(226,196,98,0)');
   c.fillStyle = sav2; c.fillRect(X(2.75), Y(PAREDE), X(MUNDO_SANT + 0.1) - X(2.75), h - Y(PAREDE));
-  if (MUNDO > MUNDO_SANT) cenarioToca(c, k, X, Y, MUNDO_SANT);
+  if (MUNDO > MUNDO_SANT) {
+    cenarioToca(c, k, X, Y, MUNDO_SANT);
+    for (let q = 1; q < MUNDO - MUNDO_SANT; q++) {
+      const x0 = MUNDO_SANT + q;
+      c.fillStyle = noite ? '#5f5a66' : '#a39c94'; c.beginPath(); c.moveTo(X(x0), Y(PAREDE + 0.02));
+      for (const [dx, dy] of [[0.1, 0.4], [0.25, 0.32], [0.45, 0.28], [0.65, 0.31], [0.85, 0.4], [1, PAREDE + 0.02]]) c.lineTo(X(x0 + dx), Y(dy));
+      c.closePath(); c.fill();
+      c.fillStyle = noite ? '#3a5a32' : '#6aa34a'; for (const [dx, dy, r] of [[0.2, 0.4, 0.04], [0.74, 0.38, 0.045], [0.5, 0.31, 0.03]]) { c.beginPath(); c.arc(X(x0 + dx), Y(dy), k * r, 0, 7); c.fill(); }
+      c.fillStyle = noite ? '#6f6a72' : '#9d968f'; c.beginPath(); c.ellipse(X(x0 + 0.5), Y(0.68), k * 0.08, k * 0.045, 0, Math.PI, 0); c.fill();
+    }
+  }
   for (const [x, y, rx] of [[3.62, 0.66, 0.09], [3.7, 0.67, 0.06]]) { c.fillStyle = noite ? '#6f6a72' : '#9d968f'; c.beginPath(); c.ellipse(X(x), Y(y), k * rx, k * rx * 0.55, 0, Math.PI, 0); c.fill(); }
   /* tufos de capim */
   c.strokeStyle = noite ? 'rgba(30,60,25,.45)' : 'rgba(70,110,40,.45)'; c.lineWidth = Math.max(1, k * 0.004); c.lineCap = 'round';
@@ -7705,7 +7912,7 @@ function tourRegras() {
 const PARCEIROS = ['Santuário da Serra', 'Reserva do Pantanal', 'Refúgio da Mata Atlântica', 'Parque das Araucárias', 'Santuário do Cerrado', 'Reserva da Caatinga', 'Refúgio do Pampa', 'Estação da Amazônia'];
 if (!save.parc || typeof save.parc !== 'object') save.parc = { lista: [], ult: Date.now(), patr: 0, feitos: 0, novos: 0 };
 if (!Array.isArray(save.parc.lista)) save.parc.lista = [];
-const PARC_MAX = 3;
+const PARC_MAX = 6, PARC_MIN = 3;
 function novoPedidoParc() {
   const epicos = FELINOS.filter(t => t.rc === 'epico' && !t.secreto && save.album[t.raca] > 0);
   const lista = epicos.length ? epicos : FELINOS.filter(t => t.rc === 'epico' && !t.secreto);
@@ -7713,7 +7920,7 @@ function novoPedidoParc() {
   const livres = lista.filter(t => !save.parc.lista.some(p => p.raca === t.raca)), pool = livres.length ? livres : lista;
   const t = pool[Math.floor(Math.random() * pool.length)], q = Math.random();
   const usados = save.parc.lista.map(p => p.de), deLivres = PARCEIROS.filter(n => usados.indexOf(n) < 0);
-  const p = { id: novoId(), de: deLivres[Math.floor(Math.random() * deLivres.length)] || PARCEIROS[0], raca: t.raca, s: q < 0.25 ? 'm' : q < 0.5 ? 'f' : '', fi: tocaOk() && Math.random() < 0.2 ? 1 : 0 };
+  const p = { id: novoId(), de: deLivres[Math.floor(Math.random() * deLivres.length)] || PARCEIROS[0], raca: t.raca, s: q < 0.25 ? 'm' : q < 0.5 ? 'f' : '', fi: tocaOk() && Math.random() < 0.38 ? 1 : 0 };
   p.moedas = Math.round(A('parcMoedas') * (1 + (p.s ? 0.2 : 0) + (p.fi ? 0.4 : 0)) / 10) * 10;
   return p;
 }
@@ -7727,6 +7934,8 @@ function atualizarParc(patrulha) {
   let novos = porTempo + (P.patr >= Math.max(1, A('parcPatr')) ? 1 : 0);
   if (P.patr >= Math.max(1, A('parcPatr'))) P.patr = 0;
   while (novos-- > 0 && P.lista.length < PARC_MAX) { const p = novoPedidoParc(); if (!p) break; P.lista.push(p); n++; }
+  /* sempre há alguns pedidos esperando, sem precisar de patrulha */
+  while (P.lista.length < PARC_MIN) { const p = novoPedidoParc(); if (!p) break; P.lista.push(p); n++; }
   if (P.lista.length >= PARC_MAX) P.ult = Math.max(P.ult, Date.now() - passo * 0.999);
   if (n) { P.novos = (P.novos || 0) + n; salvar(); }
   return n;
@@ -7743,7 +7952,7 @@ function montarParceiros() {
   const corpo = $('parcCorpo'); corpo.textContent = '';
   const P = save.parc;
   const b0 = cria('div', 'bloco'); b0.id = 'parcIntro';
-  b0.appendChild(cria('p', 'nota regrasIntro', 'Outros santuários pedem felinos épicos. Entregue para ganhar moedas, ou recuse o pedido. Chegam pedidos novos com o tempo e a cada patrulha (até ' + PARC_MAX + ').'));
+  b0.appendChild(cria('p', 'nota regrasIntro', 'Outros santuários pedem felinos épicos, às vezes filhotes. Entregue para ganhar moedas, ou recuse o pedido. Sempre há pedidos esperando, e chegam novos com o tempo (até ' + PARC_MAX + ').'));
   corpo.appendChild(b0);
   const b1 = cria('div', 'bloco'); b1.appendChild(cria('h3', '', 'Pedidos (' + P.lista.length + '/' + PARC_MAX + ')'));
   const l = cria('div', 'parcLista'); l.id = 'parcLista';
@@ -7760,7 +7969,7 @@ function montarParceiros() {
     const e = cria('button', 'mini', cands.length ? 'Entregar' : 'Não tenho'); e.type = 'button'; e.disabled = !cands.length;
     e.addEventListener('click', () => escolherEntrega(p));
     const r = cria('button', 'mini claro', 'Recusar'); r.type = 'button';
-    r.addEventListener('click', () => { P.lista = P.lista.filter(x => x !== p); salvar(); montarParceiros(); atualizarSantBtns(true); });
+    r.addEventListener('click', () => { P.lista = P.lista.filter(x => x !== p); atualizarParc(false); salvar(); montarParceiros(); atualizarSantBtns(true); });
     ac.appendChild(e); ac.appendChild(r); d.appendChild(ac);
     card.appendChild(d); l.appendChild(card);
   }
@@ -7803,7 +8012,7 @@ function entregarParc(p, c) {
   if (c.de === 'guardado') save.parcEspera = save.parcEspera.filter(r => r !== c.r);
   else if (c.de === 'santuário') { atualizarCaixa(); save.sant = save.sant.filter(r => r !== c.r); }
   else save.casa = save.casa.filter(r => r !== c.r);
-  save.parc.lista = save.parc.lista.filter(x => x !== p); save.parc.feitos = (save.parc.feitos || 0) + 1;
+  save.parc.lista = save.parc.lista.filter(x => x !== p); save.parc.feitos = (save.parc.feitos || 0) + 1; atualizarParc(false);
   save.moedas += p.moedas; salvar(); somMoeda();
   if (!telaAbrigo.hidden) { criarMoradores(); montarListas(); }
   const g = gatoDe(c.r);
@@ -9125,7 +9334,7 @@ function montarAdmin() {
   bx = cria('div', 'botoesAdm'); g.appendChild(bx);
   const liberar = {
     regioes: () => { save.regioes = REGIOES.map((r, q) => q); },
-    album: () => { for (const t of TIPOS) save.album[t.raca] = Math.max(1, save.album[t.raca] || 0); },
+    album: () => { for (const t of TIPOS) if (!t.amigo) save.album[t.raca] = Math.max(1, save.album[t.raca] || 0); },
     visual: () => { save.tem.volante = VOLANTES.map(v => v.id); save.tem.chapeu = CHAPEUS.map(c => c.id); save.tem.coleira = COLEIRAS.map(c => c.id); },
     melhorias: () => { for (const m of MELHORIAS) save.up[m.id] = m.precos.length; save.santInfo.nv = SANT_PRECOS.length; prepararAbrigo(); },
     itens: () => { for (const it of ITENS_LOJA.concat(SACHES_ESP)) save.inv[it.id] = Math.max(1, Math.round(A('maxItens'))); },
@@ -9137,7 +9346,7 @@ function montarAdmin() {
 
   g = grupoAdm(raiz, 'Gatos');
   const lin = cria('label', 'campoAdm'); lin.appendChild(cria('span', '', 'Raça'));
-  const sel = cria('select'); for (const t of TIPOS) { const o = cria('option', '', t.raca + ' (' + t.raridade + ')'); o.value = t.raca; sel.appendChild(o); }
+  const sel = cria('select'); for (const t of TIPOS.filter(x => !x.amigo)) { const o = cria('option', '', t.raca + ' (' + t.raridade + ')'); o.value = t.raca; sel.appendChild(o); }
   lin.appendChild(sel); g.appendChild(lin);
   bx = cria('div', 'botoesAdm'); g.appendChild(bx);
   botaoAdm(bx, 'Adicionar ao abrigo ou à casa', () => {
@@ -9800,6 +10009,18 @@ function montarConta(msg, erro) {
 }
 function abrirConta() { $('telaConfig').hidden = true; $('telaConta').hidden = false; contaDigitando = false; montarConta(); }
 $('cfgConta').addEventListener('click', abrirConta);
+{
+  const inp = $('cfgCod'), msg = $('cfgCodMsg'), tent = { n: 0, ate: 0 };
+  const fazer = () => {
+    if (Date.now() < tent.ate) { msg.textContent = 'Muitas tentativas. Espere um pouco.'; return; }
+    const r = resgatarCodigo(inp.value);
+    if (r.erro) { if (!/Digite|já resgatou/.test(r.erro) && ++tent.n >= 5) { tent.n = 0; tent.ate = Date.now() + 30000; } msg.textContent = r.erro; return; }
+    inp.value = ''; msg.textContent = 'Código resgatado!';
+    janelaAviso({ gato: gatoDe({ n: r.t.nomeGato, r: r.t.raca, o: r.t.olhos[0], f: 0, s: r.t.sexo }), titulo: r.t.raca + ' chegou!', texto: 'Um amigo especial foi para a sua Casa. Veja no Álbum, na aba Amigos.' });
+  };
+  $('cfgCodBtn').addEventListener('click', fazer);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') fazer(); });
+}
 $('fecharConta').addEventListener('click', () => { $('telaConta').hidden = true; $('telaConfig').hidden = false; atualizarContaUI(); });
 /* convite único para quem já tem progresso e ainda não tem conta */
 function convidarNuvem(tent) {
