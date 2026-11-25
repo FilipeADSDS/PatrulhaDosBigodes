@@ -1197,7 +1197,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3.4';
+const VERSAO = '3.3.5';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -5125,14 +5125,14 @@ aplicarDecor();
 const noCasa = () => save.casa.length + save.casaPilotos.length;
 /* santuário: vagas, ingressos e devolução à natureza */
 const SANT_PRECOS = [250, 500, 900, 1400, 2000, 2800];
-const santMax = () => Math.max(1, Math.min(Math.round(A('santTeto')), Math.round(A('santBase') + A('santNivel') * (save.santInfo.nv || 0))));
+function santMax() { return Math.max(1, Math.min(Math.round(A('santTeto')), Math.round(A('santBase') + A('santNivel') * (save.santInfo.nv || 0)))); }
 const tipoRaca = r => TIPOS.find(t => t.raca === r);
 const valorNatureza = t => Math.round(t && t.mitico ? A('natMit') : t && t.lendario ? A('natLend') : A('natEpico'));
 const ingressoDe = t => t && t.mitico ? A('ingMit') : t && t.lendario ? A('ingLend') : A('ingEpico');
 const ingressoReg = r => { const tp = tipoRaca(r.r); return tp ? ingressoDe(tp) * (r.pr ? 2 : 1) * (r.fi ? 1.5 : 1) : 0; };
-const tocaMax = () => tocaOk() ? Math.max(1, Math.round(santMax() * A('tocaFracao'))) : 0;
-const tocaMods = () => tocaOk() ? Math.max(1, Math.min(4, Math.ceil(tocaMax() / 6))) : 0;
-const mundoSant = () => MUNDO_SANT + tocaMods();
+function tocaMax() { return tocaOk() ? Math.max(1, Math.round(santMax() * A('tocaFracao'))) : 0; }
+function tocaMods() { return tocaOk() ? Math.max(1, Math.min(4, Math.ceil(tocaMax() / 6))) : 0; }
+function mundoSant() { return MUNDO_SANT + tocaMods(); }
 const tipoFel = r => r.r + (r.pr ? '|guizo' : '') + (r.fi ? '|filhote' : '');
 function taxaSant() { let t = 0; for (const r of save.sant) t += ingressoReg(r); return Math.round(t); }
 function atualizarCaixa() {
