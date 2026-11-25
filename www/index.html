@@ -1197,7 +1197,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3.5';
+const VERSAO = '3.3.6';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -9851,9 +9851,17 @@ function aplicarNuvem(rem) {
   location.reload();
   return true;
 }
+/* modo automático: nunca pergunta. Se este aparelho tem mudanças ainda não enviadas (jogou sem internet), elas sobem;
+   senão vale a nuvem. O que não for usado fica como cópia neste aparelho. */
+function resolverAuto(rem, dn) {
+  const localManda = !saveVazio(save) && (conta.sujo || saveVazio(dn));
+  if (localManda) { gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); gravarNuvem(true).then(() => { nuvemErro = ''; atualizarContaUI(); }).catch(e => { nuvemErro = erroNuvem(e); atualizarContaUI(); }); }
+  else aplicarNuvem(rem);
+}
 function perguntarConflito(rem, fim) {
   let dn = null; try { dn = JSON.parse(rem.dados); } catch (e) {}
   if (!dn) { enviarNuvem(true); return; }
+  if (!fim && conta && !conta.manual) { resolverAuto(rem, dn); return; }
   nuvemConflito = true;
   const de = rem.plat === 'ios' ? 'iPhone/site' : rem.plat === 'android' ? 'Android' : 'outro aparelho';
   janelaAviso({ ico: 'nuvem', titulo: 'Qual progresso usar?',
@@ -9878,6 +9886,8 @@ function agendarNuvem() { if (conta && !conta.expirou && !nuvemT) nuvemT = setTi
 /* toda vez que o jogo salva, marca que há algo novo para mandar (o boot não conta) */
 { const salvarLocal = salvar; salvar = function () { salvarLocal(); if (conta && !nuvemBoot) { if (!conta.sujo) { conta.sujo = 1; gravarConta(); } agendarNuvem(); } }; }
 document.addEventListener('visibilitychange', () => { if (document.hidden && conta && conta.sujo) enviarNuvem(); });
+/* a internet voltou: sobe o que ficou pendente */
+window.addEventListener('online', () => { if (conta && !conta.expirou && conta.sujo) enviarNuvem(); });
 /* ao abrir o jogo: confere se outro aparelho mudou a nuvem */
 async function sincronizarInicio() {
   if (!conta || conta.expirou) return;
@@ -9982,6 +9992,11 @@ function montarConta(msg, erro) {
     bSalvar.addEventListener('click', async () => { bSalvar.disabled = true; conta.sujo = 1; await enviarNuvem(); montarConta(nuvemErro || 'Progresso salvo na nuvem.', !!nuvemErro); });
     bSair.addEventListener('click', async () => { bSair.disabled = true; await sairConta(); atualizarContaUI(); montarConta('Você saiu. O progresso continua salvo neste aparelho.'); });
     bts.appendChild(bSalvar); bts.appendChild(bSair); b.appendChild(bts);
+    const bA = bloco('Sincronização');
+    const lA = cria('label', 'nota'); const ck = document.createElement('input'); ck.type = 'checkbox'; ck.checked = !conta.manual;
+    ck.addEventListener('change', () => { conta.manual = ck.checked ? 0 : 1; gravarConta(); });
+    lA.appendChild(ck); lA.appendChild(document.createTextNode(' Sincronizar sozinho com a nuvem, sem perguntar qual progresso usar'));
+    bA.appendChild(lA);
     const b2 = bloco('Apagar conta');
     b2.appendChild(cria('p', 'nota', 'Apaga sua conta e o progresso da nuvem. O progresso deste aparelho continua.'));
     const bAp = cria('button', 'mini claro', 'Apagar conta'); bAp.type = 'button'; let armado = 0;
