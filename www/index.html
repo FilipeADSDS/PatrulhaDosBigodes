@@ -1197,7 +1197,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3.3';
+const VERSAO = '3.3.4';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1277,6 +1277,9 @@ try {
     if (lido.audio && typeof lido.audio === 'object') { save.audio = {}; for (const k of ['geral', 'gatos', 'efeitos', 'musica']) if (typeof lido.audio[k] === 'number') save.audio[k] = Math.max(0, Math.min(1, lido.audio[k])); if (typeof lido.audio.ligado === 'boolean') save.audio.ligado = lido.audio.ligado; }
   }
 } catch (e) {}
+/* cópia de segurança: guarda o último progresso com gatos; nunca é trocada por um progresso vazio */
+const temProgresso = s => !!(s && s.album && Object.values(s.album).some(v => v > 0));
+if (temProgresso(save)) gravar('pegagatos.seguranca', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
 const cap = () => Math.max(1, Math.round(A('abrigoBase') + A('abrigoNivel') * (save.up.abrigo || 0)));
 const bercoOk = () => (save.up.berco || 0) > 0;
 const bercoVagas = () => Math.max(1, Math.round(cap() * A('bercoFracao')));
@@ -9841,7 +9844,7 @@ function quando(ms) {
 function aplicarNuvem(rem) {
   let novo = null; try { novo = JSON.parse(rem.dados); } catch (e) {}
   if (!novo || typeof novo !== 'object') return false;
-  gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
+  if (!saveVazio(save)) gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
   gravar('pegagatos.save', rem.dados);
   if (rem.piloto) gravar('gatuno.gato', rem.piloto);
   conta.upd = rem.upd; conta.sujo = 0; conta.sinc = Date.now(); gravarConta();
@@ -9882,6 +9885,8 @@ async function sincronizarInicio() {
     const rem = await lerNuvem();
     if (!rem) { conta.upd = null; gravarConta(); await enviarNuvem(); return; }
     if (rem.upd === conta.upd) { if (conta.sujo) enviarNuvem(); return; }
+    let remS = null; try { remS = JSON.parse(rem.dados); } catch (e) {}
+    if (saveVazio(remS) && !saveVazio(save)) { perguntarConflito(rem); return; }
     if (!conta.sujo || saveVazio(save)) { aplicarNuvem(rem); return; }
     perguntarConflito(rem);
   } catch (e) { nuvemErro = erroNuvem(e); }
@@ -10030,6 +10035,17 @@ function convidarNuvem(tent) {
   save.convNuvem = 1; salvar();
   janelaAviso({ ico: 'nuvem', titulo: 'Novidade: salvar na nuvem', texto: 'Crie uma conta para não perder seus gatos e para jogar no celular e no site com o mesmo progresso.', okTxt: 'Criar conta', outroTxt: 'Agora não', ok: () => { abrirConfig('menu'); abrirConta(); } });
 }
+function oferecerRecuperar(tent) {
+  if (!saveVazio(save)) return;
+  let c = null;
+  for (const k of ['pegagatos.seguranca', 'pegagatos.backup']) { let x = null; try { x = JSON.parse(ler(k) || 'null'); } catch (e) {} if (x && !saveVazio(x.save) && (!c || (x.em || 0) > (c.em || 0))) c = x; }
+  if (!c) return;
+  const livre = state === 'menu' && !menu.hidden && $('telaAviso').hidden;
+  if (!livre) { if ((tent || 0) < 40) setTimeout(() => oferecerRecuperar((tent || 0) + 1), 1500); return; }
+  janelaAviso({ ico: 'nuvem', titulo: 'Recuperar seu progresso?', texto: 'Achamos um progresso guardado neste aparelho' + (c.em ? ' em ' + quando(c.em) : '') + ': ' + resumoSave(c.save) + '.', okTxt: 'Recuperar', outroTxt: 'Agora não',
+    ok: () => { gravar('pegagatos.save', JSON.stringify(c.save)); if (c.piloto) gravar('gatuno.gato', c.piloto); if (conta) { conta.sujo = 1; gravarConta(); } location.reload(); } });
+}
+setTimeout(oferecerRecuperar, 1200);
 atualizarContaUI();
 setTimeout(() => { nuvemBoot = false; sincronizarInicio(); setTimeout(convidarNuvem, 6000); }, 0);
 
