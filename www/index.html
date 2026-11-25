@@ -1197,7 +1197,7 @@ const Z = {
   novelo: { tunnel: true, name: 'Túnel dos Novelos', wall: ['#f29bb0', '#ea88a1'], floor: ['#d9728d', '#cd6682'], road: ['#a8566f', '#9d4e67'], rumble: ['#fff0f4', '#ffd166'], lane: '#fff0f4', light: '#fff7d6', marks: 'duas' }
 };
 
-const VERSAO = '3.3.2';
+const VERSAO = '3.3.3';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1493,8 +1493,8 @@ for (const f of SECRETOS) {
 }
 /* gatos personalizados para amigos: só aparecem depois de resgatar um código (Configurações) */
 const AMIGOS = [
-  { raca: 'Mangato Louco', id: 'mangato', nomeGato: 'Mango', sexo: 'm', cod: 4456213177523716, louco: 1, fofo: 2, pelo: '#ff9f1c', orelha: '#12b8cc', dentro: '#ff5f9e', focinho: '#ffe7a8', peito: '#ffe7a8', olhos: ['#19e0f0', '#ffd23f'], nariz: '#d6336c', rabo: '#12b8cc', estampa: 'tigre', estampaCor: '#d9780a' },
-  { raca: 'Gatattoo', id: 'gatattoo', nomeGato: 'Tatu', sexo: 'f', cod: 3098870155963400, tatuadora: 1, fofo: 1, pelo: '#f3e3d0', orelha: '#2a2430', dentro: '#a8586e', focinho: '#fff6ea', peito: '#fff6ea', pata: '#fff3df', olhos: ['#8a6a55', '#5a4a52'], nariz: '#c43a55', rabo: '#e9d3bb', bochecha: '#e8b1a5' }
+  { raca: 'Mangato Louco', id: 'mangato', nomeGato: 'Mango', sexo: 'm', cod: 1625718073934015, louco: 1, fofo: 2, pelo: '#ff9f1c', orelha: '#12b8cc', dentro: '#ff5f9e', focinho: '#ffe7a8', peito: '#ffe7a8', olhos: ['#19e0f0', '#ffd23f'], nariz: '#d6336c', rabo: '#12b8cc', estampa: 'tigre', estampaCor: '#d9780a' },
+  { raca: 'Gatattoo', id: 'gatattoo', nomeGato: 'Tatu', sexo: 'f', cod: 7287844637992963, tatuadora: 1, fofo: 1, pelo: '#f3e3d0', orelha: '#2a2430', dentro: '#a8586e', focinho: '#fff6ea', peito: '#fff6ea', pata: '#fff3df', olhos: ['#8a6a55', '#5a4a52'], nariz: '#c43a55', rabo: '#e9d3bb', bochecha: '#e8b1a5' }
 ];
 for (const f of AMIGOS) {
   f.colecao = true; f.secreto = 1; f.amigo = 1; f.peso = 0; f.orelha = f.orelha || f.pelo;
