@@ -895,7 +895,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
     <section class="cartao">
       <header class="topo"><button class="voltar" id="fecharAndar" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="hotel"></span>Estação Espacial</h2></header>
       <div class="corpo">
-        <div class="regiaoEsp"><canvas id="espRegiao"></canvas><div class="regiaoTxt"><b>Estação Espacial</b><small>6º andar · patrulha espacial em breve</small></div></div>
+        <div class="regiaoEsp"><canvas id="espRegiao"></canvas><div class="regiaoTxt"><b>Estação Espacial</b><small>7º andar · patrulha espacial em breve</small></div></div>
         <button class="acao" id="espJogar" type="button" disabled>Jogar · em breve</button>
         <p class="grupoT">Cabine espacial</p>
         <p class="nota">Aqui moram os gatos dos eventos do espaço. Toque em um gato para saber mais.</p>
@@ -1256,10 +1256,14 @@ const Z = {
   ruinas: { tunnel: false, name: 'Ruínas da Aurora', sky: ['#1f4a5c', '#f7c9a0'], road: ['#8a8576', '#807b6c'], grass: ['#55825f', '#4c7957'], rumble: ['#f3e9c8', '#b8923a'], lane: '#f3e9c8', marks: 'centro' },
   selva: { tunnel: true, name: 'Túnel da Selva', wall: ['#2f7a3f', '#286b37'], floor: ['#1f5a2d', '#1b5028'], road: ['#4a3a2a', '#42352a'], rumble: ['#d9f2a0', '#7a5a2a'], lane: '#d9f2a0', light: '#fff2a8', marks: 'duas' },
   gruta: { tunnel: true, name: 'Gruta Brilhante', wall: ['#4a3a82', '#3f3175'], floor: ['#2e2358', '#271e4d'], road: ['#4a3f7c', '#433972'], rumble: ['#b9f3ff', '#4a3f7c'], lane: '#b9f3ff', light: '#d8f7ff', marks: 'centro' },
+  feira: { tunnel: false, name: 'Feira Noturna', sky: ['#1b1440', '#8a3f7e'], road: ['#4a3d5c', '#433654'], grass: ['#2d2350', '#271e48'], rumble: ['#ffd166', '#ff6b8a'], lane: '#ffd166', marks: 'duas' },
+  tenda: { tunnel: true, name: 'Tenda das Bandeirolas', wall: ['#7a2f5a', '#6c2751'], floor: ['#4a1c3a', '#421633'], road: ['#3d2a4a', '#372642'], rumble: ['#ffd166', '#e8453c'], lane: '#ffd166', light: '#fff0b8', marks: 'centro' },
+  camara: { tunnel: false, name: 'Câmara de Cristal', sky: ['#0d0826', '#3b2e86'], road: ['#4d4180', '#463a76'], grass: ['#241a4f', '#1e1545'], rumble: ['#c9f4ff', '#8a6bff'], lane: '#c9f4ff', marks: 'dupla' },
+  veio: { tunnel: true, name: 'Túnel dos Veios', wall: ['#2b2a6a', '#25245f'], floor: ['#171445', '#13113d'], road: ['#3a3a7a', '#343370'], rumble: ['#aef3ff', '#6a5bd0'], lane: '#aef3ff', light: '#e0fbff', marks: 'duas' },
   portal: { tunnel: true, name: 'Corredor do Portal', wall: ['#2a4a52', '#243f47'], floor: ['#1a3238', '#162b31'], road: ['#6b6558', '#625d51'], rumble: ['#ffd166', '#6b6558'], lane: '#ffd166', light: '#fff0b8', marks: 'dupla' }
 };
 
-const VERSAO = '3.3.7';
+const VERSAO = '3.4.0';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1308,6 +1312,7 @@ try {
     if (lido.amigos && typeof lido.amigos === 'object') save.amigos = lido.amigos;
     if (lido.amigosPil) save.amigosPil = lido.amigosPil;
     if (lido.hotelLiberado) save.hotelLiberado = 1;
+    if (Array.isArray(lido.espacoAviso)) save.espacoAviso = lido.espacoAviso.filter(x => typeof x === 'string').slice(0, 4);
     if (lido.espaco && typeof lido.espaco === 'object') save.espaco = lido.espaco;
     if (lido.regras && typeof lido.regras === 'object') save.regras = lido.regras;
     if (lido.parc && typeof lido.parc === 'object') save.parc = lido.parc;
@@ -1356,8 +1361,8 @@ const filhotesN = () => save.abrigo.filter(a => a.fi).length;
 /* ----- pontos: nível do patrulheiro e estrelas por região ----- */
 /* metas calculadas com simulações de corrida: 1 estrela dá com o carro inicial (10 vagas),
    2 estrelas pedem um carro maior ou sorte, 3 estrelas pedem um carro bem maior */
-const METAS_EST = [[12, 30, 50], [25, 55, 100], [50, 120, 200], [100, 220, 430], [110, 240, 460], [115, 300, 500], [170, 350, 750], [350, 750, 1450]];
-const PREMIO_ESTRELA = [25, 50, 100], MUL_EST = [1, 1.6, 2.5, 4, 4.5, 5, 6.5, 9];
+const METAS_EST = [[12, 30, 50], [25, 55, 100], [50, 120, 200], [100, 220, 430], [110, 240, 460], [112, 270, 480], [115, 300, 500], [170, 350, 750], [220, 450, 900], [350, 750, 1450]];
+const PREMIO_ESTRELA = [25, 50, 100], MUL_EST = [1, 1.6, 2.5, 4, 4.5, 4.8, 5, 6.5, 7.5, 9];
 const premioEstrela = (rIdx, q) => Math.round(PREMIO_ESTRELA[q] * (MUL_EST[rIdx] || 1));
 /* 1ª estrela: coleira · 2ª: decoração do abrigo · 3ª: chapéu do piloto */
 const PREMIOS_REG = [
@@ -1366,8 +1371,10 @@ const PREMIOS_REG = [
   { coleira: 'cPico', decor: 'dBoneco', chapeu: 'abafador' },
   { coleira: 'cCentro', decor: 'dLua', chapeu: 'touca' },
   { coleira: 'cBosque', decor: 'dCogumelo', chapeu: 'cogumelo' },
+  { coleira: 'cFeira', decor: 'dBarraca', chapeu: 'cartola' },
   { coleira: 'cRota', decor: 'dPlaca', chapeu: 'explorador' },
   { coleira: 'cVale', decor: 'dCristal', chapeu: 'pirata' },
+  { coleira: 'cCaverna', decor: 'dGeodo', chapeu: 'capacete' },
   { coleira: 'cTrilha', decor: 'dTrofeu', chapeu: 'aureola' }
 ];
 const ESTRELA_ORD = ['1ª', '2ª', '3ª'];
@@ -1445,6 +1452,12 @@ if (ADM.regV !== 2) {
   for (const k in ADM.precos || {}) { const m = /^reg\.(\d+)$/.exec(k); pr[m ? 'reg.' + mv(+m[1]) : k] = ADM.precos[k]; }
   ADM.chances = ch; ADM.precos = pr; ADM.regV = 2;
 }
+if (ADM.regV !== 3) {
+  const mv = n => (n >= 7 ? n + 2 : n >= 5 ? n + 1 : n), ch = {}, pr = {};
+  for (const k in ADM.chances || {}) ch[mv(+k)] = ADM.chances[k];
+  for (const k in ADM.precos || {}) { const m = /^reg\.(\d+)$/.exec(k); pr[m ? 'reg.' + mv(+m[1]) : k] = ADM.precos[k]; }
+  ADM.chances = ch; ADM.precos = pr; ADM.regV = 3;
+}
 const A = k => { const v = ADM.v[k]; return typeof v === 'number' && isFinite(v) ? v : ADM_PADRAO[k]; };
 function salvarAdm() { gravar('pegagatos.admin', JSON.stringify(ADM)); }
 const precisa = () => (save.up.turbo ? 2 : 3);
@@ -1518,6 +1531,7 @@ const FELINOS = [
   { raca: 'gato mago', mitico: 1, pelo: '#8d97a6', dentro: '#e3bcc6', focinho: '#eef2f7', olhos: [AMARELO], nariz: '#d88a9a', chapeuMago: '#4b3bb0', capa: '#4b3bb0', barba: '#f3f0ea', rabo: '#6c7686', bochecha: '#f0a0b4', oculos: '#e0b52f', varinha: 1 },
   { raca: 'gato fênix', mitico: 1, pelo: '#f2762e', dentro: '#ffd27a', focinho: '#ffd9a0', peito: '#ffd27a', olhos: ['#ffd84a'], nariz: '#a8361a', crista: ['#e8401f', '#ff9a2a', '#ffe27a'],
     asas: '#ff9a3c', penas: 1, penasLinha: 'rgba(255,226,122,.85)', raboPonta: { tipo: 'chama', cor: '#ffb03a' }, bochecha: '#ffb07a', marca: { tipo: 'chama', cor: '#ffe27a' }, auraM: '#ffa03a', brilhos: 'chama' },
+  { raca: 'grifo', mitico: 1, pelo: '#d8a03c', dentro: '#f5d69a', focinho: '#f3e2b8', peito: '#f5e6c0', olhos: [AMBAR, AMARELO], nariz: '#e8a020', juba: '#f7f1e4', jubaClara: '#ffffff', asas: '#c98a2e', penas: 1, penasLinha: 'rgba(255,240,170,.9)', rabo: '#a8681f', bochecha: '#ffcf8a', auraM: '#ffd24a', brilhos: 'dourado' },
   { raca: 'gato de nove caudas', mitico: 1, pelo: '#fbf7ef', dentro: '#ff9eb3', focinho: '#ffffff', olhos: ['#ffb03a'], nariz: '#ff7f9a', caudas: 9, rabo: '#e8503a', marcasRaposa: '#e03a3a',
     marca: { tipo: 'chama', cor: '#e03a3a' }, bochecha: '#ffb3c4', auraM: '#7fc8ff', brilhos: 'fogoAzul' },
   { raca: 'pantera negra', lendario: 1, pelo: '#1c1a21', dentro: '#3e3440', estampa: 'onca', estampaCor: '#35313f', olhos: [VERDE], nariz: '#100e14', linha: '#9a93a6', fofo: 1 }
@@ -1532,8 +1546,6 @@ for (const f of FELINOS) {
 const COMUNS = TIPOS.filter(t => !t.colecao), EPICOS = FELINOS.filter(f => !f.lendario && !f.mitico), LENDARIOS = FELINOS.filter(f => f.lendario), MITICOS = FELINOS.filter(f => f.mitico);
 /* gatos secretos: não aparecem na rua; cada um tem um jeito próprio de ser encontrado */
 const SECRETOS = [
-  { raca: 'gato estrela', id: 'estrela', nomeGato: 'Estrela', sexo: 'm', dica: 'Ganhe todas as estrelas de todas as regiões.', pelo: '#3b2a7a', dentro: '#b39cff', focinho: '#4c3a96', peito: '#4c3a96', listra: '#ffd84a', olhos: ['#ffd84a'], nariz: '#ffb3d1', linha: '#d6c9ff', fofo: 1, rabo: '#ffd84a',
-    manchas: [{ x: -0.55, y: -0.45, rx: 0.07, ry: 0.07, cor: '#fff6c8' }, { x: 0.6, y: -0.2, rx: 0.06, ry: 0.06, cor: '#fff6c8' }, { x: -0.3, y: 0.45, rx: 0.05, ry: 0.05, cor: '#fff6c8' }, { x: 0.35, y: -0.65, rx: 0.05, ry: 0.05, cor: '#fff6c8' }] },
   { raca: 'gato do amor', id: 'amor', nomeGato: 'Xodó', sexo: 'm', dica: 'Faça carinho em muitos gatos diferentes.', pelo: '#26232b', dentro: '#ff9ec0', olhos: ['#7fd46b'], patas: '#fbf7ef', pata: '#ff9ec0', nariz: '#ff5d8f', linha: '#3a3040',
     branco: { topo: -0.4, larg: 0.18, ladoE: 0.32, ladoD: 0.32, dx: 0 }, marca: { tipo: 'coracao', cor: '#ff5d8f' }, coracoesRosto: '#ff7fa8', narizCoracao: 1, olhoBrilho: 'coracao',
     peitoCoracao: 1, coracoesCorpo: '#ff5d8f', raboPonta: { tipo: 'coracao', cor: '#ff5d8f' }, coleira: '#ff5d8f', pingente: 'coracao', aura: '#ff6fa8', brilhos: 'coracao' },
@@ -1550,23 +1562,31 @@ const SECRETOS = [
     aurora: 1, fofo: 1, peito: '#243668', olhoBrilho: 'estrela', raboPonta: { tipo: 'floco', cor: '#e8fbff' }, coleira: '#5fd4b8', pingente: 'estrela', aura: '#6ff0c8', brilho: 1.4, brilhos: 'aurora' },
   { raca: 'gato cristal', id: 'cristal', nomeGato: 'Cristal', sexo: 'm', dica: 'Resgate muitos felinos épicos.', pelo: '#e8f3ff', dentro: '#bfe6ff', orelha: '#bfe6ff', olhos: ['#5ab8f0', '#5ab8f0'], patas: '#f5faff', pata: '#bfe6ff', nariz: '#9fc8f0', linha: '#4f6a9a',
     cristalBrilho: 1, marca: { tipo: 'cristal', cor: '#7fd0ff' }, olhoBrilho: 'cristal', raboPonta: { tipo: 'cristal', cor: '#9fdcff' }, coleira: '#7fd0ff', pingente: 'cristal', aura: '#bfe6ff', brilho: 1.3, brilhos: 'cristal' },
-  { raca: 'gato galáxia', id: 'galaxia', nomeGato: 'Órion', sexo: 'm', dica: 'Encontre todas as raças do álbum, inclusive os outros secretos.', pelo: '#22123d', dentro: '#8b5cf6', olhos: ['#ffe07a'], patas: '#3a2466', pata: '#b48cff', nariz: '#c9a7ff', linha: '#d6c9ff',
-    nebulosa: 1, fofo: 1, peito: '#2e1a52', marca: { tipo: 'lua', cor: '#ffd84a' }, olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#8b5cf6', pingente: 'estrela', aura: '#7b4dff', brilho: 1.6, brilhos: 'estrela' }
+  { raca: 'gato hidra', id: 'hidra', nomeGato: 'Hidra', sexo: 'f', dica: 'Resgate todos os gatos míticos.', pelo: '#2f6b52', dentro: '#9fe0b0', olhos: ['#ffd84a'], patas: '#244f3d', pata: '#9fe0b0', nariz: '#173a2a', linha: '#10281e',
+    hidra: 1, caudas: 3, rabo: '#3f8a68', escamas: '#1f5a43', bochecha: '#9fe0b0', fofo: 1, olhoBrilho: 'estrela', coleira: '#7a4fd0', pingente: 'estrela', aura: '#5fe0a0', brilho: 1.4 },
+  { raca: 'gato arquiteto', id: 'arquiteto', nomeGato: 'Tijolo', sexo: 'm', dica: 'Libere todas as decorações e construa todas as melhorias.', pelo: '#d9724a', dentro: '#f0b08a', olhos: ['#ffd84a'], patas: '#c9603c', pata: '#f0b08a', nariz: '#8a3a22', linha: '#4a2418',
+    tijolos: 1, bochecha: '#f0b08a', coleira: '#f2c14a', pingente: 'estrela', aura: '#ff9a5c', brilho: 1.3 },
+  { raca: 'gato dourado', id: 'dourado', nomeGato: 'Ouro', sexo: 'm', dica: 'Encontre todas as raças de gatos do álbum.', pelo: '#f2c94c', dentro: '#ffe9a0', olhos: ['#7a3d12'], patas: '#e8b830', pata: '#ffe9a0', nariz: '#b8741a', linha: '#6a4408',
+    ouro: 1, fofo: 1, bochecha: '#ffe08a', olhoBrilho: 'estrela', coleira: '#fff3b0', aura: '#ffd84a', brilho: 1.6, brilhos: 'dourado' },
+  { raca: 'gato estrelado', id: 'estrelado', nomeGato: 'Vega', sexo: 'm', dica: 'Ganhe as 3 estrelas de todas as regiões.', pelo: '#1d2750', dentro: '#3a4a8a', olhos: ['#ffe27a'], patas: '#141c3d', pata: '#3a4a8a', nariz: '#8fb3ff', linha: '#0d1433',
+    constelacao: 1, fofo: 1, bochecha: '#5a6ab0', olhoBrilho: 'estrela', coleira: '#2c3a7a', pingente: 'estrela', aura: '#8fb3ff', brilho: 1.4 }
 ];
 for (const f of SECRETOS) {
   f.colecao = true; f.secreto = 1; f.peso = 0; f.orelha = f.orelha || f.pelo;
-  f.raridade = 'secreto'; f.rc = 'secreto'; f.pts = f.id === 'galaxia' ? 300 : 150; f.aura = f.aura || '#8b5cf6'; f.brilho = f.brilho || 1.3; f.cosmico = 1;
+  f.raridade = 'secreto'; f.rc = 'secreto'; f.pts = 150; f.aura = f.aura || '#8b5cf6'; f.brilho = f.brilho || 1.3; f.cosmico = 1;
   TIPOS.push(f);
 }
 /* Coleção da Estação Espacial: ainda não entram no jogo, só nas prévias */
 const ESPACIAIS = [
+  { raca: 'gato estrela', id: 'estrela', nomeGato: 'Estrela', sexo: 'm', pelo: '#241a63', dentro: '#ffd84a', olhos: ['#fff0a8'], patas: '#33257f', pata: '#ffd84a', nariz: '#ffb3d1', linha: '#e6dcff', espaco: 'estrela', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#33257f', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#ffd84a', pingente: 'estrela', aura: '#ffd84a', brilho: 1.5, brilhos: 'estrela' },
+  { raca: 'gato eclipse', id: 'eclipse', nomeGato: 'Corona', sexo: 'f', pelo: '#15121f', dentro: '#ffd88a', olhos: ['#ffd84a'], patas: '#221d30', pata: '#ffd88a', nariz: '#ffd88a', linha: '#ffe7a8', espaco: 'eclipse', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#221d30', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#ffcf4a', pingente: 'lua', aura: '#ffd84a', brilho: 1.4, brilhos: 'estrela' },
+  { raca: 'gato lua de sangue', id: 'luasangue', nomeGato: 'Rubi', sexo: 'f', pelo: '#3a0d1a', dentro: '#ff8a78', olhos: ['#ffb27a'], patas: '#4d1424', pata: '#ff8a78', nariz: '#ff8a78', linha: '#ffc4b8', espaco: 'sangue', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#4d1424', olhoBrilho: 'estrela', raboPonta: { tipo: 'lua', cor: '#ff5a4a' }, coleira: '#d83a30', pingente: 'lua', aura: '#ff4d4d', brilho: 1.4, brilhos: 'estrela' },
+  { raca: 'gato chuva de meteoros', id: 'meteoros', nomeGato: 'Perseida', sexo: 'f', pelo: '#101a40', dentro: '#ffb27a', olhos: ['#fff4c4'], patas: '#1a2656', pata: '#ffb27a', nariz: '#ffb27a', linha: '#cfe0ff', espaco: 'meteoros', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#1a2656', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffb27a' }, coleira: '#ff9a3c', pingente: 'estrela', aura: '#ffb27a', brilho: 1.4, brilhos: 'estrela' },
+  { raca: 'gato galáxia', id: 'galaxia', nomeGato: 'Órion', sexo: 'm', pelo: '#170c33', dentro: '#8b5cf6', olhos: ['#ffe07a'], patas: '#2a1750', pata: '#b48cff', nariz: '#c9a7ff', linha: '#e0d4ff', espaco: 'galaxia', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#2a1750', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#8b5cf6', pingente: 'estrela', aura: '#7b4dff', brilho: 1.6, brilhos: 'estrela' },
   { raca: 'gato supernova', id: 'supernova', nomeGato: 'Nova', sexo: 'f', pelo: '#2a0f2e', dentro: '#ff9a5c', olhos: ['#ffd84a'], patas: '#3a1a3e', pata: '#ffb27a', nariz: '#ffb27a', linha: '#ffd9a8', espaco: 'supernova', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#3a1a3e', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#ff8a2a', pingente: 'estrela', aura: '#ff9a3c', brilho: 1.5, brilhos: 'chama' },
   { raca: 'gato hipernova', id: 'hipernova', nomeGato: 'Hiper', sexo: 'm', pelo: '#16134a', dentro: '#9fdcff', olhos: ['#e8fbff'], patas: '#241f6a', pata: '#bfe6ff', nariz: '#bfe6ff', linha: '#cfe7ff', espaco: 'hipernova', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#241f6a', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#e8fbff' }, coleira: '#7fd0ff', pingente: 'estrela', aura: '#7fd0ff', brilho: 1.6, brilhos: 'fogoAzul' },
   { raca: 'gato buraco negro', id: 'buraconegro', nomeGato: 'Breu', sexo: 'm', pelo: '#0b0812', dentro: '#ff9a3c', olhos: ['#ffcf7a'], patas: '#17101f', pata: '#ff9a3c', nariz: '#ffb27a', linha: '#ffd9a8', espaco: 'buraco', narizT: 1.5, bocaL: 1.7, peito: '#17101f', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffb27a' }, coleira: '#ff8a2a', pingente: 'estrela', aura: '#ff8a2a', brilho: 1.2, brilhos: 'estrela' },
-  { raca: 'gato fusão de buracos negros', id: 'fusao', nomeGato: 'Dueto', sexo: 'f', pelo: '#120a24', dentro: '#c58cff', olhos: ['#5adcff', '#ff5ac8'], patas: '#1c1236', pata: '#c58cff', nariz: '#d9a7ff', linha: '#e3d1ff', espaco: 'fusao', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#1c1236', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#c58cff' }, coleira: '#a35cff', pingente: 'estrela', aura: '#a35cff', brilho: 1.5, brilhos: 'estrela' },
-  { raca: 'gato eclipse', id: 'eclipse', nomeGato: 'Corona', sexo: 'f', pelo: '#15121f', dentro: '#ffd88a', olhos: ['#ffd84a'], patas: '#221d30', pata: '#ffd88a', nariz: '#ffd88a', linha: '#ffe7a8', espaco: 'eclipse', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#221d30', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffd84a' }, coleira: '#ffcf4a', pingente: 'lua', aura: '#ffd84a', brilho: 1.4, brilhos: 'estrela' },
-  { raca: 'gato lua de sangue', id: 'luasangue', nomeGato: 'Rubi', sexo: 'f', pelo: '#3a0d1a', dentro: '#ff8a78', olhos: ['#ffb27a'], patas: '#4d1424', pata: '#ff8a78', nariz: '#ff8a78', linha: '#ffc4b8', espaco: 'sangue', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#4d1424', olhoBrilho: 'estrela', raboPonta: { tipo: 'lua', cor: '#ff5a4a' }, coleira: '#d83a30', pingente: 'lua', aura: '#ff4d4d', brilho: 1.4, brilhos: 'estrela' },
-  { raca: 'gato chuva de meteoros', id: 'meteoros', nomeGato: 'Perseida', sexo: 'f', pelo: '#101a40', dentro: '#ffb27a', olhos: ['#fff4c4'], patas: '#1a2656', pata: '#ffb27a', nariz: '#ffb27a', linha: '#cfe0ff', espaco: 'meteoros', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#1a2656', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#ffb27a' }, coleira: '#ff9a3c', pingente: 'estrela', aura: '#ffb27a', brilho: 1.4, brilhos: 'estrela' }
+  { raca: 'gato fusão de buracos negros', id: 'fusao', nomeGato: 'Dueto', sexo: 'f', pelo: '#120a24', dentro: '#c58cff', olhos: ['#5adcff', '#ff5ac8'], patas: '#1c1236', pata: '#c58cff', nariz: '#d9a7ff', linha: '#e3d1ff', espaco: 'fusao', narizT: 1.5, bocaL: 1.7, fofo: 1, peito: '#1c1236', olhoBrilho: 'estrela', raboPonta: { tipo: 'estrela', cor: '#c58cff' }, coleira: '#a35cff', pingente: 'estrela', aura: '#a35cff', brilho: 1.5, brilhos: 'estrela' }
 ];
 const ESP_INFO = {
   supernova: ['Supernova', 'Uma estrela que explodiu e iluminou o céu inteiro.'],
@@ -1575,7 +1595,9 @@ const ESP_INFO = {
   fusao: ['Fusão de Buracos Negros', 'Dois buracos negros que dançam juntos até virarem um só.'],
   eclipse: ['Eclipse', 'A Lua cobre o Sol e só sobra a coroa dourada.'],
   luasangue: ['Lua de Sangue', 'A lua que fica vermelha na noite do eclipse.'],
-  meteoros: ['Chuva de Meteoros', 'Estrelas cadentes cruzam o céu. Faça um pedido!']
+  meteoros: ['Chuva de Meteoros', 'Estrelas cadentes cruzam o céu. Faça um pedido!'],
+  estrela: ['Gato Estrela', 'Uma estrela que desceu do céu da madrugada para brilhar ao seu lado.'],
+  galaxia: ['Gato Galáxia', 'Uma galáxia inteira num gato só, com redemoinho de luz e nebulosa.']
 };
 for (const f of ESPACIAIS) { f.orelha = f.orelha || f.pelo; f.raridade = 'secreto'; f.rc = 'secreto'; f.cosmico = 1; f.secreto = 1; f.colecao = true; }
 /* gatos personalizados para amigos: só aparecem depois de resgatar um código (Configurações) */
@@ -1646,18 +1668,22 @@ const floresCompradas = () => FLORES_DEC().filter(d => temDecor(d.local, d.id)).
 const floresColocadas = () => { let n = 0; for (const l of ['abrigo', 'casa', 'santuario']) for (const d of colocados(l)) { const def = defDecor(d.id); if (def && def.flor) n++; } return n; };
 const floresTodas = () => floresCompradas() >= FLORES_DEC().length && floresColocadas() >= FLORES_MIN;
 const racaCompleta = () => TIPOS.some(t => { if (t.secreto) return false; const l = varsDe(t); return l.length > 0 && l.every(k => temVar(t.raca, k)); });
+/* Gato Arquiteto: todas as decorações e todas as melhorias (carro, abrigo, casa e santuário) */
+const tudoConstruido = () => MELHORIAS.every(m => (save.up[m.id] || 0) >= m.precos.length) && (save.santInfo.nv || 0) >= SANT_PRECOS.length &&
+  DECOR.every(d => d.premio != null ? save.premios.indexOf(d.id) >= 0 : temDecor(d.local, d.id) > 0);
 function checarSecretos(info) {
   if (!save.secretos || typeof save.secretos !== 'object') save.secretos = {};
   const novos = [], ganha = id => { const t = ganharSecreto(id); if (t) novos.push(t); };
-  if (!save.secretos.estrela && totalEstrelas() >= REGIOES.length * 3) ganha('estrela');
   if (!save.secretos.sortudo && info && info.guizos >= Math.max(1, Math.round(A('sortudoGuizos')))) ganha('sortudo');
   if (!save.secretos.arcoiris && racaCompleta()) ganha('arcoiris');
   if (!save.secretos.fantasma && info && info.madrugada) ganha('fantasma');
   if (!save.secretos.cristal && epicosTotal() >= Math.max(1, Math.round(A('cristalEpicos')))) ganha('cristal');
   if (!save.secretos.aurora && info && info.rIdx === idxAurora() && (save.estrelas[info.rIdx] || 0) >= 3 && info.pontos >= A('auroraMeta')) ganha('aurora');
   if (!save.secretos.floral && floresTodas()) ganha('floral');
-  /* Gato Galáxia: todas as raças do álbum, inclusive os outros secretos */
-  if (!save.secretos.galaxia && TIPOS.every(t => t.id === 'galaxia' || t.amigo || save.album[t.raca])) ganha('galaxia');
+  if (!save.secretos.hidra && MITICOS.every(t => save.album[t.raca])) ganha('hidra');
+  if (!save.secretos.estrelado && totalEstrelas() >= REGIOES.length * 3) ganha('estrelado');
+  if (!save.secretos.arquiteto && tudoConstruido()) ganha('arquiteto');
+  if (!save.secretos.dourado && TIPOS.filter(t => !t.amigo && t.id !== 'dourado').every(t => save.album[t.raca])) ganha('dourado');
   return novos;
 }
 function mostrarSecretos(lista, depois) {
@@ -1671,8 +1697,10 @@ const TEXTO_SECRETO = {
   floral: 'Você encheu seus cantinhos de flores e a Flora, a Gata Floral, apareceu no meio das pétalas. Ela veio morar na sua casa e entrou no álbum, na parte de Secretos.',
   aurora: 'No alto do Pico do Floco o céu se acendeu em verde e roxo, e a Aurora desceu junto com a luz. Ela veio morar na sua casa e entrou no álbum, na parte de Secretos.',
   cristal: 'De tanto resgatar felinos épicos, você achou o Cristal, um gato que brilha como pedra preciosa. Ele veio morar na sua casa e entrou no álbum, na parte de Secretos.',
-  galaxia: 'Você completou o álbum! O Órion, o Gato Galáxia, desceu do céu para morar com você. É o segredo mais difícil do jogo.',
-  estrela: 'Você conquistou todas as estrelas e a Estrela, um gato que brilha como o céu da madrugada, veio morar na sua casa. Ele também entrou no álbum, na parte de Secretos.',
+  estrelado: 'Você ganhou todas as estrelas de todas as regiões! A Vega, uma gata de pelo estrelado, apareceu com uma constelação no pelo e veio morar na sua casa. Ela entrou no álbum, na parte de Secretos.',
+  hidra: 'Você resgatou todos os gatos míticos! A Hidra, uma gata de três caudas com cabeças de serpente, saiu das sombras e veio morar na sua casa. Ela entrou no álbum, na parte de Secretos.',
+  arquiteto: 'Você liberou todas as decorações e construiu todas as melhorias! O Tijolo, o Gato Arquiteto, chegou com o pelo de tijolinhos e veio morar na sua casa. Ele entrou no álbum, em Secretos.',
+  dourado: 'Você encontrou todas as raças de gatos do álbum, até os secretos! O Ouro, o Gato Dourado, brilhou no fim da rua e veio morar na sua casa. Ele entrou no álbum, na parte de Secretos.',
   amor: 'Você fez carinho em tantos gatos diferentes que o Xodó, o Gato do Amor, apareceu com um coração no pelo e veio morar na sua casa. Ele também entrou no álbum, na parte de Secretos.'
 };
 function mostrarSecreto(t, depois) {
@@ -1681,6 +1709,28 @@ function mostrarSecreto(t, depois) {
   janelaAviso({ gato: g, titulo: 'Gato secreto encontrado!', texto: TEXTO_SECRETO[t.id] || '', okTxt: 'Que lindo!', ok: depois });
 }
 /* Gato do Amor: carinho em N gatos diferentes (cada gato conta uma vez só) */
+/* item 15: Estrela e Órion saíram dos secretos e foram para a coleção da Estação Espacial (Hotel 7 Vidas) */
+const RACAS_MOVIDAS = { 'gato estrela': 'Estrela', 'gato galáxia': 'Órion' };
+function migrarParaEspaco() {
+  const quais = [], tem = (r) => !!((save.album && save.album[r]) || (Array.isArray(save.casa) && save.casa.some(c => c && c.r === r)) || (save.secretos && save.secretos[r === 'gato estrela' ? 'estrela' : 'galaxia']));
+  for (const r in RACAS_MOVIDAS) {
+    if (!tem(r)) continue;
+    quais.push(RACAS_MOVIDAS[r]);
+    if (save.album) delete save.album[r];
+    if (save.albumVar) delete save.albumVar[r];
+    if (save.natureza) delete save.natureza[r];
+    if (save.secretos) delete save.secretos[r === 'gato estrela' ? 'estrela' : 'galaxia'];
+    for (const k of ['casa', 'abrigo', 'sant', 'felFila', 'parcEspera']) if (Array.isArray(save[k])) save[k] = save[k].filter(x => !(x && x.r === r));
+  }
+  if (quais.length) { const a = Array.isArray(save.espacoAviso) ? save.espacoAviso : []; for (const n of quais) if (a.indexOf(n) < 0) a.push(n); save.espacoAviso = a; }
+  if (save.hotelLiberado) { if (!save.espaco || typeof save.espaco !== 'object') save.espaco = {}; for (const e of ESPACIAIS) save.espaco[e.id] = 1; }
+}
+migrarParaEspaco();
+function avisoEspaco(depois) {
+  if (!Array.isArray(save.espacoAviso) || !save.espacoAviso.length) { depois(); return; }
+  const nomes = save.espacoAviso.join(' e '), plural = save.espacoAviso.length > 1;
+  janelaAviso({ ico: 'hotel', titulo: 'Mudança nos gatos secretos', texto: (plural ? nomes + ' deixaram os secretos e foram' : nomes + ' deixou os secretos e foi') + ' para a coleção da Estação Espacial, no Hotel 7 Vidas, com visual e efeitos novos. Por isso ' + (plural ? 'eles saíram' : 'ele saiu') + ' da sua casa e do álbum. Quem libera o Hotel recebe ' + (plural ? 'os dois' : 'o gato') + ' lá.', okTxt: 'Entendi', ok: () => { save.espacoAviso = []; salvar(); depois(); } });
+}
 if (!Array.isArray(save.carinhos)) save.carinhos = [];
 function contarCarinho(reg) {
   if (!reg || !save.secretos) return null;
@@ -1704,6 +1754,13 @@ if (save.regV !== 2) {
   if (save.regioes.indexOf(5) >= 0 && save.regioes.indexOf(4) < 0) save.regioes.push(4);
   save.regiao = mv(save.regiao); save.estrelas = mvObj(save.estrelas || {}); save.melhorReg = mvObj(save.melhorReg || {});
   save.regV = 2;
+}
+/* 3.4: Feira Noturna (6ª) e Caverna de Cristal Antigo (9ª) entraram no meio; Grande Rota, Vale e Trilha andam de casa */
+if (save.regV !== 3) {
+  const mv = n => (n >= 7 ? n + 2 : n >= 5 ? n + 1 : n), mvObj = o => { const r = {}; for (const k in o) r[mv(+k)] = o[k]; return r; };
+  save.regioes = save.regioes.map(mv);
+  save.regiao = mv(save.regiao); save.estrelas = mvObj(save.estrelas || {}); save.melhorReg = mvObj(save.melhorReg || {});
+  save.regV = 3;
 }
 if (!Array.isArray(save.casa)) {
   /* primeira vez com a casa: os felinos que você já pegou vão morar nela */
@@ -1735,9 +1792,11 @@ const COLEIRAS = [
   { id: 'cPico', nome: 'Coleira floco de neve', preco: 0, cor: '#9fc9ef', ping: 'floco', premio: 2 },
   { id: 'cCentro', nome: 'Coleira de estrela', preco: 0, cor: '#3b3550', ping: 'estrela', premio: 3 },
   { id: 'cBosque', nome: 'Coleira de folhinha', preco: 0, cor: '#d9822b', ping: 'folha', premio: 4 },
-  { id: 'cRota', nome: 'Coleira de couro', preco: 0, cor: '#8a5a34', ping: 'fivela', premio: 5 },
-  { id: 'cVale', nome: 'Coleira de cristal', preco: 0, cor: '#9a6fd6', ping: 'cristal', premio: 6 },
-  { id: 'cTrilha', nome: 'Coleira lendária', preco: 0, cor: '#e8b923', ping: 'medalha', premio: 7 }
+  { id: 'cFeira', nome: 'Coleira de lanterna', preco: 0, cor: '#e8453c', ping: 'lanterna', premio: 5 },
+  { id: 'cRota', nome: 'Coleira de couro', preco: 0, cor: '#8a5a34', ping: 'fivela', premio: 6 },
+  { id: 'cVale', nome: 'Coleira de cristal', preco: 0, cor: '#9a6fd6', ping: 'cristal', premio: 7 },
+  { id: 'cCaverna', nome: 'Coleira de diamante', preco: 0, cor: '#3fb6d9', ping: 'diamante', premio: 8 },
+  { id: 'cTrilha', nome: 'Coleira lendária', preco: 0, cor: '#e8b923', ping: 'medalha', premio: 9 }
 ];
 function vestirColeira(g) {
   const o = Object.assign({}, g); delete o.coleira; delete o.guizo; delete o.pingente;
@@ -1805,6 +1864,16 @@ function efeitoEspaco(k, x, y, R, g, t) {
       gr.addColorStop(0, 'rgba(255,247,208,1)'); gr.addColorStop(0.4, 'rgba(255,170,70,.7)'); gr.addColorStop(1, 'rgba(255,110,40,0)');
       k.globalAlpha = Math.sin(p * Math.PI); k.strokeStyle = gr; k.lineWidth = R * 0.05; k.beginPath(); k.moveTo(hx, hy); k.lineTo(tx, ty); k.stroke(); brilho(hx, hy, R * 0.09, '#fff4c4', 1); k.globalAlpha = 1;
     }
+  } else if (tipo === 'estrela') {
+    for (const off of [0, 0.5]) { const p = fase(t * 0.5 + off); k.strokeStyle = '#ffe08a'; k.globalAlpha = (1 - p) * 0.7; k.lineWidth = R * 0.03; k.beginPath(); k.arc(x, y, R * (0.35 + 0.65 * p), 0, 7); k.stroke(); }
+    k.globalAlpha = 1;
+    for (let q = 0; q < 9; q++) { const a = t * 0.8 + q * 0.698, d = R * (0.62 + 0.14 * Math.sin(t * 2 + q)); estrela4(x + Math.cos(a) * d, y + Math.sin(a) * d * 0.72, R * (0.07 + 0.035 * Math.sin(t * 5 + q * 2)), q % 3 === 0 ? '#ffffff' : q % 3 === 1 ? '#ffd84a' : '#c9b6ff', 0.95); }
+    for (let q = 0; q < 6; q++) { const p = fase(t * 0.35 + q / 6); brilho(x + (q - 2.5) * R * 0.2, y + R * 0.5 - p * R * 1.1, R * 0.05, '#fff3b0', Math.sin(p * Math.PI)); }
+  } else if (tipo === 'galaxia') {
+    k.strokeStyle = 'rgba(190,150,255,.35)'; k.lineWidth = R * 0.03; k.beginPath(); k.ellipse(x, y, R * 0.82, R * 0.3, -0.35, 0, 7); k.stroke();
+    for (let q = 0; q < 14; q++) { const p = q / 14, a = t * 0.9 + p * 12.566, rr = R * (0.35 + 0.5 * ((p * 3) % 1)); brilho(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.6, R * 0.07, ['#c9a7ff', '#8fd0ff', '#ffb3e6', '#ffe08a'][q % 4], 0.9); }
+    { const p = fase(t * 0.45); k.strokeStyle = '#d9c4ff'; k.globalAlpha = (1 - p) * 0.55; k.lineWidth = R * 0.025; k.beginPath(); k.arc(x, y, R * (0.3 + 0.7 * p), 0, 7); k.stroke(); k.globalAlpha = 1; }
+    for (let q = 0; q < 3; q++) estrela4(x + R * (0.55 - q * 0.5), y - R * (0.5 - (q % 2) * 0.7), R * (0.07 + 0.04 * Math.sin(t * 5 + q * 2)), '#ffffff', 0.95);
   }
   k.restore();
 }
@@ -1827,6 +1896,7 @@ function auraFelino(k, x, y, raio, g, t) {
       if (g.brilhos === 'cristal') { desenhaMarca(k, 'cristal', px, py, r * 0.8, ['#bfe6ff', '#ffffff', '#ffc4e8', '#9fdcff'][q % 4], true); continue; }
       if (g.brilhos === 'chama' || g.brilhos === 'fogoAzul') { desenhaMarca(k, 'chama', px, py, r * 0.9, (g.brilhos === 'chama' ? ['#ff8a2a', '#ffd84a', '#ff5a2a'] : ['#7fc8ff', '#bfe6ff', '#4f9cff'])[q % 3]); continue; }
       if (g.brilhos === 'arco') k.fillStyle = ARCO[q % ARCO.length];
+      if (g.brilhos === 'dourado') k.fillStyle = ['#ffd84a', '#fff3b0', '#e8a020'][q % 3];
       k.beginPath(); for (let v = 0; v < 8; v++) { const rr = v % 2 ? r * 0.38 : r, aa = v * Math.PI / 4; k.lineTo(px + Math.cos(aa) * rr, py + Math.sin(aa) * rr); } k.fill();
     }
   }
@@ -2151,6 +2221,8 @@ function pingente(c, x, y, s, tipo) {
   if (tipo === 'flor' || tipo === 'cristal') { c.save(); c.fillStyle = tipo === 'flor' ? '#ff7fa8' : '#7fd0ff'; desenhaMarca(c, tipo, x, y, s * 0.85, c.fillStyle); c.restore(); return; }
   if (tipo === 'folha') { c.save(); c.translate(x, y); c.rotate(0.35); c.fillStyle = '#e8742f'; c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.1); c.beginPath(); c.moveTo(0, s * 0.95); c.quadraticCurveTo(-s * 0.85, s * 0.1, 0, -s * 0.95); c.quadraticCurveTo(s * 0.85, s * 0.1, 0, s * 0.95); c.closePath(); c.fill(); c.stroke(); c.strokeStyle = '#9a4a1c'; c.lineWidth = Math.max(0.6, s * 0.07); c.beginPath(); c.moveTo(0, s * 0.8); c.lineTo(0, -s * 0.6); c.stroke(); c.restore(); return; }
   if (tipo === 'coracao' || tipo === 'trevo') { c.save(); c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.12); if (tipo === 'coracao') { caminhoCoracao(c, x, y, s * 0.85); c.stroke(); } desenhaMarca(c, tipo, x, y, s * 0.85, tipo === 'coracao' ? '#ff5d8f' : '#3fae4a'); c.restore(); return; }
+  if (tipo === 'lanterna') { c.save(); c.fillStyle = '#e8453c'; c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.1); c.beginPath(); c.ellipse(x, y, s * 0.55, s * 0.7, 0, 0, 7); c.fill(); c.stroke(); c.fillStyle = '#ffd84a'; c.fillRect(x - s * 0.3, y - s * 0.78, s * 0.6, s * 0.16); c.fillRect(x - s * 0.3, y + s * 0.62, s * 0.6, s * 0.16); c.restore(); return; }
+  if (tipo === 'diamante') { c.save(); c.fillStyle = '#7fe0f5'; c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.1); c.beginPath(); c.moveTo(x - s * 0.6, y - s * 0.2); c.lineTo(x - s * 0.3, y - s * 0.65); c.lineTo(x + s * 0.3, y - s * 0.65); c.lineTo(x + s * 0.6, y - s * 0.2); c.lineTo(x, y + s * 0.7); c.closePath(); c.fill(); c.stroke(); c.beginPath(); c.moveTo(x - s * 0.6, y - s * 0.2); c.lineTo(x + s * 0.6, y - s * 0.2); c.stroke(); c.restore(); return; }
   c.save(); c.lineJoin = 'round'; c.lineCap = 'round';
   c.strokeStyle = 'rgba(42,34,48,.85)'; c.lineWidth = Math.max(0.8, s * 0.12);
   if (tipo === 'flor') {
@@ -2188,6 +2260,12 @@ function rostoEm(c, x, y, r, g, op) {
   felinoAtras(c, x, y, r * 1.06, r * 0.92, g, S * 0.03);
   if (g.coleira) {
     c.fillStyle = g.coleira; c.beginPath(); c.ellipse(x, y + r * 0.86, r * 0.62, r * 0.2, 0, 0, 7); c.fill();
+    if (g.ouro && r > 9) {
+      const nomes = ['bengal', 'persa', 'siamês', 'sphynx', 'ragdoll', 'tigre', 'grifo'];
+      c.save(); c.fillStyle = '#8a5a10'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = Math.max(3, r * 0.095) + 'px sans-serif';
+      nomes.forEach((nm, q) => { const a = Math.PI * (0.18 + q * 0.105); c.save(); c.translate(x + Math.cos(a) * r * 0.5 * (a > Math.PI / 2 ? 1 : 1), y + r * 0.86 + Math.sin(a) * r * 0.16); c.rotate(Math.cos(a) * -0.5 + Math.PI / 2 - Math.PI / 2); c.fillText(nm, 0, 0); c.restore(); });
+      c.restore();
+    }
     if (g.guizo) {
       c.fillStyle = '#ffd84a'; c.strokeStyle = '#b8860b'; c.lineWidth = Math.max(1, r * 0.035);
       c.beginPath(); c.arc(x, y + r * 1.13, r * 0.19, 0, 7); c.fill(); c.stroke();
@@ -2243,10 +2321,13 @@ function rostoEm(c, x, y, r, g, op) {
     c.beginPath(); c.ellipse(x + t.x * r, y + t.y * r, t.rx * r, t.ry * r, t.g || 0, 0, 7); c.fill();
   }
   felinoEstampa(c, x, y, r * 1.06, r * 0.92, g);
-  if (g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral || g.espaco) {
+  if (g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral || g.espaco || g.tijolos || g.ouro || g.constelacao) {
     c.save(); c.beginPath(); c.ellipse(x, y, r * 1.06, r * 0.92, 0, 0, 7); c.clip();
     if (g.aurora) pintaAurora(c, x, y, r * 1.06, r * 0.92);
     if (g.cristalBrilho) pintaCristal(c, x, y, r * 1.06, r * 0.92);
+    if (g.ouro) pintaOuro(c, x, y, r * 1.06, r * 0.92);
+    if (g.constelacao) pintaEstrelado(c, x, y, r * 1.06, r * 0.92);
+    if (g.tijolos) pintaTijolos(c, x, y, r * 1.06, r * 0.92);
     if (g.floral) for (const [fx, fy, k, cor] of [[-0.55, -0.15, 0.1, '#ff8fb1'], [0.62, 0.05, 0.085, '#b38ce0'], [-0.3, 0.55, 0.07, '#ffd84a'], [0.42, -0.62, 0.065, '#ffffff']]) desenhaMarca(c, 'flor', x + fx * r, y + fy * r, r * k, cor, true);
     if (g.nebulosa) pintaGalaxia(c, x, y, r * 1.06, r * 0.92, r * 0.035);
     if (g.espaco) pintaEspaco(c, x, y, r * 1.06, r * 0.92, g.espaco);
@@ -2342,14 +2423,20 @@ const REGIOES = [
   { nome: 'Bosque do Outono', nivel: 5, preco: 1100, xp: 1300, desc: 'Folhas laranja caindo, cogumelos, abóboras e o túnel do tronco oco. Raros e mais felinos épicos.',
     gatos: ['azul russo', 'ragdoll', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: ['leopardo', 'jaguatirica', 'lince', 'caracal', 'guepardo'], lendarios: [], chE: 0.14, chL: 0,
     pista: [[90, 0, 'outono'], [60, 2, 'outono'], [60, -2, 'outono'], [40, 0, 'outono'], [30, 0, 'tronco'], [80, 4, 'tronco'], [80, -4, 'tronco'], [30, 0, 'tronco'], [80, 0, 'outono'], [50, 3.5, 'outono'], [50, -3.5, 'outono'], [60, 0, 'outono']] },
-  { nome: 'Grande Rota Selvagem', nivel: 6, preco: 1500, xp: 1800, desc: 'Todas as paisagens numa rota só. Raros, todos os épicos e até lendários.',
+  { nome: 'Feira Noturna', nivel: 6, preco: 1300, xp: 1500, desc: 'Barracas, lanternas de papel e uma roda-gigante sob as estrelas. Mais tranquila: raros e alguns felinos.',
+    gatos: ['azul russo', 'ragdoll', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: ['leopardo', 'jaguatirica', 'lince', 'caracal', 'guepardo'], lendarios: null, miticos: [], chE: 0.08, chL: 0.02,
+    pista: [[90, 0, 'feira'], [60, 2, 'feira'], [60, -2, 'feira'], [40, 0, 'feira'], [30, 0, 'tenda'], [80, 4, 'tenda'], [80, -4, 'tenda'], [30, 0, 'tenda'], [80, 0, 'feira'], [50, 3.5, 'feira'], [50, -3.5, 'feira'], [60, 0, 'feira']] },
+  { nome: 'Grande Rota Selvagem', nivel: 7, preco: 1500, xp: 1800, desc: 'Todas as paisagens numa rota só. Raros, todos os épicos e até lendários.',
     gatos: ['bengal', 'maine coon'], epicos: null, lendarios: ['tigre branco', 'tigre preto', 'leão branco', 'leão negro'], chE: 0.18, chL: 0.02,
     pista: [[90, 0, 'savana'], [60, 1.5, 'savana'], [30, 0, 'savana'], [40, 0, 'selva'], [80, -3, 'selva'], [80, 4, 'selva'], [30, 0, 'selva'], [50, 0, 'savana'], [120, 2.2, 'savana'], [40, 0, 'savana'], [120, -2.2, 'savana'], [30, 0, 'savana'], [30, 0, 'selva'], [70, 4, 'selva'], [70, -4, 'selva'], [70, 4, 'selva'], [30, 0, 'selva'], [40, 0, 'savana'], [50, 3.5, 'savana'], [50, -3.5, 'savana'], [50, 3.5, 'savana'], [50, -3.5, 'savana'], [40, 0, 'savana'], [30, 0, 'selva'], [90, 5, 'selva'], [90, -5, 'selva'], [60, 3, 'selva'], [30, 0, 'selva'], [120, 0, 'savana'], [40, 5, 'savana'], [40, -5, 'savana'], [100, 0, 'savana'], [30, 0, 'selva'], [100, -6, 'selva'], [100, 6, 'selva'], [70, -4, 'selva'], [30, 0, 'selva'], [40, 0, 'savana'], [60, 2, 'savana'], [30, 0, 'selva'], [70, -3, 'selva'], [30, 0, 'selva'], [40, 0, 'savana']] },
-  { nome: 'Vale dos Raros', nivel: 7, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um gato mago já passou por aqui.',
-    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['gato mago'], chE: 0.3, chL: 0.07, chM: 0.001,
+  { nome: 'Vale dos Raros', nivel: 8, preco: 3000, xp: 99999, desc: 'Praia, neve e novelos onde só aparecem gatos raros para cima. Dizem que um gato mago já passou por aqui.',
+    gatos: ['creme', 'ragdoll', 'azul russo', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['gato mago'], chE: 0.3, chL: 0.07, chM: 0.0005,
     pista: [[80, 0, 'cristais'], [100, 2.5, 'cristais'], [30, 0, 'gruta'], [80, -4.5, 'gruta'], [30, 0, 'gruta'], [60, 0, 'cristais'], [50, 4, 'cristais'], [50, -4, 'cristais'], [30, 0, 'gruta'], [100, 6, 'gruta'], [30, 0, 'gruta'], [60, 0, 'cristais']] },
-  { nome: 'Trilha Lendária', nivel: 8, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Aqui só aparecem felinos: épicos, lendários e até míticos.',
-    gatos: [], epicos: null, lendarios: null, miticos: null, chE: 0.79, chL: 0.2, chM: 0.01,
+  { nome: 'Caverna de Cristal Antigo', nivel: 9, preco: 4000, xp: 99999, desc: 'Câmaras de cristal e veios brilhantes. Difícil: muitos felinos e, com sorte, um mítico.',
+    gatos: ['azul russo', 'ragdoll', 'british shorthair', 'persa', 'maine coon', 'bengal', 'sphynx'], epicos: null, lendarios: null, miticos: ['grifo', 'dragão preto', 'gato fênix'], chE: 0.28, chL: 0.12, chM: 0.003,
+    pista: [[80, 0, 'camara'], [100, 3, 'camara'], [40, 0, 'camara'], [30, 0, 'veio'], [80, -5, 'veio'], [80, 5, 'veio'], [30, 0, 'veio'], [60, 0, 'camara'], [50, -4, 'camara'], [50, 4, 'camara'], [30, 0, 'veio'], [100, 6, 'veio'], [30, 0, 'veio'], [60, 0, 'camara']] },
+  { nome: 'Trilha Lendária', nivel: 10, preco: 5000, xp: 99999, desc: 'A rota secreta da madrugada. Aqui só aparecem felinos: épicos, lendários e até míticos.',
+    gatos: [], epicos: null, lendarios: null, miticos: null, chE: 0.79, chL: 0.2, chM: 0.005,
     pista: [[80, 0, 'ruinas'], [40, 5, 'ruinas'], [40, -5, 'ruinas'], [30, 0, 'portal'], [90, 6, 'portal'], [90, -6, 'portal'], [30, 0, 'portal'], [60, 0, 'ruinas'], [30, 0, 'portal'], [80, -4, 'portal'], [30, 0, 'portal'], [100, 0, 'ruinas']] }
 ];
 function tiposRegiao(r) {
@@ -3053,12 +3140,12 @@ function atualizarHotel() {
   const t = $('abrirHotel'); t.classList.toggle('liberado', ok); const c = t.querySelector('.tranca'); if (c) c.hidden = ok;
 }
 $('abrirHotel').addEventListener('click', () => { if (save.hotelLiberado) { menu.hidden = true; $('hotel').hidden = false; montarHotel(); return; } janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas', fechar: true, texto: 'Em breve! Um hotel de 7 andares, cada um com um tema e gatos especiais para colecionar.', okTxt: 'Mal posso esperar!' }); });
-const ANDARES = [[7, 'Reino Encantado', 'Andar final'], [6, 'Estação Espacial', 'Mundo do espaço'], [5, 'Arraiá dos Gatos', 'Junho'], [4, 'Doceria', 'Páscoa'], [3, 'Egito', 'Fevereiro'], [2, 'Vila Natalina', 'Dezembro'], [1, 'Mundo Assombrado', 'Outubro']];
+const ANDARES = [[7, 'Estação Espacial', 'Andar final · mundo do espaço'], [6, 'Reino Encantado', 'Mundo de fantasia'], [5, 'Arraiá dos Gatos', 'Junho'], [4, 'Doceria', 'Páscoa'], [3, 'Egito', 'Fevereiro'], [2, 'Vila Natalina', 'Dezembro'], [1, 'Mundo Assombrado', 'Outubro']];
 const espQtd = () => ESPACIAIS.filter(e => save.espaco && save.espaco[e.id]).length;
 function montarHotel() {
   const l = $('andares'); l.textContent = '';
   for (const [n, nome, sub] of ANDARES) {
-    const aberto = n === 6, b = cria('button', 'andar ' + (aberto ? 'aberto' : 'trancado')), d = cria('div'); b.type = 'button';
+    const aberto = n === 7, b = cria('button', 'andar ' + (aberto ? 'aberto' : 'trancado')), d = cria('div'); b.type = 'button';
     b.appendChild(cria('span', 'num', String(n)));
     d.appendChild(cria('b', '', nome)); d.appendChild(cria('small', '', aberto ? sub + ' · ' + espQtd() + '/' + ESPACIAIS.length + ' gatos' : 'Em breve')); b.appendChild(d);
     if (!aberto) { const c = cria('span', 'cad'); c.innerHTML = ICO.cadeado; b.appendChild(c); }
@@ -3067,8 +3154,55 @@ function montarHotel() {
   }
 }
 const espAm = {}; for (const e of ESPACIAIS) espAm[e.id] = amostra(e);
-const ESP_POS = [[0.1, 0.5, 0.38], [0.34, 0.5, 0.38], [0.58, 0.5, 0.38], [0.82, 0.5, 0.38], [0.17, 0.9, 0.44], [0.46, 0.9, 0.44], [0.75, 0.9, 0.44]];
+const ESP_POS = [[0.11, 0.5, 0.28], [0.305, 0.5, 0.28], [0.5, 0.5, 0.28], [0.695, 0.5, 0.28], [0.89, 0.5, 0.28], [0.13, 0.9, 0.4], [0.38, 0.9, 0.4], [0.62, 0.9, 0.4], [0.87, 0.9, 0.4]];
 let espRaf = 0;
+function cenaBanner(c, W, H, t) {
+  /* fundo: gradiente + nebulosas + faixa de estrelas */
+  const gr = c.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#060620'); gr.addColorStop(0.5, '#1d1458'); gr.addColorStop(1, '#3b1d6e'); c.fillStyle = gr; c.fillRect(0, 0, W, H);
+  for (const [nx, ny, rr, cor] of [[0.8, 0.2, 0.5, 'rgba(160,90,255,.38)'], [0.35, 0.75, 0.45, 'rgba(60,150,255,.28)'], [0.62, 0.95, 0.4, 'rgba(255,90,170,.25)'], [0.05, 0.1, 0.35, 'rgba(90,220,200,.18)']]) { const g2 = c.createRadialGradient(W * nx, H * ny, 0, W * nx, H * ny, W * rr); g2.addColorStop(0, cor); g2.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g2; c.fillRect(0, 0, W, H); }
+  let sd = 77; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  c.save(); c.translate(W * 0.5, H * 0.5); c.rotate(-0.35);
+  for (let q = 0; q < 150; q++) { const sx = (rnd() - 0.5) * W * 1.4, sy = (rnd() + rnd() - 1) * H * 0.22; c.globalAlpha = 0.15 + rnd() * 0.4; c.fillStyle = rnd() > 0.5 ? '#d8ccff' : '#ffffff'; c.fillRect(sx, sy, 1.2, 1.2); }
+  c.restore(); c.globalAlpha = 1;
+  for (let q = 0; q < 80; q++) { const sx = rnd() * W, sy = rnd() * H, sr = 0.5 + rnd() * 1.3; c.globalAlpha = 0.35 + 0.55 * (0.5 + 0.5 * Math.sin(t * 1.6 + q * 1.9)); c.fillStyle = '#fff'; c.beginPath(); c.arc(sx, sy, sr, 0, 7); c.fill(); }
+  c.globalAlpha = 1;
+  const cintila = (x, y, r, cor, al) => { c.globalAlpha = al; c.fillStyle = cor; c.beginPath(); c.moveTo(x, y - r); c.quadraticCurveTo(x, y, x + r, y); c.quadraticCurveTo(x, y, x, y + r); c.quadraticCurveTo(x, y, x - r, y); c.quadraticCurveTo(x, y, x, y - r); c.fill(); c.globalAlpha = 1; };
+  for (let q = 0; q < 6; q++) cintila(W * (0.08 + rnd() * 0.84), H * (0.06 + rnd() * 0.55), 3 + 3 * (0.5 + 0.5 * Math.sin(t * 2.4 + q * 2)), '#fff3c4', 0.9);
+  /* estrela cadente */
+  { const p = (t * 0.22) % 1; if (p < 0.35) { const k = p / 0.35, x0 = W * (0.95 - k * 0.5), y0 = H * (0.05 + k * 0.3); const g3 = c.createLinearGradient(x0, y0, x0 + W * 0.12, y0 - H * 0.08); g3.addColorStop(0, 'rgba(255,255,255,' + (1 - k) + ')'); g3.addColorStop(1, 'rgba(255,255,255,0)'); c.strokeStyle = g3; c.lineWidth = 2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + W * 0.12, y0 - H * 0.08); c.stroke(); } }
+  /* planeta com anéis */
+  const px = W * 0.2, py = H * 0.42, pr = H * 0.3;
+  const anel = (a0, a1, fator) => { for (const [rr, lw, cor] of [[1.95, 0.1, 'rgba(255,225,170,' + fator * 0.8 + ')'], [1.72, 0.06, 'rgba(240,190,140,' + fator * 0.7 + ')'], [1.52, 0.035, 'rgba(255,240,200,' + fator * 0.55 + ')']]) { c.strokeStyle = cor; c.lineWidth = pr * lw; c.beginPath(); c.ellipse(px, py, pr * rr, pr * rr * 0.26, -0.32, a0, a1); c.stroke(); } };
+  anel(Math.PI, Math.PI * 2, 1);
+  c.fillStyle = 'rgba(255,170,90,.15)'; c.beginPath(); c.arc(px, py, pr * 1.18, 0, 7); c.fill();
+  c.save(); c.beginPath(); c.arc(px, py, pr, 0, 7); c.clip();
+  const pg = c.createRadialGradient(px - pr * 0.45, py - pr * 0.4, pr * 0.1, px, py, pr * 1.05); pg.addColorStop(0, '#ffd9a8'); pg.addColorStop(0.5, '#e8793f'); pg.addColorStop(1, '#6a1f4a'); c.fillStyle = pg; c.fillRect(px - pr, py - pr, pr * 2, pr * 2);
+  for (const [oy, h, al] of [[-0.55, 0.12, 0.25], [-0.2, 0.16, 0.2], [0.2, 0.12, 0.28], [0.55, 0.14, 0.22]]) { c.fillStyle = 'rgba(120,40,40,' + al + ')'; c.fillRect(px - pr, py + oy * pr, pr * 2, h * pr); }
+  const sh = c.createRadialGradient(px + pr * 0.55, py + pr * 0.5, pr * 0.2, px + pr * 0.55, py + pr * 0.5, pr * 1.5); sh.addColorStop(0, 'rgba(10,5,40,0)'); sh.addColorStop(1, 'rgba(10,5,40,.7)'); c.fillStyle = sh; c.fillRect(px - pr, py - pr, pr * 2, pr * 2);
+  c.restore();
+  anel(0, Math.PI, 1);
+  /* lua com crateras */
+  const lx = W * 0.86, ly = H * 0.22, lr = H * 0.1; c.fillStyle = 'rgba(200,215,255,.15)'; c.beginPath(); c.arc(lx, ly, lr * 1.5, 0, 7); c.fill();
+  const lg = c.createRadialGradient(lx - lr * 0.4, ly - lr * 0.4, lr * 0.1, lx, ly, lr); lg.addColorStop(0, '#f4f7ff'); lg.addColorStop(1, '#9aa6cc'); c.fillStyle = lg; c.beginPath(); c.arc(lx, ly, lr, 0, 7); c.fill();
+  c.fillStyle = 'rgba(80,90,140,.35)'; for (const [dx, dy, rr] of [[0.25, 0.1, 0.22], [-0.3, 0.3, 0.14], [0.05, -0.4, 0.12]]) { c.beginPath(); c.arc(lx + dx * lr, ly + dy * lr, rr * lr, 0, 7); c.fill(); }
+  /* estação */
+  c.save(); c.translate(W * 0.6, H * 0.5 + Math.sin(t * 0.9) * H * 0.02); c.rotate(-0.1 + Math.sin(t * 0.5) * 0.03);
+  const u = H * 0.01;
+  const painel = (x0) => { c.fillStyle = '#2a4fc0'; c.fillRect(x0, -9 * u, 11 * u, 18 * u); c.strokeStyle = '#8fb0ff'; c.lineWidth = 1; for (let q = 1; q < 4; q++) { c.beginPath(); c.moveTo(x0 + q * 11 * u / 4, -9 * u); c.lineTo(x0 + q * 11 * u / 4, 9 * u); c.stroke(); } for (let q = 1; q < 3; q++) { c.beginPath(); c.moveTo(x0, -9 * u + q * 6 * u); c.lineTo(x0 + 11 * u, -9 * u + q * 6 * u); c.stroke(); } c.strokeRect(x0, -9 * u, 11 * u, 18 * u); c.fillStyle = 'rgba(255,255,255,.18)'; c.beginPath(); c.moveTo(x0, -9 * u); c.lineTo(x0 + 4 * u, -9 * u); c.lineTo(x0 + u, 9 * u); c.lineTo(x0, 9 * u); c.fill(); };
+  c.fillStyle = '#a9b2d8'; c.fillRect(-26 * u, -1.2 * u, 52 * u, 2.4 * u);
+  painel(-38 * u); painel(-24 * u); painel(13 * u); painel(27 * u);
+  const cg = c.createLinearGradient(0, -8 * u, 0, 8 * u); cg.addColorStop(0, '#e6eaff'); cg.addColorStop(1, '#6f7aa8');
+  c.fillStyle = cg; c.beginPath(); c.roundRect(-10 * u, -7 * u, 20 * u, 14 * u, 5 * u); c.fill(); c.strokeStyle = '#4a5488'; c.lineWidth = 1.2; c.stroke();
+  c.fillStyle = '#8791c4'; c.fillRect(-4 * u, -11 * u, 8 * u, 4 * u); c.fillRect(-1 * u, -15 * u, 2 * u, 5 * u);
+  c.fillStyle = Math.sin(t * 4) > 0 ? '#ff5d73' : '#7a2a3a'; c.beginPath(); c.arc(0, -15.5 * u, 1.3 * u, 0, 7); c.fill();
+  c.fillStyle = '#1b2250'; c.beginPath(); c.arc(0, 0, 4.6 * u, 0, 7); c.fill(); c.fillStyle = '#ffd84a'; c.globalAlpha = 0.55; c.beginPath(); c.arc(0, 0, 4.6 * u, 0, 7); c.fill(); c.globalAlpha = 1;
+  c.fillStyle = '#2a1d3a'; c.beginPath(); c.moveTo(-3.3 * u, -0.5 * u); c.lineTo(-3 * u, -3.8 * u); c.lineTo(-1 * u, -2.2 * u); c.lineTo(1 * u, -2.2 * u); c.lineTo(3 * u, -3.8 * u); c.lineTo(3.3 * u, -0.5 * u); c.arc(0, 0.2 * u, 3.4 * u, 0, Math.PI); c.fill();
+  c.fillStyle = '#ffd84a'; for (const d of [-1, 1]) { c.beginPath(); c.ellipse(d * 1.4 * u, 0.2 * u, 0.5 * u, 0.9 * u, 0, 0, 7); c.fill(); }
+  c.fillStyle = '#7ff0b8'; for (let q = 0; q < 4; q++) { c.globalAlpha = Math.sin(t * 3 + q * 1.5) > 0 ? 1 : 0.3; c.fillRect((-7 + q * 4.6) * u, 5.2 * u, 1.6 * u, 0.9 * u); } c.globalAlpha = 1;
+  c.restore();
+  /* base escura para o texto */
+  const tx = c.createLinearGradient(0, H * 0.55, 0, H); tx.addColorStop(0, 'rgba(8,6,32,0)'); tx.addColorStop(1, 'rgba(8,6,32,.82)'); c.fillStyle = tx; c.fillRect(0, H * 0.55, W, H * 0.45);
+}
 function cenaEspaco(c, W, H, t, regiao) {
   const gr = c.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#080826'); gr.addColorStop(0.55, '#26185a'); gr.addColorStop(1, '#4a2a7a'); c.fillStyle = gr; c.fillRect(0, 0, W, H);
   for (const [nx, ny, cor] of [[0.78, 0.25, 'rgba(155,90,255,.35)'], [0.2, 0.55, 'rgba(60,140,255,.3)'], [0.6, 0.8, 'rgba(255,90,170,.22)']]) { const g2 = c.createRadialGradient(W * nx, H * ny, 0, W * nx, H * ny, W * 0.45); g2.addColorStop(0, cor); g2.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g2; c.fillRect(0, 0, W, H); }
@@ -3097,14 +3231,14 @@ function plataforma(c, x0, x1, y, esp) {
 function desenharEspaco(ms) {
   const t = reduz ? 0.9 : ms / 1000, dpr = Math.min(2, window.devicePixelRatio || 1);
   const ajusta = (cv) => { const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return null; if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); return [c, w, h]; };
-  const a = ajusta($('espRegiao')); if (a) cenaEspaco(a[0], a[1], a[2], t, true);
+  const a = ajusta($('espRegiao')); if (a) cenaBanner(a[0], a[1], a[2], t);
   const b = ajusta($('espCabine')); if (!b) return;
   const [c, W, H] = b; cenaEspaco(c, W, H, t, false);
   const quais = ESPACIAIS.map((e, i) => [e, i]).filter(([e]) => save.espaco && save.espaco[e.id]);
   plataforma(c, 0, W, H * 0.5, H * 0.05);
   for (const fila of [0, 1]) {
     if (fila) plataforma(c, 0, W, H * 0.9, H * 0.1);
-    for (const [e, i] of quais) { if ((i < 4 ? 0 : 1) !== fila) continue; const [fx, fy, fs] = ESP_POS[i]; comCtx(c, () => { relogio = t; gatoRua(W * fx, H * fy, W * fs, espAm[e.id], false, false, false); }); }
+    for (const [e, i] of quais) { if ((i < 5 ? 0 : 1) !== fila) continue; const [fx, fy, fs] = ESP_POS[i]; comCtx(c, () => { relogio = t; gatoRua(W * fx, H * fy, W * fs, espAm[e.id], false, false, false); }); }
   }
 }
 function rodarEspaco() {
@@ -3373,6 +3507,34 @@ function anel(p, g, z, ultimo, fator) {
     }
     if (g.i % 5 === 2) { const fx = p.x + lado * w * 1.4, fy = p.y - w * 0.35; ctx.fillStyle = ['#ff7aa8', '#ffd84a', '#ff9e5c'][g.i % 3]; ctx.beginPath(); ctx.arc(fx, fy, w * 0.06, 0, 7); ctx.fill(); ctx.fillStyle = '#fff3c4'; ctx.beginPath(); ctx.arc(fx, fy, w * 0.025, 0, 7); ctx.fill(); }
     if (g.i % 4 === 1) { ctx.fillStyle = '#e8ff8a'; for (let q = 0; q < 3; q++) { ctx.globalAlpha = 0.5 + 0.5 * Math.sin(relogio * 3 + q * 2 + g.i); ctx.beginPath(); ctx.arc(p.x + Math.cos(relogio * 0.6 + q * 2.1 + g.i) * w * 1.3, p.y - w * (0.5 + q * 0.4), w * 0.018, 0, 7); ctx.fill(); } ctx.globalAlpha = 1; }
+  } else if (g.zone === 'tenda') {
+    /* fio de lampadinhas e bandeirolas coloridas */
+    if (g.i % 2 === 0) {
+      const cs = ['#ff5d73', '#ffd166', '#5bd6c0', '#8f7bff'];
+      for (let q = 0; q < 5; q++) {
+        const a = Math.PI + (q + 0.5) * Math.PI / 5, vx = p.x + Math.cos(a) * w * 1.25, vy = p.y - w + Math.sin(a) * w * 1.0;
+        ctx.fillStyle = cs[(q + g.i) % 4]; ctx.beginPath(); ctx.moveTo(vx - w * 0.06, vy); ctx.lineTo(vx + w * 0.06, vy); ctx.lineTo(vx, vy + w * 0.14); ctx.closePath(); ctx.fill();
+      }
+    }
+    if (g.i % 4 === 1) {
+      const lx = p.x + lado * w * 1.45, ly = p.y - w * 0.9, pul = 0.6 + 0.4 * Math.sin(relogio * 3 + g.i);
+      ctx.globalAlpha = 0.3 * pul; ctx.fillStyle = '#ffd166'; ctx.beginPath(); ctx.arc(lx, ly, w * 0.22, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = '#ff6b4a'; ctx.beginPath(); ctx.ellipse(lx, ly, w * 0.07, w * 0.1, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#ffd166'; ctx.fillRect(lx - w * 0.07, ly - w * 0.11, w * 0.14, w * 0.018); ctx.fillRect(lx - w * 0.07, ly + w * 0.093, w * 0.14, w * 0.018);
+    }
+  } else if (g.zone === 'veio') {
+    /* veios de cristal que brilham nas paredes */
+    if (g.i % 2 === 0) {
+      const pul = 0.45 + 0.4 * Math.sin(relogio * 2 + g.i * 0.7);
+      ctx.strokeStyle = g.i % 6 < 3 ? '#7be8ff' : '#c69bff'; ctx.lineWidth = Math.max(1, w * 0.03); ctx.globalAlpha = pul; ctx.lineCap = 'round';
+      for (const d of [-1, 1]) { const vx = p.x + d * w * (1.1 + ((g.i * 7) % 4) * 0.1), vy = p.y - w * (0.3 + ((g.i * 5) % 5) * 0.2); ctx.beginPath(); ctx.moveTo(vx, vy); ctx.lineTo(vx - d * w * 0.12, vy - w * 0.2); ctx.lineTo(vx + d * w * 0.03, vy - w * 0.38); ctx.stroke(); }
+      ctx.globalAlpha = 1;
+    }
+    if (g.i % 5 === 2) {
+      const cx = p.x + lado * w * 1.4, cy = p.y - w * 0.04, pul = 0.5 + 0.5 * Math.sin(relogio * 2.4 + g.i), cc = g.i % 10 < 5 ? '#8ff0ff' : '#ff9fe0';
+      ctx.globalAlpha = 0.25 * pul; ctx.fillStyle = cc; ctx.beginPath(); ctx.arc(cx, cy - w * 0.2, w * 0.3, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = cc; for (const [dx, h] of [[-0.07, 0.22], [0, 0.34], [0.07, 0.18]]) { ctx.beginPath(); ctx.moveTo(cx + (dx - 0.04) * w, cy); ctx.lineTo(cx + dx * w, cy - h * w); ctx.lineTo(cx + (dx + 0.04) * w, cy); ctx.closePath(); ctx.fill(); }
+    }
   } else if (g.zone === 'gruta') {
     if (g.i % 2 === 0) {
       ctx.fillStyle = '#6a58b0';
@@ -3722,6 +3884,42 @@ function caixasCidade(x, y, s) {
   ctx.strokeStyle = 'rgba(255,240,200,.6)'; ctx.beginPath(); ctx.moveTo(x - s * 0.065, y - s * 0.22); ctx.lineTo(x - s * 0.065, y - s * 0.12); ctx.stroke();
   if (s > 18) { ctx.fillStyle = '#8a8f99'; ctx.beginPath(); ctx.arc(x - s * 0.045, y - s * 0.245, s * 0.035, Math.PI, 0); ctx.fill(); ctx.fillStyle = '#ffe45c'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.arc(x - s * 0.045 + d * s * 0.014, y - s * 0.255, s * 0.006, 0, 7); ctx.fill(); } }
 }
+/* feira noturna: barraca de toldo listrado */
+function barracaFeira(x, y, s, v) {
+  const cor = v ? ['#5bd6c0', '#fff3df'] : ['#ff5d73', '#fff3df'];
+  ctx.strokeStyle = '#2a1f33'; ctx.lineWidth = Math.max(1, s * 0.012);
+  ctx.fillStyle = '#7a4a2c'; ctx.fillRect(x - s * 0.13, y - s * 0.12, s * 0.26, s * 0.12); ctx.strokeRect(x - s * 0.13, y - s * 0.12, s * 0.26, s * 0.12);
+  ctx.fillStyle = '#ffe9a8'; ctx.fillRect(x - s * 0.1, y - s * 0.1, s * 0.2, s * 0.05);
+  for (let q = 0; q < 6; q++) { ctx.fillStyle = cor[q & 1]; ctx.beginPath(); ctx.moveTo(x - s * 0.16 + q * s * 0.053, y - s * 0.26); ctx.lineTo(x - s * 0.16 + (q + 1) * s * 0.053, y - s * 0.26); ctx.lineTo(x - s * 0.17 + (q + 1) * s * 0.0567, y - s * 0.16); ctx.lineTo(x - s * 0.17 + q * s * 0.0567, y - s * 0.16); ctx.closePath(); ctx.fill(); }
+  ctx.strokeRect(x - s * 0.16, y - s * 0.26, s * 0.32, s * 0.1);
+  if (s > 18) { ctx.fillStyle = '#ffd166'; ctx.globalAlpha = 0.35 + 0.25 * Math.sin(relogio * 3 + x * 0.02); ctx.beginPath(); ctx.arc(x, y - s * 0.07, s * 0.12, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
+}
+function postLanterna(x, y, s) {
+  ctx.strokeStyle = '#2a1f33'; ctx.lineWidth = Math.max(1, s * 0.02); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - s * 0.34); ctx.lineTo(x + s * 0.07, y - s * 0.34); ctx.stroke();
+  const lx = x + s * 0.07, ly = y - s * 0.28, pul = 0.7 + 0.3 * Math.sin(relogio * 3 + x * 0.03);
+  ctx.globalAlpha = 0.3 * pul; ctx.fillStyle = '#ffb347'; ctx.beginPath(); ctx.arc(lx, ly, s * 0.13, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+  ctx.fillStyle = '#ff5d3a'; ctx.beginPath(); ctx.ellipse(lx, ly, s * 0.045, s * 0.06, 0, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#ffd166'; ctx.fillRect(lx - s * 0.03, ly - s * 0.07, s * 0.06, s * 0.012);
+}
+function baloesFeira(x, y, s) {
+  const cs = ['#ff5d73', '#ffd166', '#5bd6c0', '#8f7bff'];
+  ctx.strokeStyle = 'rgba(255,255,255,.7)'; ctx.lineWidth = Math.max(1, s * 0.008);
+  for (let q = 0; q < 4; q++) {
+    const bx = x + (q - 1.5) * s * 0.07, by = y - s * (0.26 + (q % 2) * 0.05) + Math.sin(relogio * 1.5 + q) * s * 0.01;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(bx, by + s * 0.05); ctx.stroke();
+    ctx.fillStyle = cs[q]; ctx.beginPath(); ctx.ellipse(bx, by, s * 0.04, s * 0.052, 0, 0, 7); ctx.fill();
+  }
+}
+/* caverna: pilar de cristal alto com brilho */
+function pilarCristal(x, y, s, v) {
+  const cc = v ? ['#9ff2ff', '#5fc9e8'] : ['#d3a8ff', '#a070e8'], pul = 0.5 + 0.5 * Math.sin(relogio * 2 + x * 0.04);
+  ctx.globalAlpha = 0.22 * pul; ctx.fillStyle = cc[0]; ctx.beginPath(); ctx.arc(x, y - s * 0.25, s * 0.28, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+  ctx.strokeStyle = '#1f1740'; ctx.lineWidth = Math.max(1, s * 0.012);
+  for (const [dx, h, w2] of [[-0.09, 0.3, 0.06], [0.08, 0.38, 0.06], [0, 0.55, 0.09]]) {
+    ctx.fillStyle = cc[0]; ctx.beginPath(); ctx.moveTo(x + (dx - w2) * s, y); ctx.lineTo(x + (dx - w2 * 0.8) * s, y - h * s * 0.85); ctx.lineTo(x + dx * s, y - h * s); ctx.lineTo(x + (dx + w2 * 0.8) * s, y - h * s * 0.85); ctx.lineTo(x + (dx + w2) * s, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = cc[1]; ctx.beginPath(); ctx.moveTo(x + dx * s, y - h * s); ctx.lineTo(x + (dx + w2 * 0.8) * s, y - h * s * 0.85); ctx.lineTo(x + (dx + w2) * s, y); ctx.lineTo(x + dx * s, y); ctx.closePath(); ctx.fill();
+  }
+}
 function cenario(zona, x, y, s, v, o) {
   if (s < 2) return;
   if (zona === 'jardim') { if (v === 3) arbustoFlor(x, y, s); else arvore(x, y, s, v); }
@@ -3730,6 +3928,8 @@ function cenario(zona, x, y, s, v, o) {
   else if (zona === 'outono') { if (v < 2) arvore(x, y, s, v + (o > 0 ? 2 : 0), true); else if (v === 2) cogumeloGigante(x, y, s); else aboboras(x, y, s); }
   else if (zona === 'savana') { if (v < 2) acaciaSavana(x, y, s, v); else if (v === 2) baoba(x, y, s); else rochaCapim(x, y, s); }
   else if (zona === 'cristais') cristal(x, y, s, v);
+  else if (zona === 'feira') { if (v === 0 || v === 1) barracaFeira(x, y, s, v); else if (v === 2) postLanterna(x, y, s); else baloesFeira(x, y, s); }
+  else if (zona === 'camara') { if (v < 2) pilarCristal(x, y, s, v); else cristal(x, y, s, v); }
   else if (zona === 'ruinas') { if (v === 0) colunaRuina(x, y, s, false); else if (v === 1) colunaRuina(x, y, s, true); else if (v === 2) brasaRuina(x, y, s); else estatuaGato(x, y, s); }
   else {
     if (v === 0) poste(x, y, s, o);
@@ -3760,6 +3960,12 @@ function detalheChao(zona, x, y, s, v) {
   } else if (zona === 'savana') {
     if (v < 2) { ctx.strokeStyle = '#b8892f'; ctx.lineWidth = Math.max(1, s * 0.014); for (const dx of [-0.05, -0.02, 0.01, 0.045]) { ctx.beginPath(); ctx.moveTo(x + dx * s, y); ctx.lineTo(x + dx * s * 1.5 + Math.sin(relogio * 2 + dx * 20) * s * 0.012, y - s * 0.1 - Math.abs(dx) * s * 0.6); ctx.stroke(); } }
     else { ctx.fillStyle = '#b89a7a'; for (const [dx, rr] of [[-0.04, 0.025], [0.03, 0.018], [0.07, 0.012]]) { ctx.beginPath(); ctx.ellipse(x + dx * s, y, s * rr * 1.3, s * rr * 0.7, 0, 0, 7); ctx.fill(); } }
+  } else if (zona === 'feira') {
+    const cc = ['#ff5d73', '#ffd166', '#5bd6c0', '#8f7bff'];
+    for (let q = 0; q < 4; q++) { ctx.fillStyle = cc[(q + v) % 4]; ctx.fillRect(x + (q - 1.5) * s * 0.05, y - (q % 2) * s * 0.015, s * 0.025, s * 0.012); }
+  } else if (zona === 'camara') {
+    const cc = ['#9ff2ff', '#d3a8ff', '#ff9fe0'][v % 3];
+    ctx.fillStyle = cc; ctx.globalAlpha = 0.5 + 0.5 * Math.sin(relogio * 3 + x * 0.05); caminhoEstrela(ctx, x, y - s * 0.03, s * 0.035, s * 0.012); ctx.fill(); ctx.globalAlpha = 1;
   } else if (zona === 'cristais') {
     const cc = ['#b58cff', '#57e0f0', '#ff8fcf', '#7ff0b8'][v % 4];
     if (v < 2) { ctx.fillStyle = cc; ctx.beginPath(); ctx.moveTo(x - s * 0.02, y); ctx.lineTo(x, y - s * 0.09); ctx.lineTo(x + s * 0.02, y); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(x + s * 0.03, y); ctx.lineTo(x + s * 0.045, y - s * 0.05); ctx.lineTo(x + s * 0.06, y); ctx.closePath(); ctx.fill(); }
@@ -3880,6 +4086,30 @@ function caudasLeque(bx, by, L, a0, a1, g, s) {
     for (let q = 0; q < n; q++) { const a = ang(q); ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo(bx + Math.cos(a - 0.35) * L * 0.55, by + Math.sin(a - 0.35) * L * 0.55, bx + Math.cos(a) * L, by + Math.sin(a) * L); ctx.strokeStyle = g.pelo; ctx.lineWidth = s * 0.05; ctx.stroke(); }
     ctx.lineCap = 'butt'; return;
   }
+  if (g.hidra) {
+    /* três caudas com cabeça de serpente; os olhos piscam em ordens diferentes */
+    const corpoH = g.rabo || g.pelo, bwH = Math.max(1, s * 0.013), compH = L * 1.0;
+    for (const q of [0, 2, 1]) {
+      const a = am + (ang(q) - am) * 0.5, bal = Math.sin(relogio * 1.8 + q * 2.1) * 0.12, ac = a - (a - am) * 0.4 + bal;
+      const cx = bx + Math.cos(ac) * compH * 0.6, cy = by + Math.sin(ac) * compH * 0.6, tx = bx + Math.cos(a + bal * 1.6) * compH, ty = by + Math.sin(a + bal * 1.6) * compH;
+      const tg = Math.atan2(ty - cy, tx - cx), larg = s * 0.05;
+      const caminho = () => { ctx.beginPath(); ctx.moveTo(bx, by); ctx.quadraticCurveTo(cx, cy, tx, ty); };
+      caminho(); ctx.strokeStyle = 'rgba(42,34,48,.9)'; ctx.lineWidth = larg + bwH * 2; ctx.stroke();
+      caminho(); ctx.strokeStyle = corpoH; ctx.lineWidth = larg; ctx.stroke();
+      ctx.save(); ctx.translate(tx, ty); ctx.rotate(tg);
+      const hr = s * 0.058;
+      ctx.fillStyle = corpoH; ctx.strokeStyle = 'rgba(42,34,48,.9)'; ctx.lineWidth = bwH;
+      ctx.beginPath(); ctx.ellipse(hr * 0.5, 0, hr * 1.15, hr * 0.8, 0, 0, 7); ctx.fill(); ctx.stroke();
+      const aberto = ((relogio * 0.9 + q * 0.33) % 1) < 0.72;
+      ctx.fillStyle = aberto ? '#ffd84a' : '#1f4a38';
+      if (aberto) { ctx.beginPath(); ctx.arc(hr * 0.55, -hr * 0.3, hr * 0.26, 0, 7); ctx.fill(); ctx.fillStyle = '#10281e'; ctx.fillRect(hr * 0.5, -hr * 0.55, hr * 0.1, hr * 0.5); }
+      else { ctx.strokeStyle = '#10281e'; ctx.lineWidth = Math.max(1, hr * 0.12); ctx.beginPath(); ctx.moveTo(hr * 0.3, -hr * 0.3); ctx.lineTo(hr * 0.8, -hr * 0.3); ctx.stroke(); }
+      const lg = Math.max(0, Math.sin(relogio * 5 + q * 2)) * hr * 0.9;
+      if (lg > 0.5) { ctx.strokeStyle = '#e8453c'; ctx.lineWidth = Math.max(1, hr * 0.1); ctx.beginPath(); ctx.moveTo(hr * 1.6, 0); ctx.lineTo(hr * 1.6 + lg, 0); ctx.lineTo(hr * 1.6 + lg * 1.3, -hr * 0.25); ctx.moveTo(hr * 1.6 + lg, 0); ctx.lineTo(hr * 1.6 + lg * 1.3, hr * 0.25); ctx.stroke(); }
+      ctx.restore();
+    }
+    ctx.lineCap = 'butt'; return;
+  }
   /* caudas de raposa: compridas, em forma de chama, abertas em leque, com a ponta clara e fina */
   const corpo = g.rabo || g.pelo, ponta = g.pelo, N = 14, W = L * 0.32, bw = Math.max(1, s * 0.013);
   const ordem = []; for (let q = 0; q < n; q++) ordem.push(q);
@@ -3963,7 +4193,7 @@ function gatoRua(x, y, s, g, pula, semSombra, fecha) {
   }
   if (g.fofo && s > 10) felpa(ctx, x, y - s * 0.25, s * 0.075, s * 0.03, 0, Math.PI, 4, s * 0.03, g.peito || g.pelo, null);
   if (g.branco && !(g.peitoCoracao && s > 10)) { ctx.fillStyle = '#fbf7ef'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.14, s * 0.08 * (g.corpo || 1), s * 0.12, 0, 0, 7); ctx.fill(); }
-  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral || g.espaco || g.louco || g.tatuadora)) corpoSecreto(x, y, s, g);
+  if (s > 10 && (g.peitoCoracao || g.coracoesCorpo || g.trevoPeito || g.arcoIris || g.nebulosa || g.aurora || g.cristalBrilho || g.floral || g.espaco || g.tijolos || g.ouro || g.constelacao || g.louco || g.tatuadora)) corpoSecreto(x, y, s, g);
   frenteMitico(x, y, s, g);
   if (estica) ctx.restore();
   if (!pularCabeca) cabecaGato(x, y - s * (g.filhote ? 0.35 : 0.4 + 0.3 * (al - 1)), s * 0.15 * (g.filhote ? 1.32 : 1), g, fecha);
@@ -3976,6 +4206,9 @@ function corpoSecreto(x, y, s, g) {
   if (g.espaco) pintaEspaco(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16, g.espaco);
   if (g.aurora) pintaAurora(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
   if (g.cristalBrilho) pintaCristal(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
+  if (g.ouro) pintaOuro(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
+  if (g.constelacao) pintaEstrelado(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
+  if (g.tijolos) pintaTijolos(ctx, x, y - s * 0.16, s * 0.15 * cw, s * 0.16);
   if (g.floral) for (const [fx, fy, k, cor] of [[-0.6, -0.4, 0.024, '#ff8fb1'], [0.55, -0.15, 0.02, '#b38ce0'], [-0.2, 0.3, 0.018, '#ffd84a'], [0.3, -0.62, 0.016, '#ffffff']]) desenhaMarca(ctx, 'flor', x + fx * s * 0.15 * cw, y - s * 0.16 + fy * s * 0.16, s * k, cor, true);
   if (g.arcoIris) pintaArco(ctx, x, y + s * 0.02, s * 0.19, s * 0.016, Math.PI * 1.05, Math.PI * 1.95);
   if (g.peitoCoracao) desenhaMarca(ctx, 'coracao', x, y - s * 0.15, s * 0.085, '#fbf7ef', true);
@@ -4144,6 +4377,43 @@ function fundo(base) {
     ctx.fillStyle = '#ffd84a'; ctx.beginPath(); ctx.moveTo(bx - W * 0.003, by - W * 0.045); ctx.lineTo(bx - W * 0.003, by - W * 0.004); ctx.lineTo(bx - W * 0.024, by - W * 0.004); ctx.fill();
     passaros(desl, 'rgba(255,255,255,.9)');
     ctx.fillStyle = '#fff3d6'; ctx.fillRect(0, HOR - 1, W, 3);
+  } else if (zf === 'feira') {
+    for (const e of ESTRELAS) { ctx.globalAlpha = 0.5 + 0.5 * Math.sin(relogio * 2 + e.x * 30); ctx.fillStyle = '#fff3d6'; ctx.fillRect(e.x * W, e.y * HOR * 0.8, e.r * W * 0.004, e.r * W * 0.004); }
+    ctx.globalAlpha = 1;
+    solFundo(W * 0.2, HOR * 0.4, W * 0.04, '#fff3d6', 'rgba(255,240,200,.35)');
+    morroFundo(desl * 0.3, HOR - W * 0.01, W * 0.1, 5, 0.8, '#3a2a5e');
+    /* roda-gigante */
+    { const cx = (((W * 0.66 + desl * 0.8) % (W * 1.8)) + W * 1.8) % (W * 1.8) - W * 0.4, R = W * 0.085, cy = HOR - R - W * 0.012, rot = relogio * 0.25;
+      ctx.strokeStyle = '#ffd9a8'; ctx.lineWidth = Math.max(1, W * 0.003);
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.arc(cx, cy, R * 0.55, 0, 7); ctx.stroke();
+      for (let q = 0; q < 8; q++) { const a = rot + q * Math.PI / 4; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R); ctx.stroke();
+        ctx.fillStyle = ['#ff5d73', '#ffd166', '#5bd6c0', '#8f7bff'][q % 4]; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * R, cy + Math.sin(a) * R, W * 0.009, 0, 7); ctx.fill(); }
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx - R * 0.5, HOR); ctx.moveTo(cx, cy); ctx.lineTo(cx + R * 0.5, HOR); ctx.stroke(); }
+    /* fogos de artificio */
+    for (let q = 0; q < 3; q++) {
+      const t = (relogio * 0.35 + q / 3) % 1, fx = W * (0.18 + q * 0.3) + Math.sin(q * 5) * W * 0.04, fy = HOR * (0.22 + (q % 2) * 0.15), r = t * W * 0.07;
+      ctx.globalAlpha = Math.max(0, 1 - t) * 0.9; ctx.fillStyle = ['#ff5d73', '#ffd166', '#5bd6c0'][q];
+      for (let k = 0; k < 10; k++) { const a = k * Math.PI / 5; ctx.fillRect(fx + Math.cos(a) * r, fy + Math.sin(a) * r + t * t * W * 0.01, W * 0.004, W * 0.004); }
+      ctx.globalAlpha = 1;
+    }
+    /* tendas pequenas no horizonte */
+    for (let q = 0; q < 9; q++) {
+      const x = (((q * 0.2 * W * 1.7 + desl * 1.1) % (W * 1.7)) + W * 1.7) % (W * 1.7) - W * 0.2, r = W * (0.018 + (q % 3) * 0.006), y = HOR - W * 0.002;
+      ctx.fillStyle = ['#8a3f6e', '#3e6a8a', '#8a6a2e'][q % 3]; ctx.beginPath(); ctx.moveTo(x - r, y); ctx.lineTo(x, y - r * 1.4); ctx.lineTo(x + r, y); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#ffd166'; ctx.fillRect(x - r * 0.15, y - r * 0.5, r * 0.3, r * 0.5);
+    }
+  } else if (zf === 'camara') {
+    /* teto de caverna com estalactites e cristais brilhando no fundo */
+    ctx.fillStyle = '#1b1240'; ctx.beginPath(); ctx.moveTo(0, 0);
+    for (let x = 0; x <= W + 8; x += W / 30) { const k = Math.floor(x / (W / 30)); ctx.lineTo(x, HOR * (0.1 + ((k * 7) % 5) * 0.05)); }
+    ctx.lineTo(W, 0); ctx.closePath(); ctx.fill();
+    for (let q = 0; q < 14; q++) {
+      const x = (((q * 0.13 * W * 1.6 + desl * 0.9) % (W * 1.6)) + W * 1.6) % (W * 1.6) - W * 0.2, pul = 0.5 + 0.5 * Math.sin(relogio * 1.5 + q * 1.3), h = W * (0.03 + (q % 4) * 0.012), cc = ['#8ff0ff', '#c69bff', '#ff9fe0'][q % 3];
+      ctx.globalAlpha = 0.2 * pul; ctx.fillStyle = cc; ctx.beginPath(); ctx.arc(x, HOR - h * 0.5, h * 1.3, 0, 7); ctx.fill(); ctx.globalAlpha = 0.9; ctx.fillStyle = cc;
+      ctx.beginPath(); ctx.moveTo(x - h * 0.25, HOR); ctx.lineTo(x, HOR - h); ctx.lineTo(x + h * 0.25, HOR); ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1;
+    }
+    for (let q = 0; q < 26; q++) { const t = (relogio * 0.05 + q * 0.137) % 1, x = ((q * 0.371 + desl / W * 0.05) % 1 + 1) % 1 * W, y = HOR * (0.15 + ((q * 0.53) % 1) * 0.75) - t * HOR * 0.05; ctx.globalAlpha = 0.3 + 0.5 * Math.sin(relogio * 2 + q); ctx.fillStyle = '#e6f8ff'; ctx.fillRect(x, y, W * 0.0025, W * 0.0025); }
+    ctx.globalAlpha = 1;
   } else if (zf === 'outono') {
     solFundo(W * 0.7, HOR * 0.58, W * 0.085, '#ffd27a', 'rgba(255,180,100,.5)');
     for (const n of NUVENS) nuvemFundo(((n.x + relogio * n.v * 0.7) % 1.3) * W - W * 0.15 + desl * 0.12, HOR * n.y * 0.7, n.e * 0.85);
@@ -4540,6 +4810,20 @@ function cabecaVolante(k, cx, hy, r, R) {
     k.fillStyle = '#7a5236'; k.fillRect(cx - r * 0.6, ty + r * 0.06, r * 1.2, r * 0.12);
     k.fillStyle = '#c9ae72'; k.beginPath(); k.arc(cx, ty - r * 0.36, r * 0.07, 0, 7); k.fill(); k.stroke();
     k.strokeStyle = 'rgba(255,255,255,.35)'; k.lineWidth = r * 0.05; k.beginPath(); k.arc(cx, ty + r * 0.2, r * 0.42, Math.PI * 1.2, Math.PI * 1.45); k.stroke();
+  } else if (ch === 'cartola') {
+    k.fillStyle = '#2b2433';
+    k.beginPath(); k.ellipse(cx, ty + r * 0.2, r * 0.95, r * 0.2, 0, 0, 7); k.fill(); k.stroke();
+    k.fillRect(cx - r * 0.5, ty - r * 0.62, r * 1.0, r * 0.82); k.strokeRect(cx - r * 0.5, ty - r * 0.62, r * 1.0, r * 0.82);
+    k.beginPath(); k.ellipse(cx, ty - r * 0.62, r * 0.5, r * 0.12, 0, 0, 7); k.fill(); k.stroke();
+    k.fillStyle = '#e8453c'; k.fillRect(cx - r * 0.5, ty - r * 0.12, r * 1.0, r * 0.2);
+    k.fillStyle = '#ffd84a'; k.beginPath(); for (let q = 0; q < 10; q++) { const a = q * Math.PI / 5 - Math.PI / 2, rr = q % 2 ? r * 0.04 : r * 0.1; k.lineTo(cx + Math.cos(a) * rr, ty - r * 0.02 + Math.sin(a) * rr); } k.closePath(); k.fill();
+  } else if (ch === 'capacete') {
+    k.fillStyle = '#f2c230';
+    k.beginPath(); k.ellipse(cx, ty + r * 0.18, r * 0.98, r * 0.16, 0, 0, 7); k.fill(); k.stroke();
+    k.beginPath(); k.ellipse(cx, ty + r * 0.14, r * 0.7, r * 0.7, 0, Math.PI, 0); k.closePath(); k.fill(); k.stroke();
+    k.fillStyle = '#d9a41a'; k.fillRect(cx - r * 0.06, ty - r * 0.55, r * 0.12, r * 0.66);
+    k.save(); k.shadowColor = '#fffbd0'; k.shadowBlur = r * 0.4; k.fillStyle = '#fffbe0'; k.beginPath(); k.arc(cx, ty - r * 0.2, r * 0.17, 0, 7); k.fill(); k.restore();
+    k.strokeStyle = '#2a2230'; k.beginPath(); k.arc(cx, ty - r * 0.2, r * 0.17, 0, 7); k.stroke();
   } else if (ch === 'pirata') {
     k.fillStyle = '#26232b';
     k.beginPath(); k.moveTo(cx - r * 0.95, ty + r * 0.05); k.quadraticCurveTo(cx - r * 0.55, ty + r * 0.3, cx, ty + r * 0.3); k.quadraticCurveTo(cx + r * 0.55, ty + r * 0.3, cx + r * 0.95, ty + r * 0.05);
@@ -4701,9 +4985,11 @@ const CHAPEUS = [
   { id: 'abafador', nome: 'Protetor de orelhas', preco: 0, premio: 2 },
   { id: 'touca', nome: 'Touca de dormir', preco: 0, premio: 3 },
   { id: 'cogumelo', nome: 'Chapéu de cogumelo', preco: 0, premio: 4 },
-  { id: 'explorador', nome: 'Chapéu de explorador', preco: 0, premio: 5 },
-  { id: 'pirata', nome: 'Chapéu de pirata', preco: 0, premio: 6 },
-  { id: 'aureola', nome: 'Auréola lendária', preco: 0, premio: 7 }
+  { id: 'explorador', nome: 'Chapéu de explorador', preco: 0, premio: 6 },
+  { id: 'cartola', nome: 'Cartola da feira', preco: 0, premio: 5 },
+  { id: 'pirata', nome: 'Chapéu de pirata', preco: 0, premio: 7 },
+  { id: 'capacete', nome: 'Capacete de mineiro', preco: 0, premio: 8 },
+  { id: 'aureola', nome: 'Auréola lendária', preco: 0, premio: 9 }
 ];
 const MELHORIAS = [
   { id: 'sache', nome: 'Sachê mais longo', precos: [30, 60, 100], desc: n => 'Dura ' + String(A('durSache') + 1.5 * n).replace('.', ',') + ' s' },
@@ -4717,6 +5003,8 @@ const MELHORIAS = [
 const sv = d => '<svg viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>';
 const ESTRELA_SVG = (cx, cy, R, ri) => { let d = ''; for (let v = 0; v < 10; v++) { const a = v * Math.PI / 5 - Math.PI / 2, rr = v % 2 ? ri : R; d += (v ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(2) + ' ' + (cy + Math.sin(a) * rr).toFixed(2); } return d + 'z'; };
 const PING_SVG = {
+  lanterna: '<ellipse cx="12" cy="18" rx="2.6" ry="3.3" fill="#e8453c" stroke="#2a2230" stroke-width=".6"/><rect x="10" y="14.3" width="4" height="1" fill="#ffd84a"/><rect x="10" y="20.7" width="4" height="1" fill="#ffd84a"/>',
+  diamante: '<path d="M8.6 17.5l1.6-2.6h3.6l1.6 2.6-3.4 4.5z" fill="#7fe0f5" stroke="#2a2230" stroke-width=".6" stroke-linejoin="round"/>',
   flor: '<g transform="translate(12 18)"><circle cx="0" cy="-2" r="1.6" fill="#ff9eb3"/><circle cx="1.9" cy="-.6" r="1.6" fill="#ff9eb3"/><circle cx="1.2" cy="1.6" r="1.6" fill="#ff9eb3"/><circle cx="-1.2" cy="1.6" r="1.6" fill="#ff9eb3"/><circle cx="-1.9" cy="-.6" r="1.6" fill="#ff9eb3"/><circle r="1.3" fill="#ffd84a"/></g>',
   concha: '<path d="M12 21.5l-3.6-3.6c1.2-2.6 6-2.6 7.2 0z" fill="#ffd1c4" stroke="#2a2230" stroke-width=".6" stroke-linejoin="round"/><path d="M12 21v-4.6M12 21l-2-3.6M12 21l2-3.6" stroke="#e8957f" stroke-width=".6"/>',
   floco: '<g stroke="#3f6fa0" stroke-width="1.6" stroke-linecap="round"><path d="M12 15.2v6M9.4 16.7l5.2 3M9.4 19.7l5.2-3"/></g><g stroke="#fff" stroke-width=".7" stroke-linecap="round"><path d="M12 15.2v6M9.4 16.7l5.2 3M9.4 19.7l5.2-3"/></g>',
@@ -4737,6 +5025,8 @@ const ICO = {
   touca: sv('<path d="M5 16Q5 7 12 6.5q6 0 8.5 7-3-3-4.5-2.5L16 16z" fill="#3b3f8a" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><rect x="4" y="15" width="13" height="3.2" rx="1.4" fill="#fff3df" stroke="#2a2230" stroke-width=".8"/><circle cx="20.5" cy="14" r="1.8" fill="#fff3df" stroke="#2a2230" stroke-width=".8"/><path d="' + ESTRELA_SVG(9, 11, 1.4, .6) + ESTRELA_SVG(13.5, 9, 1.2, .5) + '" fill="#ffd84a"/>'),
   cogumelo: sv('<ellipse cx="12" cy="17" rx="5.5" ry="1.8" fill="#fbf1dc" stroke="#2a2230" stroke-width=".9"/><path d="M2.5 16.4a9.5 7.4 0 0 1 19 0z" fill="#e8453c" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="7.4" cy="13.2" r="1.5" fill="#fff"/><circle cx="12.6" cy="10.6" r="1.7" fill="#fff"/><circle cx="17" cy="13.6" r="1.2" fill="#fff"/><circle cx="11" cy="14.6" r=".9" fill="#fff"/>'),
   explorador: sv('<ellipse cx="12" cy="16" rx="10" ry="2.4" fill="#d8c08a" stroke="#2a2230" stroke-width=".9"/><path d="M5.5 15.6a6.5 6.5 0 0 1 13 0z" fill="#d8c08a" stroke="#2a2230" stroke-width=".9"/><rect x="5.6" y="13.6" width="12.8" height="1.6" fill="#7a5236"/><circle cx="12" cy="8.6" r=".9" fill="#c9ae72" stroke="#2a2230" stroke-width=".5"/>'),
+  cartola: sv('<ellipse cx="12" cy="16" rx="9" ry="2.4" fill="#2b2433" stroke="#2a2230" stroke-width=".9"/><rect x="7" y="5" width="10" height="11" fill="#2b2433" stroke="#2a2230" stroke-width=".9"/><rect x="7" y="11.5" width="10" height="3" fill="#e8453c"/><circle cx="12" cy="13" r="1.1" fill="#ffd84a"/>'),
+  capacete: sv('<ellipse cx="12" cy="15" rx="9.5" ry="2.2" fill="#f2c230" stroke="#2a2230" stroke-width=".9"/><path d="M4.5 14.5a7.5 7.5 0 0 1 15 0z" fill="#f2c230" stroke="#2a2230" stroke-width=".9"/><circle cx="12" cy="9" r="1.8" fill="#fffbe0" stroke="#2a2230" stroke-width=".7"/>'),
   pirata: sv('<path d="M2.5 14Q7 17 12 17t9.5-3q-3.5-1-4.6-5.6Q12 5 7.1 8.4 6 13 2.5 14z" fill="#26232b" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><path d="M3.6 14.3Q12 18.2 20.4 14.3" fill="none" stroke="#ffd84a" stroke-width=".9"/><circle cx="12" cy="10.4" r="1.4" fill="#fff3df"/><path d="M10 13.2l4-2M14 13.2l-4-2" stroke="#fff3df" stroke-width=".9" stroke-linecap="round"/>'),
   aureola: sv('<ellipse cx="12" cy="11" rx="8" ry="3" fill="none" stroke="#ffd84a" stroke-width="2.4"/><ellipse cx="12" cy="11" rx="8" ry="3" fill="none" stroke="#c98a1a" stroke-width=".5"/><path d="' + ESTRELA_SVG(4, 5, 1.6, .6) + ESTRELA_SVG(20, 5.5, 1.4, .5) + ESTRELA_SVG(12, 4, 1.1, .4) + '" fill="#ffd84a"/>'),
   dGirassol: sv('<path d="M8.5 16h7l-1 5h-5z" fill="#d9704a"/><path d="M12 16V10" stroke="#3fae6a" stroke-width="1.4"/><path d="M12 13c-2 0-3-1-3.6-2 1.6-.2 2.8.4 3.6 2z" fill="#3fae6a"/><g transform="translate(12 8)"><circle r="4.2" fill="#ffd84a"/><circle r="2" fill="#7a4a26"/></g>'),
@@ -4744,6 +5034,8 @@ const ICO = {
   dBoneco: sv('<circle cx="12" cy="16.5" r="5" fill="#fff" stroke="#2a2230" stroke-width=".9"/><circle cx="12" cy="8.6" r="3.6" fill="#fff" stroke="#2a2230" stroke-width=".9"/><path d="M12 8.8l3 .7-3 .6z" fill="#ff8a3c"/><rect x="8.6" y="11.4" width="6.8" height="1.6" rx=".8" fill="#ff5d73"/><circle cx="10.8" cy="7.8" r=".5" fill="#2a2230"/><circle cx="13.2" cy="7.8" r=".5" fill="#2a2230"/>'),
   dLua: sv('<path d="M15 3.5a8.5 8.5 0 1 0 5 13.6A7 7 0 0 1 15 3.5z" fill="#ffd84a" stroke="#c98a1a" stroke-width=".8"/><path d="' + ESTRELA_SVG(17.5, 7, 1.4, .6) + ESTRELA_SVG(20, 11.5, 1, .4) + '" fill="#fff3df"/>'),
   dCogumelo: sv('<path d="M9.4 21.5c-.4-2.6-.3-5 .4-7.3h4.4c.7 2.3.8 4.7.4 7.3z" fill="#fbf1dc" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="10.9" cy="17.4" r=".6" fill="#2a2230"/><circle cx="13.1" cy="17.4" r=".6" fill="#2a2230"/><path d="M3 14.4a9 8.4 0 0 1 18 0c-3 .9-15 .9-18 0z" fill="#e8453c" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><circle cx="7.6" cy="11" r="1.4" fill="#fff"/><circle cx="12.4" cy="8.2" r="1.6" fill="#fff"/><circle cx="16.6" cy="11.4" r="1.1" fill="#fff"/>'),
+  dBarraca: sv('<rect x="4" y="12" width="16" height="8" fill="#7a4a2c" stroke="#2a2230" stroke-width=".8"/><path d="M3 5h18l-1.5 7h-15z" fill="#ff5d73" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><path d="M7 5l-.8 7M11 5l-.4 7M15 5l.4 7M19 5l.6 7" stroke="#fff3df" stroke-width="1.6"/><rect x="8" y="14" width="8" height="3" fill="#ffe9a8"/>'),
+  dGeodo: sv('<path d="M3 20c0-6 3-10 9-10s9 4 9 10z" fill="#6b5a80" stroke="#2a2230" stroke-width=".9"/><path d="M7 20l2-8 2 8zM11 20l2-11 2 11zM14.5 20l1.8-6 1.7 6z" fill="#c9a8ff" stroke="#2a2230" stroke-width=".7" stroke-linejoin="round"/>'),
   dPlaca: sv('<rect x="11" y="6" width="2" height="15" fill="#8a5a34"/><path d="M4 5h13l3 3-3 3H4z" fill="#3fae6a" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><circle cx="9" cy="8" r="1.2" fill="#fff"/><circle cx="12" cy="8" r="1.2" fill="#fff"/>'),
   dCristal: sv('<path d="M12 3l4 6-4 12-4-12z" fill="#c9a8ff" stroke="#2a2230" stroke-width=".9" stroke-linejoin="round"/><path d="M6 11l2.4 3L6 20l-2-6z" fill="#9fd8e8" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><path d="M18 11l2 3-2 6-2.4-6z" fill="#ffb3d1" stroke="#2a2230" stroke-width=".8" stroke-linejoin="round"/><path d="M11 6l-1.6 3 1.2.6z" fill="#fff"/>'),
   dTrofeu: sv('<path d="M7 4h10v4a5 5 0 0 1-10 0z" fill="#ffd84a" stroke="#c98a1a" stroke-width=".9"/><path d="M7 5.5H4.5a3 3 0 0 0 3 4M17 5.5h2.5a3 3 0 0 1-3 4" fill="none" stroke="#c98a1a" stroke-width="1.2"/><rect x="10.8" y="12.6" width="2.4" height="3.6" fill="#e8b923"/><rect x="7.5" y="16" width="9" height="4" rx="1" fill="#8a5a34"/><path d="' + ESTRELA_SVG(12, 7.6, 2, .85) + '" fill="#fff6c8"/>'),
@@ -5040,7 +5332,56 @@ function pintaEspaco(c, x, y, rx, ry, tipo) {
       c.strokeStyle = gr; c.lineWidth = R * 0.085 * k; c.beginPath(); c.moveTo(hx, hy); c.lineTo(tx, ty); c.stroke();
       flash(hx, hy, R * 0.13 * k, '#fff4c4');
     }
+  } else if (tipo === 'estrela') {
+    c.fillStyle = radial(x, y, 0, M * 1.15, [[0, '#fff6c8'], [0.25, '#ffd84acc'], [0.6, '#7a4fd8aa'], [1, '#1a0d4a00']]); c.fillRect(x - rx * 1.3, y - ry * 1.3, rx * 2.6, ry * 2.6);
+    const pent = (cx, cy, Ro, ri, cor) => { c.fillStyle = cor; c.beginPath(); for (let q = 0; q < 10; q++) { const rr = q % 2 ? ri : Ro, a = q * Math.PI / 5 - Math.PI / 2; c.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); } c.closePath(); c.fill(); };
+    const cons = [[-0.72, -0.5], [-0.42, -0.78], [0.1, -0.7], [0.62, -0.42], [0.72, 0.1], [0.55, 0.62]];
+    c.strokeStyle = 'rgba(255,240,190,.55)'; c.lineWidth = R * 0.02; c.beginPath(); cons.forEach(([px, py], q) => c[q ? 'lineTo' : 'moveTo'](x + px * rx, y + py * ry)); c.stroke();
+    for (const [px, py] of cons) flash(x + px * rx, y + py * ry, R * 0.1, '#fff3c4');
+    pent(x, y, R * 0.98, R * 0.42, 'rgba(255,196,60,.9)'); pent(x, y, R * 0.7, R * 0.3, '#ffe27a'); pent(x, y, R * 0.42, R * 0.18, '#fff6c8');
+    flash(x, y, R * 0.3, '#ffffff'); estrelinhas([[-0.8, 0.2, 0.025], [0.82, -0.2, 0.03], [-0.5, 0.7, 0.022], [0.2, 0.82, 0.025]], '#fff3c4');
+  } else if (tipo === 'galaxia') {
+    c.fillStyle = radial(x, y, 0, M * 1.15, [[0, '#fff3c4'], [0.18, '#c9a7ff'], [0.5, '#5b2fc9bb'], [1, '#1a0d4a00']]); c.fillRect(x - rx * 1.3, y - ry * 1.3, rx * 2.6, ry * 2.6);
+    const braco = (off, cor, lw) => { c.strokeStyle = cor; c.lineWidth = R * lw; c.beginPath(); for (let q = 0; q <= 40; q++) { const tt = q / 40, a = off + tt * 5.2, rr = R * (0.1 + tt * 0.95); c[q ? 'lineTo' : 'moveTo'](x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.85); } c.stroke(); };
+    braco(0, 'rgba(190,150,255,.85)', 0.1); braco(Math.PI, 'rgba(120,190,255,.85)', 0.1); braco(Math.PI / 2, 'rgba(255,150,220,.6)', 0.065); braco(Math.PI * 1.5, 'rgba(255,214,120,.5)', 0.05);
+    estrelinhas([[-0.75, -0.5, 0.025], [0.78, -0.4, 0.03], [0.6, 0.6, 0.025], [-0.7, 0.5, 0.03], [0.1, -0.85, 0.022], [-0.2, 0.85, 0.022]], '#ffffff');
+    flash(x, y, R * 0.34, '#fff3c4'); flash(x, y, R * 0.14, '#ffffff');
   }
+}
+/* Gato Arquiteto: pelo de tijolinhos coloridos; os tijolos caem e se encaixam em volta */
+function pintaTijolos(c, x, y, rx, ry) {
+  const cores = ['#d9724a', '#e8946a', '#c9603c', '#f0b08a', '#b8532f', '#e07f55'], h = ry * 0.36, w = rx * 0.62;
+  const fase = (relogio * 0.35) % 1;
+  for (let l = -3; l <= 3; l++) for (let q = -2; q <= 2; q++) {
+    const idx = (l + 3) * 5 + q + 2, bx = x + q * w + (l & 1 ? w * 0.5 : 0), by = y + l * h;
+    const cai = Math.max(0, 1 - Math.min(1, ((fase * 7 + idx * 0.13) % 7) / 1.2)) * (idx % 9 === 0 ? 1 : 0);
+    const dy = -cai * ry * 0.9;
+    c.globalAlpha = 1 - cai * 0.6; c.fillStyle = cores[idx % cores.length]; c.fillRect(bx - w / 2 + 0.5, by - h / 2 + 0.5 + dy, w - 1, h - 1);
+    c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(bx - w / 2 + 0.5, by - h / 2 + 0.5 + dy, w - 1, h * 0.22);
+  }
+  c.globalAlpha = 1; c.strokeStyle = 'rgba(74,36,24,.55)'; c.lineWidth = Math.max(0.6, rx * 0.025);
+  for (let l = -3; l <= 4; l++) { c.beginPath(); c.moveTo(x - rx * 1.2, y + (l - 0.5) * h); c.lineTo(x + rx * 1.2, y + (l - 0.5) * h); c.stroke(); }
+}
+/* Gato Estrelado: pelo azul-noite com constelação que pulsa e liga as estrelas */
+function pintaEstrelado(c, x, y, rx, ry) {
+  const pts = [[-0.55, -0.35], [-0.2, -0.6], [0.15, -0.42], [0.5, -0.55], [0.3, -0.1], [-0.1, 0.05], [-0.5, 0.2], [0.6, 0.2]];
+  const pul = 0.6 + 0.4 * Math.sin(relogio * 2);
+  c.strokeStyle = 'rgba(220,235,255,' + (0.35 * pul).toFixed(3) + ')'; c.lineWidth = Math.max(0.6, rx * 0.02);
+  c.beginPath(); pts.forEach(([a, b], q) => { const px = x + a * rx, py = y + b * ry + Math.sin(relogio * 1.5 + q) * ry * 0.02; if (q) c.lineTo(px, py); else c.moveTo(px, py); }); c.stroke();
+  pts.forEach(([a, b], q) => { c.globalAlpha = 0.6 + 0.4 * Math.sin(relogio * 3 + q * 1.7); c.fillStyle = '#ffffff'; c.beginPath(); c.arc(x + a * rx, y + b * ry, Math.max(0.8, rx * 0.035), 0, 7); c.fill(); });
+  c.globalAlpha = 1;
+}
+/* Gato Dourado: pelo de ouro com reflexos que passam */
+function pintaOuro(c, x, y, rx, ry) {
+  const g0 = c.createLinearGradient(x - rx, y - ry, x + rx, y + ry); g0.addColorStop(0, 'rgba(255,248,200,.55)'); g0.addColorStop(0.5, 'rgba(255,200,60,.15)'); g0.addColorStop(1, 'rgba(190,120,20,.45)');
+  c.fillStyle = g0; c.fillRect(x - rx * 1.2, y - ry * 1.2, rx * 2.4, ry * 2.4);
+  for (let q = 0; q < 2; q++) {
+    const t = ((relogio * 0.4 + q * 0.5) % 1.6) - 0.3, gx = x - rx + t * rx * 2;
+    const gr = c.createLinearGradient(gx - rx * 0.22, y, gx + rx * 0.22, y); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,.85)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    c.save(); c.translate(gx, y); c.rotate(0.45); c.translate(-gx, -y); c.fillStyle = gr; c.fillRect(gx - rx * 0.22, y - ry * 1.6, rx * 0.44, ry * 3.2); c.restore();
+  }
+  const pul = 0.5 + 0.5 * Math.sin(relogio * 2.5);
+  c.fillStyle = 'rgba(255,255,255,' + (0.25 + 0.3 * pul) + ')'; c.beginPath(); c.ellipse(x - rx * 0.35, y - ry * 0.45, rx * 0.2, ry * 0.1, -0.5, 0, 7); c.fill();
 }
 function pintaCristal(c, x, y, rx, ry) {
   c.fillStyle = 'rgba(159,220,255,.35)';
@@ -5128,7 +5469,7 @@ function abrirAlbum() {
   raiz.appendChild(abas);
   const grupos = [
     ['Secretos', SECRETOS, 'Gatos que não aparecem na rua. Cada um tem um jeito próprio de ser encontrado.'],
-    ['Míticos', MITICOS, 'Criaturas de lenda. Aparecem muito raramente na Trilha Lendária (o gato mago também no Vale dos Raros).'],
+    ['Míticos', MITICOS, 'Criaturas de lenda. Aparecem muito raramente: na Trilha Lendária (todos), na Caverna de Cristal Antigo (grifo, dragão preto e fênix) e no Vale dos Raros (só o gato mago). Pegando todos, a Hidra aparece.'],
     ['Lendários', LENDARIOS, 'Os felinos mais difíceis de encontrar. Moram no Santuário.'],
     ['Épicos', EPICOS, 'Felinos muito raros. Moram no Santuário.'],
     ['Raros', COMUNS.filter(t => t.rc === 'raro'), 'Gatos de rua difíceis de achar. Vão para o abrigo.'],
@@ -5154,6 +5495,7 @@ function abrirAlbum() {
       b.appendChild(cria('p', 'nota', nota));
       if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + epicosTotal() + ' · Flores e plantas compradas: ' + floresCompradas() + '/' + FLORES_DEC().length + ' · colocadas: ' + Math.min(floresColocadas(), FLORES_MIN) + '/' + FLORES_MIN));
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
+      if (titulo === 'Míticos') for (let q = 0; q < 2; q++) { const v = cria('div', 'raca falta col-mitico vagaAmigo'); v.appendChild(cria('div', 'vagaInterro', '?')); v.appendChild(cria('b', '', 'Em breve')); g.appendChild(v); }
       b.appendChild(g); raiz.appendChild(b);
     }
     const NT = TIPOS.filter(t => !t.amigo).length; $('albumTotal').textContent = tem + ' de ' + NT; $('albumTotalTxt').textContent = 'raças encontradas';
@@ -5384,9 +5726,11 @@ const DECOR = [
   { id: 'dBoneco', local: 'abrigo', nome: 'Boneco de neve de pelúcia', preco: 0, max: 1, onde: 'chao', premio: 2, desc: 'Prêmio do Pico do Floco' },
   { id: 'dLua', local: 'abrigo', nome: 'Luminária de lua', preco: 0, max: 1, onde: 'parede', premio: 3, desc: 'Prêmio do Centro da Meia-Noite' },
   { id: 'dCogumelo', local: 'abrigo', nome: 'Cogumelo de pelúcia', preco: 0, max: 1, onde: 'chao', premio: 4, desc: 'Prêmio do Bosque do Outono' },
-  { id: 'dPlaca', local: 'abrigo', nome: 'Placa de estrada', preco: 0, max: 1, onde: 'chao', premio: 5, desc: 'Prêmio da Grande Rota Selvagem' },
-  { id: 'dCristal', local: 'abrigo', nome: 'Cristais brilhantes', preco: 0, max: 1, onde: 'chao', premio: 6, desc: 'Prêmio do Vale dos Raros' },
-  { id: 'dTrofeu', local: 'abrigo', nome: 'Troféu lendário', preco: 0, max: 1, onde: 'chao', premio: 7, desc: 'Prêmio da Trilha Lendária' },
+  { id: 'dBarraca', local: 'abrigo', nome: 'Barraquinha de doces', preco: 0, max: 1, onde: 'chao', premio: 5, desc: 'Prêmio da Feira Noturna' },
+  { id: 'dPlaca', local: 'abrigo', nome: 'Placa de estrada', preco: 0, max: 1, onde: 'chao', premio: 6, desc: 'Prêmio da Grande Rota Selvagem' },
+  { id: 'dCristal', local: 'abrigo', nome: 'Cristais brilhantes', preco: 0, max: 1, onde: 'chao', premio: 7, desc: 'Prêmio do Vale dos Raros' },
+  { id: 'dGeodo', local: 'abrigo', nome: 'Geodo de cristal', preco: 0, max: 1, onde: 'chao', premio: 8, desc: 'Prêmio da Caverna de Cristal Antigo' },
+  { id: 'dTrofeu', local: 'abrigo', nome: 'Troféu lendário', preco: 0, max: 1, onde: 'chao', premio: 9, desc: 'Prêmio da Trilha Lendária' },
   { id: 'flores', local: 'santuario', nome: 'Canteiro de flores', preco: 60, max: 3, onde: 'chao', flor: 1, desc: 'Flores do campo com borboletas; os felinos cheiram' },
   { id: 'arbusto', local: 'santuario', nome: 'Arbusto florido', preco: 70, max: 3, onde: 'chao', flor: 1, desc: 'Moita cheia de flores para o santuário' },
   { id: 'canteiroGirassol', base: 'florVaso', flor: 'girassol', local: 'santuario', nome: 'Canteiro de girassóis', preco: 90, max: 2, onde: 'chao', cores: ['#8a5a34'], desc: 'Girassóis altos que viram para o sol' },
@@ -5530,7 +5874,7 @@ function extrasDecor(lista) {
       case 'flores': sp({ x: x - 0.09, y: y + 0.01, olhar: 1, dir: 1, nome: 'Cheirando as flores' }); ob(0.07, -0.03, 0.02); break;
       case 'arbusto': sp({ x: x + 0.1, y: y + 0.012, olhar: 1, dir: -1, nome: 'Cheirando o arbusto' }); ob(0.08); break;
       case 'dCristal': sp({ x: x + 0.075, y: y + 0.012, olhar: 1, dir: -1, nome: 'Admirando os cristais' }); ob(0.06); break;
-      case 'dBoneco': case 'dPlaca': case 'dTrofeu': case 'dCogumelo': ob(0.06); break;
+      case 'dBoneco': case 'dPlaca': case 'dTrofeu': case 'dCogumelo': case 'dBarraca': case 'dGeodo': ob(0.06); break;
       case 'caixaDec': sp({ x, y, caixa: 1, nome: 'Dentro da caixa de papelão' }); ob(0.1, -0.06, 0.02); break;
       case 'bolinhas': sp({ x: x - 0.09, y: y - 0.02, brinca: 1, dir: 1, tx: x - 0.035, ty: y - 0.016, nome: 'Brincando com as bolinhas' }); ob(0.055, -0.018, 0.012); break;
       case 'ratinho': sp({ x: x + 0.075, y: y - 0.02, brinca: 1, dir: -1, tx: x - 0.012, ty: y - 0.014, nome: 'Caçando o ratinho' }); ob(0.04, -0.018, 0.012); break;
@@ -5546,7 +5890,7 @@ function extrasDecor(lista) {
       case 'escadinha': sp({ x: x + 0.065, y: y - 0.135, alto: 1, nome: 'no topo da escadinha' }); ob(0.11, -0.06, 0.02); break;
     }
     /* a área atrás de um móvel de chão também fica bloqueada, na altura dele: assim nenhum gato fica "dentro" do desenho */
-    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, florVaso: 0.2, cerejeira: 0.34, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dCogumelo: 0.14, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
+    const ALT_VIS = { varinha: 0.18, planta: 0.17, vaso: 0.2, florVaso: 0.2, cerejeira: 0.34, dGirassol: 0.2, arbusto: 0.14, troncoArr: 0.18, bambu: 0.16, flores: 0.11, fonte: 0.1, dPlaca: 0.16, dBarraca: 0.14, dGeodo: 0.09, dCogumelo: 0.14, dBoneco: 0.13, dTrofeu: 0.11, dCristal: 0.11, circuito: 0.06, caixaDec: 0.09, cesta: 0.07, ursinho: 0.11, bolinhas: 0.05, ratinho: 0.05, peixeChute: 0.05, bolaCipo: 0.07, luxo: 0.07, caminha: 0.07, almofada: 0.06, bercinho: 0.08, ninho: 0.06, rochaQuente: 0.07, piscina: 0.06, tunel: 0.1, troncoOco: 0.12 };
     if (ALT_VIS[bid] != null) for (const o of obst) if (o.dec === d.slot) { o.y0 = Math.min(o.y0, y - ALT_VIS[bid] - 0.02); o.x0 -= 0.025; o.x1 += 0.025; }
     const zDe = { bolinhas: -0.03, ratinho: -0.03, peixeChute: -0.03, varinha: -0.035, circuito: -0.035, bolaCipo: -0.03, caixaDec: -0.04, tunel: -0.03, troncoOco: -0.07, ursinho: -0.02, caminha: -0.045, almofada: -0.03, bercinho: -0.045, iglu: -0.004, casinha: -0.004, tocaPedra: -0.004, fonte: 0, cesta: -0.04, luxo: -0.05, ninho: -0.04, rochaQuente: -0.06, piscina: -0.04, torre: -0.004, plataforma: -0.004, redeCipo: -0.004, poltrona: -0.004, aquarioPe: -0.004 };
     const def = defDecor(d.id);
@@ -6243,6 +6587,22 @@ const DECOR_PREMIO = {
     const cr = (dx, h, w, cor) => { c.fillStyle = cor; c.beginPath(); c.moveTo(X(cx + dx), Y(cy - h)); c.lineTo(X(cx + dx + w), Y(cy - h * 0.7)); c.lineTo(X(cx + dx + w * 0.7), Y(cy)); c.lineTo(X(cx + dx - w * 0.7), Y(cy)); c.lineTo(X(cx + dx - w), Y(cy - h * 0.7)); c.closePath(); c.fill(); c.strokeStyle = 'rgba(42,34,48,.45)'; c.lineWidth = Math.max(1, k * 0.003); c.stroke(); c.fillStyle = 'rgba(255,255,255,.55)'; c.beginPath(); c.moveTo(X(cx + dx - w * 0.2), Y(cy - h * 0.9)); c.lineTo(X(cx + dx - w * 0.6), Y(cy - h * 0.65)); c.lineTo(X(cx + dx - w * 0.3), Y(cy - h * 0.4)); c.closePath(); c.fill(); };
     c.save(); c.shadowColor = 'rgba(201,168,255,.8)'; c.shadowBlur = k * 0.03;
     cr(-0.03, 0.07, 0.018, '#9fd8e8'); cr(0.03, 0.08, 0.018, '#ffb3d1'); cr(0, 0.13, 0.024, '#c9a8ff');
+    c.restore();
+  },
+  dBarraca(c, k, X, Y, cx, cy) {
+    sombraDec(c, k, X, Y, cx, cy, 0.06);
+    c.strokeStyle = 'rgba(42,34,48,.6)'; c.lineWidth = Math.max(1, k * 0.003);
+    c.fillStyle = '#7a4a2c'; c.fillRect(X(cx - 0.055), Y(cy - 0.07), k * 0.11, k * 0.07); c.strokeRect(X(cx - 0.055), Y(cy - 0.07), k * 0.11, k * 0.07);
+    c.fillStyle = '#ffe9a8'; c.fillRect(X(cx - 0.04), Y(cy - 0.058), k * 0.08, k * 0.022);
+    for (let q = 0; q < 5; q++) { c.fillStyle = q & 1 ? '#fff3df' : '#ff5d73'; c.beginPath(); c.moveTo(X(cx - 0.07 + q * 0.028), Y(cy - 0.14)); c.lineTo(X(cx - 0.07 + (q + 1) * 0.028), Y(cy - 0.14)); c.lineTo(X(cx - 0.065 + (q + 1) * 0.026), Y(cy - 0.09)); c.lineTo(X(cx - 0.065 + q * 0.026), Y(cy - 0.09)); c.closePath(); c.fill(); }
+    c.strokeRect(X(cx - 0.07), Y(cy - 0.14), k * 0.14, k * 0.05);
+  },
+  dGeodo(c, k, X, Y, cx, cy) {
+    sombraDec(c, k, X, Y, cx, cy, 0.05);
+    c.fillStyle = '#6b5a80'; c.strokeStyle = 'rgba(42,34,48,.6)'; c.lineWidth = Math.max(1, k * 0.003);
+    c.beginPath(); c.moveTo(X(cx - 0.06), Y(cy)); c.quadraticCurveTo(X(cx - 0.065), Y(cy - 0.075), X(cx), Y(cy - 0.08)); c.quadraticCurveTo(X(cx + 0.065), Y(cy - 0.075), X(cx + 0.06), Y(cy)); c.closePath(); c.fill(); c.stroke();
+    c.save(); c.shadowColor = 'rgba(201,168,255,.8)'; c.shadowBlur = k * 0.025;
+    for (const [dx, h, w, cor] of [[-0.025, 0.06, 0.012, '#9fd8e8'], [0.025, 0.05, 0.012, '#ffb3d1'], [0, 0.085, 0.016, '#c9a8ff']]) { c.fillStyle = cor; c.beginPath(); c.moveTo(X(cx + dx - w), Y(cy - 0.015)); c.lineTo(X(cx + dx), Y(cy - 0.015 - h)); c.lineTo(X(cx + dx + w), Y(cy - 0.015)); c.closePath(); c.fill(); }
     c.restore();
   },
   dTrofeu(c, k, X, Y, cx, cy) {
@@ -7236,6 +7596,9 @@ function gatoDeitado(x, y, s, g, dir) {
   if (g.espaco) pintaEspaco(ctx, bx, by, rx, ry, g.espaco);
   if (g.aurora) pintaAurora(ctx, bx, by, rx, ry);
   if (g.cristalBrilho) pintaCristal(ctx, bx, by, rx, ry);
+  if (g.ouro) pintaOuro(ctx, bx, by, rx, ry);
+  if (g.constelacao) pintaEstrelado(ctx, bx, by, rx, ry);
+  if (g.tijolos) pintaTijolos(ctx, bx, by, rx, ry);
   if (g.floral) for (const [fx, fy, k, cor] of [[-0.5, -0.3, 0.022, '#ff8fb1'], [0.1, -0.5, 0.018, '#b38ce0'], [0.5, -0.2, 0.02, '#ffd84a']]) desenhaMarca(ctx, 'flor', bx + fx * rx, by + fy * ry, s * k, cor, true);
   if (g.arcoIris) pintaArco(ctx, bx - dir * rx * 0.1, by + ry * 1.6, ry * 2.5, ry * 0.2, Math.PI * 1.15, Math.PI * 1.85);
   if (g.coracoesCorpo) for (const [t, oy, k] of [[-0.35, -0.3, 1], [0.05, -0.5, 0.8], [0.42, -0.25, 0.9]]) desenhaMarca(ctx, 'coracao', bx + dir * t * rx, by + oy * ry, ry * 0.28 * k, g.coracoesCorpo, true);
@@ -10100,7 +10463,7 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
     { const metas = METAS_EST[idx] || METAS_EST[0], linha = cria('div', 'regEstrelas'); linha.appendChild(estrelasEl(save.estrelas[idx] || 0, 0, metas));
       const mb = save.melhorReg[idx]; linha.appendChild(cria('small', 'regMelhor', (save.estrelas[idx] || 0) >= 3 ? 'Completa!' : mb ? 'Melhor: ' + mb + ' pts' : ok ? 'Ainda sem pontos aqui' : '')); card.appendChild(linha);
       const pl = cria('div', 'regPremios'); pl.appendChild(cria('small', '', 'Prêmios:'));
-      for (let q = 0; q < 3; q++) { const pr = premioDaEstrela(idx, q), tem = (save.estrelas[idx] || 0) > q, it = cria('span', 'regPremio' + (tem ? ' ok' : '')); it.innerHTML = icoPremio(pr); it.title = ESTRELA_ORD[q] + ' estrela: ' + pr.nome; pl.appendChild(it); }
+      for (let q = 0; q < 3; q++) { const pr = premioDaEstrela(idx, q); if (!pr) continue; const tem = (save.estrelas[idx] || 0) > q, it = cria('span', 'regPremio' + (tem ? ' ok' : '')); it.innerHTML = icoPremio(pr); it.title = ESTRELA_ORD[q] + ' estrela: ' + pr.nome; pl.appendChild(it); }
       card.appendChild(pl);
       if (idx === idxAurora() && (save.estrelas[idx] || 0) >= 3) {
         const au = cria('div', 'regAurora' + (save.secretos && save.secretos.aurora ? ' ok' : ''));
@@ -10632,7 +10995,7 @@ $('cfgConta').addEventListener('click', abrirConta);
     const r = resgatarCodigo(inp.value);
     if (r.erro) { if (!/Digite|já /.test(r.erro) && ++tent.n >= 5) { tent.n = 0; tent.ate = Date.now() + 30000; } msg.textContent = r.erro; return; }
     inp.value = ''; msg.textContent = 'Código resgatado!';
-    if (r.hotel) { janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas liberado!', texto: 'Abra o hotel na tela inicial e vá ao 6º andar: a Estação Espacial tem 7 gatos esperando por você.', okTxt: 'Entendi' }); return; }
+    if (r.hotel) { janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas liberado!', texto: 'Abra o hotel na tela inicial e vá ao 7º andar: a Estação Espacial tem 9 gatos esperando por você.', okTxt: 'Entendi' }); return; }
     janelaAviso({ gato: gatoDe({ n: r.t.nomeGato, r: r.t.raca, o: r.t.olhos[0], f: 0, s: r.t.sexo }), titulo: r.t.raca + ' chegou!', texto: 'Um amigo especial foi para a sua Casa. Veja no Álbum, na aba Amigos.' });
   };
   $('cfgCodBtn').addEventListener('click', fazer);
@@ -10664,7 +11027,7 @@ setTimeout(() => { nuvemBoot = false; sincronizarInicio(); setTimeout(convidarNu
 /* ---------- laço ---------- */
 construirPista(regiaoAtual());
 atualizarMenu();
-{ const aposInicio = () => { if (save.santNovo) mostrarSantLiberado(() => { if (save.felFila.length) mostrarFilaFel(); }); else if (save.felFila.length) mostrarFilaFel(); else tentarTut('menu', tourMenu, 500); };
+{ const aposInicio = () => avisoEspaco(() => { if (save.santNovo) mostrarSantLiberado(() => { if (save.felFila.length) mostrarFilaFel(); }); else if (save.felFila.length) mostrarFilaFel(); else tentarTut('menu', tourMenu, 500); });
   mostrarSplash(() => { if (!save.hist.abrigo) contarHistoria('abrigo', aposInicio); else aposInicio(); }); }
 let ant = performance.now();
 let pausaDesenhada = false, ultPedido = 0;
