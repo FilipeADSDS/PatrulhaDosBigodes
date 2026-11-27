@@ -270,6 +270,16 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .felTopo b{display:block;font-size:22px;font-family:var(--display)}
 .felTopo span{font-size:14px;font-weight:700;opacity:.7}
 .felTopo b span{font-size:inherit;opacity:1;font-weight:inherit}
+.felCard{padding:18px 16px 16px;gap:12px;background:linear-gradient(180deg,#fff4e3 0,var(--creme) 60%)}
+.felCard h2{font-size:24px}
+.felTopo{box-shadow:0 0 0 2px var(--linha),0 4px 0 var(--linha)}
+.felPills{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.felPill{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:4px 12px 4px 8px;font-size:13px;font-weight:800;box-shadow:0 0 0 2px var(--linha)}
+.felPill svg{width:20px;height:20px;flex:0 0 auto}
+.felPill.cheio{background:#ffe0e0;color:#8a2b3d}
+.felOpcoes .sec{padding:12px 14px;font-size:17px;border-radius:14px;justify-content:center}
+.felOpcoes .trocaBtn{background:transparent;box-shadow:0 0 0 2px var(--linha);border:0;font-size:15px;opacity:.85;margin-top:2px}
+.felOpcoes .acao{font-size:20px;padding:13px 16px}
 .felOpcoes{display:flex;flex-direction:column;gap:10px}
 .felOpcoes .sec svg,.felOpcoes .acao svg{width:22px;height:22px;flex:0 0 auto}
 .felOpcoes .acao{display:flex;align-items:center;justify-content:center;gap:8px}
@@ -1201,6 +1211,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
     <section class="cartao simples felCard">
       <h2 id="felTitulo">Santuário cheio!</h2>
       <div class="felTopo"><canvas id="felRosto" width="160" height="160"></canvas><div><b id="felNome"></b><span id="felRaca"></span></div></div>
+      <div class="felPills" id="felPills"></div>
       <p class="nota" id="felTexto"></p>
       <div id="felOpcoes" class="felOpcoes"></div>
     </section>
@@ -1263,7 +1274,7 @@ const Z = {
   portal: { tunnel: true, name: 'Corredor do Portal', wall: ['#2a4a52', '#243f47'], floor: ['#1a3238', '#162b31'], road: ['#6b6558', '#625d51'], rumble: ['#ffd166', '#6b6558'], lane: '#ffd166', light: '#fff0b8', marks: 'dupla' }
 };
 
-const VERSAO = '3.4.0';
+const VERSAO = '3.4.1';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1439,7 +1450,7 @@ if (!Array.isArray(save.felFila)) save.felFila = [];
 const novoId = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);
 for (const a of save.abrigo.concat(save.casa || [], save.sant)) if (a && !a.id) a.id = novoId();
 save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
-function salvar() { gravar('pegagatos.save', JSON.stringify(save)); }
+function salvar() { gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.regs', JSON.stringify({ v: save.regV, r: save.regioes })); }
 const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
   carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 0.5, parcPatr: 2, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
   santBase: 10, santNivel: 5, santTeto: 40, nomeEpico: 500, nomeLend: 1500, nomeMit: 4000, bercoFracao: 0.5, tocaFracao: 0.5, chanceFilhote: 0.15, chanceCaixa: 0.009, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
@@ -1762,6 +1773,11 @@ if (save.regV !== 3) {
   save.regiao = mv(save.regiao); save.estrelas = mvObj(save.estrelas || {}); save.melhorReg = mvObj(save.melhorReg || {});
   save.regV = 3;
 }
+/* 3.4.1: cópia extra das regiões compradas; se o progresso for trocado por um mais antigo, as regiões não somem */
+try {
+  const cp = JSON.parse(ler('pegagatos.regs') || 'null');
+  if (cp && cp.v === save.regV && Array.isArray(cp.r)) save.regioes = Array.from(new Set(save.regioes.concat(cp.r.filter(n => typeof n === 'number')))).sort((a, b) => a - b);
+} catch (e) {}
 if (!Array.isArray(save.casa)) {
   /* primeira vez com a casa: os felinos que você já pegou vão morar nela */
   save.casa = [];
@@ -5015,6 +5031,7 @@ const PING_SVG = {
   medalha: '<circle cx="12" cy="18.6" r="3" fill="#ffd84a" stroke="#2a2230" stroke-width=".6"/><path d="M12 16.7l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z" fill="#e8a417"/>'
 };
 const ICO = {
+  trocaFel: sv('<path d="M5 8h12l-3-3M19 16H7l3 3" fill="none" stroke="#2a2230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'),
   nuvem: sv('<path d="M7 19h10.5a4.5 4.5 0 0 0 .6-8.96A6 6 0 0 0 6.6 9.1 5 5 0 0 0 7 19z" fill="#cfe8ff" stroke="#2a2230" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 16v-5m-2.2 2.2L12 11l2.2 2.2" fill="none" stroke="#4a7fd0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'),
   livro: sv('<path d="M3.5 5.5c3-1.4 6-1.4 8.5.6v14c-2.5-2-5.5-2-8.5-.6z" fill="#ff9eb3" stroke="#2a2230" stroke-width="1.4" stroke-linejoin="round"/><path d="M20.5 5.5c-3-1.4-6-1.4-8.5.6v14c2.5-2 5.5-2 8.5-.6z" fill="#ffd84a" stroke="#2a2230" stroke-width="1.4" stroke-linejoin="round"/><path d="M15 9.5c1.4-.5 2.6-.5 3.6-.1M15 12.5c1.4-.5 2.6-.5 3.6-.1" stroke="#2a2230" stroke-width="1" stroke-linecap="round"/>'),
   chapeuIco: sv('<path d="M3 17.5c3 1.4 15 1.4 18 0" fill="none" stroke="#2a2230" stroke-width="1.6" stroke-linecap="round"/><path d="M7 17V9.5a5 3 0 0 1 10 0V17" fill="#b38ce0" stroke="#2a2230" stroke-width="1.3"/><rect x="7" y="13.5" width="10" height="2" fill="#ff5d73"/>'),
@@ -9029,7 +9046,7 @@ function mostrarFilaFel() {
     const vB = Math.max(0, LUG.max() - LUG.n());
     $('felTitulo').textContent = (felF && !tocaOk() ? 'Filhote de felino!' : LUG.Nome + ' cheia!'.replace('cheia', felF ? 'cheia' : 'cheio')) + (racas > 1 ? ' (' + racas + ' tipos)' : '');
     $('felRaca').textContent = (n > 1 ? 'filhotes · a escolha vale para todos' : g.raca + ' · filhote') + (reg.pr ? ' · com guizo' : '');
-    $('felTexto').textContent = (n > 1 ? 'Você trouxe ' + n + ' filhotes iguais.' : felF && !tocaOk() ? 'Para ter filhotes de felinos no santuário, compre a Toca dos Filhotes na Loja.' : 'Não cabe mais nenhum filhote ' + (felF ? 'na toca.' : 'no berçário.')) + ' ' + LUG.Nome + ': ' + LUG.n() + '/' + LUG.max() + ' · Casa: ' + noCasa() + '/' + casaMax() + '.';
+    $('felTexto').textContent = (n > 1 ? 'Você trouxe ' + n + ' filhotes iguais.' : felF && !tocaOk() ? 'Para ter filhotes de felinos no santuário, compre a Toca dos Filhotes na Loja.' : 'Não cabe mais nenhum filhote ' + (felF ? 'na toca.' : 'no berçário.')) + '';
     const qB = Math.min(n, vB), qC = Math.min(n, vCasa);
     const c1 = cria('button', 'acao', vB ? (qB < n ? 'Mandar ' + qB + ' para a ' + LUG.nome : 'Para ' + (felF ? 'a toca' : 'o berçário')) : LUG.Nome + (felF ? ' cheia' : ' cheio')); c1.type = 'button'; c1.disabled = !vB; c1.insertAdjacentHTML('afterbegin', LUG.ico);
     c1.addEventListener('click', () => { const k = Math.min(grupo.length, LUG.max() - LUG.n()); if (k <= 0) return; for (const r of grupo.slice(0, k)) LUG.por(r); tira(grupo, k); fim2(); });
@@ -9037,9 +9054,8 @@ function mostrarFilaFel() {
     c2.addEventListener('click', () => { const k = Math.min(grupo.length, casaMax() - noCasa()); if (k <= 0) return; for (const r of grupo.slice(0, k)) save.casa.push(r); tira(grupo, k); fim2(); });
     const c3 = cria('button', 'sec', LUG.doarTxt(n) + v * n); c3.type = 'button'; c3.insertAdjacentHTML('afterbegin', LUG.doarIco);
     c3.addEventListener('click', () => { save.moedas += v * n; LUG.doar(grupo, n); tira(grupo, n); fim2(); });
-    op.appendChild(c1);
-    if (!vB && LUG.n()) { const c4 = cria('button', 'sec', 'Trocar por um ' + LUG.da); c4.type = 'button'; c4.insertAdjacentHTML('afterbegin', LUG.ico); c4.addEventListener('click', () => { felTrocando = true; mostrarFilaFel(); }); op.appendChild(c4); }
-    op.appendChild(c2); op.appendChild(c3);
+    op.appendChild(c1); op.appendChild(c2); op.appendChild(c3);
+    if (!vB && LUG.n()) { const c4 = cria('button', 'sec trocaBtn', 'Trocar por um ' + LUG.da); c4.type = 'button'; c4.insertAdjacentHTML('afterbegin', ICO.trocaFel); c4.addEventListener('click', () => { felTrocando = true; mostrarFilaFel(); }); op.appendChild(c4); }
   } else if (felTrocando) {
     $('felTexto').textContent = 'Escolha quem sai do santuário para dar lugar a ' + nomeComSexo(g) + '. Quem sair volta para a natureza e rende moedas.';
     const gr = cria('div', 'felGrade');
@@ -9059,7 +9075,7 @@ function mostrarFilaFel() {
   } else {
     $('felTexto').textContent = (tem ? 'Você já tem ' + tem + ' ' + g.raca + gz + ' no santuário. ' : '') +
       (n > 1 ? 'Você pegou ' + n + ' iguais nesta patrulha.' : 'O que fazer com ' + g.nome + '?') +
-      ' Santuário: ' + santAdultos() + '/' + santMax() + ' · Casa: ' + noCasa() + '/' + casaMax() + '.';
+      '';
     const qS = Math.min(n, vSant), qC = Math.min(n, vCasa);
     const b1 = cria('button', 'acao', vSant ? (n > 1 ? (qS < n ? 'Mandar ' + qS + ' para o santuário' : 'Todos para o santuário') : 'Mandar para o santuário') : 'Santuário cheio'); b1.type = 'button'; b1.disabled = !vSant;
     b1.insertAdjacentHTML('afterbegin', ICO.santuario);
@@ -9072,11 +9088,18 @@ function mostrarFilaFel() {
     b3.addEventListener('click', () => { save.moedas += v * n; save.natureza[reg.r] = (save.natureza[reg.r] || 0) + n; tira(grupo, n); fim2(); });
     op.appendChild(b1); op.appendChild(b2); op.appendChild(b3);
     if (!vSant && santAdultos()) {
-      const b4 = cria('button', 'sec', 'Trocar por um do santuário'); b4.type = 'button';
+      const b4 = cria('button', 'sec trocaBtn', 'Trocar por um do santuário'); b4.type = 'button'; b4.insertAdjacentHTML('afterbegin', ICO.trocaFel);
       b4.addEventListener('click', () => { felTrocando = true; mostrarFilaFel(); });
       op.appendChild(b4);
     }
   }
+  const pills = $('felPills'); pills.textContent = '';
+  if (!felTrocando) {
+    const pill = (ico, nome, a, m) => { const e = cria('span', 'felPill' + (a >= m ? ' cheio' : '')); e.insertAdjacentHTML('afterbegin', ico); e.appendChild(document.createTextNode(nome + ' ' + a + '/' + m)); pills.appendChild(e); };
+    if (reg.fi) pill(LUG.ico, LUG.Nome, LUG.n(), LUG.max()); else pill(ICO.santuario, 'Santuário', santAdultos(), santMax());
+    pill(ICO.casa, 'Casa', noCasa(), casaMax());
+  }
+  pills.hidden = !pills.childNodes.length;
   tela.hidden = false;
 }
 function abrirSala(modo) {
@@ -10799,10 +10822,18 @@ function quando(ms) {
   const d = new Date(ms); const p = n => String(n).padStart(2, '0');
   return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' às ' + p(d.getHours()) + ':' + p(d.getMinutes());
 }
+/* regiões compradas só aumentam: ao trocar de progresso, nunca perde uma região que um dos lados já tinha (mesma versão de numeração) */
+function unirRegioes(dest, outro) {
+  if (!dest || !outro || dest.regV !== outro.regV || !Array.isArray(outro.regioes)) return false;
+  const a = Array.isArray(dest.regioes) ? dest.regioes : [];
+  const u = Array.from(new Set(a.concat(outro.regioes.filter(n => typeof n === 'number')))).sort((x, y) => x - y);
+  const mudou = u.length !== a.length; dest.regioes = u; return mudou;
+}
 /* troca o progresso deste aparelho pelo da nuvem (guarda uma cópia do atual antes) */
 function aplicarNuvem(rem) {
   let novo = null; try { novo = JSON.parse(rem.dados); } catch (e) {}
   if (!novo || typeof novo !== 'object') return false;
+  if (unirRegioes(novo, save)) rem = Object.assign({}, rem, { dados: JSON.stringify(novo) });
   if (!saveVazio(save)) gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
   gravar('pegagatos.save', rem.dados);
   if (rem.piloto) gravar('gatuno.gato', rem.piloto);
@@ -10814,7 +10845,7 @@ function aplicarNuvem(rem) {
    senão vale a nuvem. O que não for usado fica como cópia neste aparelho. */
 function resolverAuto(rem, dn) {
   const localManda = !saveVazio(save) && (conta.sujo || saveVazio(dn));
-  if (localManda) { gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); gravarNuvem(true).then(() => { nuvemErro = ''; atualizarContaUI(); }).catch(e => { nuvemErro = erroNuvem(e); atualizarContaUI(); }); }
+  if (localManda) { if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); gravarNuvem(true).then(() => { nuvemErro = ''; atualizarContaUI(); }).catch(e => { nuvemErro = erroNuvem(e); atualizarContaUI(); }); }
   else aplicarNuvem(rem);
 }
 function perguntarConflito(rem, fim) {
@@ -10827,7 +10858,7 @@ function perguntarConflito(rem, fim) {
     texto: 'Na nuvem (' + de + (rem.em ? ', ' + quando(rem.em) : '') + '): ' + resumoSave(dn) + '. Neste aparelho: ' + resumoSave(save) + '. O que não for escolhido fica guardado como cópia neste aparelho.',
     okTxt: 'Usar o da nuvem', outroTxt: 'Usar o deste aparelho',
     ok: () => { nuvemConflito = false; aplicarNuvem(rem); },
-    outro: () => { nuvemConflito = false; gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); enviarNuvem(true).then(() => fim && fim()); } });
+    outro: () => { nuvemConflito = false; if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); enviarNuvem(true).then(() => fim && fim()); } });
 }
 async function enviarNuvem(forcar) {
   clearTimeout(nuvemT); nuvemT = null;
