@@ -208,6 +208,24 @@ button:focus-visible{outline:3px solid var(--manteiga);outline-offset:2px}
 .irBerco[hidden]{display:none}
 #telaNome{z-index:7}
 #telaAviso{z-index:8}
+#telaSave{z-index:9}
+.saveCard{max-width:420px;text-align:center;display:flex;flex-direction:column;gap:10px}
+.saveLados{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.saveLado{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:18px;padding:12px 10px;box-shadow:0 0 0 2px var(--linha),0 4px 0 var(--linha);text-align:left;position:relative}
+.saveLado.melhor{box-shadow:0 0 0 3px var(--rosa),0 4px 0 var(--rosa-escuro)}
+.saveLado h3{font-size:17px;display:flex;align-items:center;gap:6px}
+.saveLado h3 svg{width:22px;height:22px}
+.saveLado small{font-size:12px;font-weight:700;opacity:.6}
+.saveSelo{position:absolute;top:-10px;right:8px;background:var(--rosa);border-radius:999px;padding:1px 9px;font-size:11px;font-weight:800}
+.saveDados{display:flex;flex-direction:column;gap:3px;margin:4px 0}
+.saveDados div{display:flex;justify-content:space-between;gap:6px;font-size:14px;font-weight:700}
+.saveDados div span{opacity:.65}
+.saveDados div b{font-weight:800}
+.saveLado .acao{font-size:16px;padding:10px 8px;margin-top:auto}
+.saveLado .sec{font-size:15px;padding:10px 8px;margin-top:auto}
+.copiaItem{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:14px;padding:10px 12px;box-shadow:0 0 0 2px var(--linha);margin-top:8px}
+.copiaItem .saveDados{margin:0}
+@media (max-width:380px){.saveLados{grid-template-columns:1fr}}
 #telaConta{z-index:7}
 .contaMsg{font-size:14px;font-weight:800;color:#2f7a4f;background:#e6f7ec;border-radius:10px;padding:8px 10px}
 .contaMsg.erro{color:#a8323a;background:#fdeaea}
@@ -757,13 +775,24 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 .xpBarra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--verde-agua),var(--manteiga));border-radius:999px}
 .regiao{background:#fff;border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 0 0 2px var(--linha)}
 .regiao.atual{box-shadow:0 0 0 3px var(--verde-agua)}
+.regiao:not(.aberta){min-height:318px}
 .regiao.trancada{background:#f4ede3}
 .regiao.trancada .regFaces{opacity:.75}
 .regTopo{display:flex;gap:10px;align-items:flex-start}
 .regTopo div{display:flex;flex-direction:column;gap:2px}
 .regTopo b{font-size:18px;line-height:1.1}
-.regTopo small{font-size:13px;font-weight:600;opacity:.7;line-height:1.3}
+.regTopo small{font-size:13px;font-weight:600;opacity:.7;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.regTopo b{min-height:20px}
+.regiao.aberta .regTopo small{-webkit-line-clamp:unset;display:block;min-height:0}
+.regDet{display:flex;flex-direction:column;gap:10px}.regDet[hidden]{display:none}
+.regResumo{display:flex;flex-direction:column;gap:4px;min-height:70px}
+.regResumo small{font-size:12px;font-weight:800;opacity:.65}
+.regResFaces{display:flex;gap:6px;align-items:center;min-height:50px}
+.face.fp{padding:3px;border-radius:12px;flex:0 0 auto;width:56px}.face.fp canvas{width:44px;height:44px}
+.regMais{font-size:13px;font-weight:800;opacity:.7;padding-left:2px}
+.regToggle{align-self:center;background:none;color:var(--tinta);font-weight:800;font-size:14px;padding:6px 12px;border-radius:999px;box-shadow:0 0 0 2px var(--linha)}
 .regiao.trancada .nivelSelo{background:#d9cdbd}
+.raca.comDica{cursor:pointer}.dicaToque{font-size:11px;font-weight:800;opacity:.6}
 .regFaces{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px}
 .face{display:flex;flex-direction:column;align-items:center;gap:1px;border-radius:12px;padding:4px 2px 3px;text-align:center}
 .face canvas{width:44px;height:44px}
@@ -787,11 +816,11 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 .ef[hidden]{display:none}
 .ef svg{width:24px;height:24px;flex:0 0 24px}
 .ef b{color:var(--manteiga);font-variant-numeric:tabular-nums}
-#bolsa{position:absolute;right:10px;top:calc(112px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:10px;z-index:3}
+#bolsa{position:absolute;left:12px;bottom:calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:row;align-items:flex-end;gap:10px;z-index:3}
 #bolsa[hidden]{display:none}
 .espW{position:relative}
 .espBtn.aberto{box-shadow:0 0 0 3px var(--manteiga),0 4px 0 rgba(42,34,48,.35)}
-.bandejaEsp{position:absolute;right:74px;top:-6px;display:grid;grid-template-columns:repeat(var(--col,3),64px);gap:8px 6px;width:max-content;padding:8px;border-radius:18px;background:rgba(42,34,48,.86);box-shadow:0 0 0 2px rgba(255,243,223,.35),0 6px 14px rgba(0,0,0,.25)}
+.bandejaEsp{position:absolute;left:74px;bottom:-6px;display:grid;grid-template-columns:repeat(var(--col,3),64px);gap:8px 6px;width:max-content;padding:8px;border-radius:18px;background:rgba(42,34,48,.86);box-shadow:0 0 0 2px rgba(255,243,223,.35),0 6px 14px rgba(0,0,0,.25)}
 .itemEsp{display:flex;flex-direction:column;align-items:center;gap:3px;width:64px;padding:0;background:none;color:var(--creme)}
 .itemEsp .icoEsp{position:relative;width:50px;height:50px;border-radius:50%;background:rgba(255,243,223,.95);padding:8px;box-shadow:0 0 0 2px rgba(255,243,223,.5)}
 .itemEsp .icoEsp svg{width:100%;height:100%}
@@ -884,7 +913,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
       <div class="tiles">
         <button class="tile" id="abrirAlbum" type="button"><span class="tico" data-ico="album"></span><b>Álbum</b><small id="tAlbum">0/29 raças</small></button>
         <button class="tile" id="abrirLoja" type="button"><span class="tico" data-ico="loja"></span><b>Loja</b><small id="tLoja">0 moedas</small></button>
-        <button class="tile largo hotel" id="abrirHotel" type="button"><span class="tico" data-ico="hotel"></span><b>Hotel 7 Vidas</b><small id="tHotel">Em breve</small><i class="tranca" data-ico="cadeado"></i></button>
+        <button class="tile largo hotel" id="abrirHotel" type="button"><span class="tico" data-ico="hotel"></span><b>Festival dos Felinos</b><small id="tHotel">Em breve</small><i class="tranca" data-ico="cadeado"></i></button>
       </div>
       <button class="nivelMenu" id="nivelMenu" type="button"><span class="nivelSelo" id="menuNivel">1</span><span class="nivelMeio"><span class="nivelTopo"><b id="menuNivelTxt">Nível 1</b><small id="menuNivelXp">0/40 XP</small></span><span class="xpBarra"><i id="menuNivelBarra"></i></span></span><span class="nivelEst"><i data-ico="estrela"></i><b id="menuEstrelas">0/21</b></span></button>
       <div class="stats"><span><i data-ico="trofeu"></i>Recorde: <b id="recorde">0</b> pts</span><span><i data-ico="moeda"></i><b id="menuMoedas">0</b> moedas</span></div>
@@ -893,7 +922,7 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
 
   <div class="tela cheia" id="hotel" hidden>
     <section class="cartao">
-      <header class="topo"><button class="voltar" id="fecharHotel" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="hotel"></span>Hotel 7 Vidas</h2></header>
+      <header class="topo"><button class="voltar" id="fecharHotel" type="button" aria-label="Voltar" data-ico="voltar"></button><h2><span data-ico="hotel"></span>Festival dos Felinos</h2></header>
       <div class="corpo">
         <p class="nota">Escolha um andar. Cada andar tem um tema e gatos especiais.</p>
         <div id="andares"></div>
@@ -1170,6 +1199,14 @@ input[type=range]{width:100%;height:30px;margin:2px 0 0;accent-color:var(--coral
       <div class="corpo" id="contaCorpo"></div>
     </section>
   </div>
+  <div class="tela" id="telaSave" hidden>
+    <section class="cartao simples saveCard">
+      <div class="nomeIco" data-ico="nuvem"></div>
+      <h2>Qual progresso usar?</h2>
+      <p class="nota" id="saveTexto">Você jogou em dois lugares. Escolha qual progresso continuar. O outro fica guardado como cópia de segurança.</p>
+      <div class="saveLados" id="saveLados"></div>
+    </section>
+  </div>
   <div class="tela" id="telaAviso" hidden>
     <section class="cartao simples avisoCard">
       <button class="fechar avisoX" id="avisoFechar" type="button" aria-label="Fechar" hidden>×</button>
@@ -1274,7 +1311,7 @@ const Z = {
   portal: { tunnel: true, name: 'Corredor do Portal', wall: ['#2a4a52', '#243f47'], floor: ['#1a3238', '#162b31'], road: ['#6b6558', '#625d51'], rumble: ['#ffd166', '#6b6558'], lane: '#ffd166', light: '#fff0b8', marks: 'dupla' }
 };
 
-const VERSAO = '3.4.1';
+const VERSAO = '3.4.2';
 const EDICAO = 'android'; /* o site do iPhone (GitHub Pages) troca para 'ios' na hora de publicar */
 const IOS = EDICAO === 'ios';
 const VERSAO_TXT = VERSAO + (IOS ? ' iOS' : '');
@@ -1294,8 +1331,8 @@ const GATOS = [
       kE: [-0.07, 0.2], jE: [-0.42, 0.36], cE: [-0.56, 0.76], kD: [0.07, 0.2], jD: [0.42, 0.36], cD: [0.56, 0.76] },
     pinta: { x: 0.22, y: 0.45, rx: 0.11, ry: 0.07, g: -0.3 }, sarda: '#b56f7c' }
 ];
-/* edição do iPhone: sem Olívia, Sebastian e Seline; no lugar entra a Lua, uma gata tricolor */
-if (IOS) GATOS.splice(0, GATOS.length, ...GATOS.filter(g => ['olivia', 'sebastian', 'seline'].indexOf(g.id) < 0),
+/* edição do iPhone: além de Olívia, Sebastian e Seline, entra a Lua, uma gata tricolor */
+if (IOS) GATOS.push(
   { id: 'lua', sexo: 'f', nome: 'Lua', pelo: '#fbf7ef', orelha: '#e58f3c', orelhaD: '#2b2730', dentro: '#ffc2cf', olho: '#7ecb4f', pata: '#f3bcc6', nariz: '#f2a0b0',
     manchas: [{ x: -0.55, y: -0.5, rx: 0.52, ry: 0.42, cor: '#e58f3c' }, { x: 0.55, y: -0.5, rx: 0.52, ry: 0.42, cor: '#2b2730' }] });
 function ler(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -1452,7 +1489,7 @@ for (const a of save.abrigo.concat(save.casa || [], save.sant)) if (a && !a.id) 
 save.pedidos = (save.pedidos || []).filter(pd => pd && pd.cat);
 function salvar() { gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.regs', JSON.stringify({ v: save.regV, r: save.regioes })); }
 const ADM_PADRAO = { pedMax: 6, pedGatos: 4, bonusPacote: 10, espComumMin: 5, espComumMax: 9, espIncMin: 15, espIncMax: 28, espRaroMin: 35, espRaroMax: 60, valComum: 6, valIncomum: 15, valRaro: 40,
-  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 7, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 0.5, parcPatr: 2, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
+  carroBase: 10, carroNivel: 5, durSache: 5, durEscova: 6, durGuizo: 8, durEspecial: 15, carinhoSecreto: 50, sortudoGuizos: 15, cristalEpicos: 80, auroraMeta: 280, parcMoedas: 250, parcHoras: 0.5, parcPatr: 2, parcGuarda: 12, freqItens: 1, chanceRaros: 1, maxItens: 9, abrigoBase: 30, abrigoNivel: 10, casaMax: 20, casaNivel: 5,
   santBase: 10, santNivel: 5, santTeto: 40, nomeEpico: 500, nomeLend: 1500, nomeMit: 4000, bercoFracao: 0.5, tocaFracao: 0.5, chanceFilhote: 0.15, chanceCaixa: 0.009, ingEpico: 6, ingLend: 18, ingMit: 45, ingHoras: 12, natEpico: 30, natLend: 90, natMit: 250 };
 let ADM = { v: {}, precos: {}, corpos: {}, pelos: {}, chances: {} };
 try { const a = JSON.parse(ler('pegagatos.admin') || 'null'); if (a && typeof a === 'object') { if (a.v && typeof a.v === 'object') ADM.v = a.v; if (a.precos && typeof a.precos === 'object') ADM.precos = a.precos; if (a.corpos && typeof a.corpos === 'object') ADM.corpos = a.corpos; if (a.pelos && typeof a.pelos === 'object') ADM.pelos = a.pelos; if (a.chances && typeof a.chances === 'object') ADM.chances = a.chances; } } catch (e) {}
@@ -1560,7 +1597,7 @@ const SECRETOS = [
   { raca: 'gato do amor', id: 'amor', nomeGato: 'Xodó', sexo: 'm', dica: 'Faça carinho em muitos gatos diferentes.', pelo: '#26232b', dentro: '#ff9ec0', olhos: ['#7fd46b'], patas: '#fbf7ef', pata: '#ff9ec0', nariz: '#ff5d8f', linha: '#3a3040',
     branco: { topo: -0.4, larg: 0.18, ladoE: 0.32, ladoD: 0.32, dx: 0 }, marca: { tipo: 'coracao', cor: '#ff5d8f' }, coracoesRosto: '#ff7fa8', narizCoracao: 1, olhoBrilho: 'coracao',
     peitoCoracao: 1, coracoesCorpo: '#ff5d8f', raboPonta: { tipo: 'coracao', cor: '#ff5d8f' }, coleira: '#ff5d8f', pingente: 'coracao', aura: '#ff6fa8', brilhos: 'coracao' },
-  { raca: 'gato sortudo', id: 'sortudo', nomeGato: 'Trevo', sexo: 'm', dica: 'Pegue muitos gatos com guizo numa patrulha só.', pelo: '#f2a24e', dentro: '#ffb3a7', olhos: ['#4fbf5a'], patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f28ca0',
+  { raca: 'gato sortudo', id: 'sortudo', nomeGato: 'Trevo', sexo: 'm', dica: 'Quem anda cercado de tilintar sempre encontra mais sorte.', pelo: '#f2a24e', dentro: '#ffb3a7', olhos: ['#4fbf5a'], patas: '#fbf7ef', pata: '#f3bcc6', nariz: '#f28ca0',
     branco: { topo: -0.28, larg: 0.2, ladoE: 0.3, ladoD: 0.3, dx: 0 }, manchas: [{ x: -0.62, y: -0.5, rx: 0.3, ry: 0.22, cor: '#e0862f' }, { x: 0.66, y: -0.45, rx: 0.26, ry: 0.2, cor: '#e0862f' }],
     marca: { tipo: 'trevo', cor: '#3fae4a' }, olhoBrilho: 'estrela', trevoPeito: '#3fae4a', raboPonta: { tipo: 'trevo', cor: '#3fae4a' }, coleira: '#2f9e44', pingente: 'trevo', aura: '#8fdc5a', brilhos: 'trevo' },
   { raca: 'gato arco-íris', id: 'arcoiris', nomeGato: 'Íris', sexo: 'f', dica: 'Encontre todos os jeitos de uma mesma raça.', pelo: '#fbf7ef', dentro: '#ffc4dc', olhos: ['#5ab8f0', '#5ab8f0'], olho2: '#9be7ff', patas: '#fbf7ef', pata: '#ffb3d1', nariz: '#ff9eb3',
@@ -1647,7 +1684,7 @@ const HASH_HOTEL = 4565743328030077;
 function resgatarCodigo(txt) {
   if (!String(txt || '').replace(/[^A-Za-z0-9]/g, '')) return { erro: 'Digite o código.' };
   if (hashCodigo(txt) === HASH_HOTEL) {
-    if (save.hotelLiberado) return { erro: 'Você já liberou o Hotel 7 Vidas.' };
+    if (save.hotelLiberado) return { erro: 'Você já liberou o Festival dos Felinos.' };
     save.hotelLiberado = 1; if (!save.espaco || typeof save.espaco !== 'object') save.espaco = {}; for (const e of ESPACIAIS) save.espaco[e.id] = 1;
     salvar(); atualizarHotel(); return { hotel: true };
   }
@@ -1720,7 +1757,7 @@ function mostrarSecreto(t, depois) {
   janelaAviso({ gato: g, titulo: 'Gato secreto encontrado!', texto: TEXTO_SECRETO[t.id] || '', okTxt: 'Que lindo!', ok: depois });
 }
 /* Gato do Amor: carinho em N gatos diferentes (cada gato conta uma vez só) */
-/* item 15: Estrela e Órion saíram dos secretos e foram para a coleção da Estação Espacial (Hotel 7 Vidas) */
+/* item 15: Estrela e Órion saíram dos secretos e foram para a coleção da Estação Espacial (Festival dos Felinos) */
 const RACAS_MOVIDAS = { 'gato estrela': 'Estrela', 'gato galáxia': 'Órion' };
 function migrarParaEspaco() {
   const quais = [], tem = (r) => !!((save.album && save.album[r]) || (Array.isArray(save.casa) && save.casa.some(c => c && c.r === r)) || (save.secretos && save.secretos[r === 'gato estrela' ? 'estrela' : 'galaxia']));
@@ -1740,7 +1777,7 @@ migrarParaEspaco();
 function avisoEspaco(depois) {
   if (!Array.isArray(save.espacoAviso) || !save.espacoAviso.length) { depois(); return; }
   const nomes = save.espacoAviso.join(' e '), plural = save.espacoAviso.length > 1;
-  janelaAviso({ ico: 'hotel', titulo: 'Mudança nos gatos secretos', texto: (plural ? nomes + ' deixaram os secretos e foram' : nomes + ' deixou os secretos e foi') + ' para a coleção da Estação Espacial, no Hotel 7 Vidas, com visual e efeitos novos. Por isso ' + (plural ? 'eles saíram' : 'ele saiu') + ' da sua casa e do álbum. Quem libera o Hotel recebe ' + (plural ? 'os dois' : 'o gato') + ' lá.', okTxt: 'Entendi', ok: () => { save.espacoAviso = []; salvar(); depois(); } });
+  janelaAviso({ ico: 'hotel', titulo: 'Mudança nos gatos secretos', texto: (plural ? nomes + ' deixaram os secretos e foram' : nomes + ' deixou os secretos e foi') + ' para a coleção da Estação Espacial, no Festival dos Felinos, com visual e efeitos novos. Por isso ' + (plural ? 'eles saíram' : 'ele saiu') + ' da sua casa e do álbum. Quem libera o Hotel recebe ' + (plural ? 'os dois' : 'o gato') + ' lá.', okTxt: 'Entendi', ok: () => { save.espacoAviso = []; salvar(); depois(); } });
 }
 if (!Array.isArray(save.carinhos)) save.carinhos = [];
 function contarCarinho(reg) {
@@ -3155,7 +3192,7 @@ function atualizarHotel() {
   $('tHotel').textContent = ok ? 'Toque para abrir' : 'Em breve';
   const t = $('abrirHotel'); t.classList.toggle('liberado', ok); const c = t.querySelector('.tranca'); if (c) c.hidden = ok;
 }
-$('abrirHotel').addEventListener('click', () => { if (save.hotelLiberado) { menu.hidden = true; $('hotel').hidden = false; montarHotel(); return; } janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas', fechar: true, texto: 'Em breve! Um hotel de 7 andares, cada um com um tema e gatos especiais para colecionar.', okTxt: 'Mal posso esperar!' }); });
+$('abrirHotel').addEventListener('click', () => { if (save.hotelLiberado) { menu.hidden = true; $('hotel').hidden = false; montarHotel(); return; } janelaAviso({ ico: 'hotel', titulo: 'Festival dos Felinos', fechar: true, texto: 'Em breve! Um hotel de 7 andares, cada um com um tema e gatos especiais para colecionar.', okTxt: 'Mal posso esperar!' }); });
 const ANDARES = [[7, 'Estação Espacial', 'Andar final · mundo do espaço'], [6, 'Reino Encantado', 'Mundo de fantasia'], [5, 'Arraiá dos Gatos', 'Junho'], [4, 'Doceria', 'Páscoa'], [3, 'Egito', 'Fevereiro'], [2, 'Vila Natalina', 'Dezembro'], [1, 'Mundo Assombrado', 'Outubro']];
 const espQtd = () => ESPACIAIS.filter(e => save.espaco && save.espaco[e.id]).length;
 function montarHotel() {
@@ -5462,6 +5499,17 @@ function figuraVar(k, tam) {
   comCtx(cv.getContext('2d'), () => { relogio = 0; gatoRua(tam / 2, tam * 0.92, tam * 1.2, amostraVar(k), 0, false, false); });
   return cv;
 }
+const DICAS_SECRETOS = {
+  amor: 'Quem espalha carinho por aí pode conquistar um coração.',
+  sortudo: 'Quem anda cercado de tilintar sempre encontra mais sorte.',
+  floral: 'Dizem que esse gato nasce onde há jardins bem cuidados.',
+  aurora: 'Existe uma luz escondida num céu muito frio.',
+  cristal: 'Os mais raros brilham para quem tem paciência de colecioná-los.',
+  arquiteto: 'Quem constrói tudo o que pode talvez ganhe um novo morador.',
+  dourado: 'Ele só aparece para quem conhece todos os tipos de gato.',
+  hidra: 'Reúna as lendas e algo desperta.',
+  estrelado: 'Para quem brilha em cada caminho, o céu mostra uma constelação.'
+};
 function cartaoAlbum(t) {
   const qt = save.album[t.raca] || 0;
   const d = cria('div', 'raca col-' + t.rc + (qt ? '' : ' falta'));
@@ -5471,6 +5519,10 @@ function cartaoAlbum(t) {
   d.appendChild(cria('b', '', qt ? t.raca : '???'));
   d.appendChild(cria('span', 'tag r-' + t.rc, t.raridade));
   d.appendChild(cria('span', 'qt', t.pts + (t.pts === 1 ? ' pt' : ' pts') + ' · ' + (qt ? 'pegou ' + qt + '×' : 'falta')));
+  if (!qt && SECRETOS.indexOf(t) >= 0) {
+    d.classList.add('comDica'); d.appendChild(cria('span', 'dicaToque', 'Toque para uma dica'));
+    d.addEventListener('click', () => janelaAviso({ ico: 'estrela', titulo: 'Gato secreto', texto: DICAS_SECRETOS[t.id] || 'Esse segredo ainda é um mistério.', okTxt: 'Entendi' }));
+  }
   return d;
 }
 function abrirAlbum() {
@@ -5485,13 +5537,13 @@ function abrirAlbum() {
   }
   raiz.appendChild(abas);
   const grupos = [
-    ['Secretos', SECRETOS, 'Gatos que não aparecem na rua. Cada um tem um jeito próprio de ser encontrado.'],
-    ['Míticos', MITICOS, 'Criaturas de lenda. Aparecem muito raramente: na Trilha Lendária (todos), na Caverna de Cristal Antigo (grifo, dragão preto e fênix) e no Vale dos Raros (só o gato mago). Pegando todos, a Hidra aparece.'],
-    ['Lendários', LENDARIOS, 'Os felinos mais difíceis de encontrar. Moram no Santuário.'],
-    ['Épicos', EPICOS, 'Felinos muito raros. Moram no Santuário.'],
-    ['Raros', COMUNS.filter(t => t.rc === 'raro'), 'Gatos de rua difíceis de achar. Vão para o abrigo.'],
-    ['Incomuns', COMUNS.filter(t => t.rc === 'incomum'), 'Aparecem de vez em quando. Vão para o abrigo.'],
-    ['Comuns', COMUNS.filter(t => t.rc === 'comum'), 'Os mais vistos na rua. Vão para o abrigo.']
+    ['Secretos', SECRETOS, 'Gatos escondidos. Cada um tem o seu jeito de aparecer.'],
+    ['Míticos', MITICOS, 'Criaturas de lenda, muitíssimo raras.'],
+    ['Lendários', LENDARIOS, 'Muito difíceis de encontrar.'],
+    ['Épicos', EPICOS, 'Muito raros.'],
+    ['Raros', COMUNS.filter(t => t.rc === 'raro'), 'Difíceis de achar.'],
+    ['Incomuns', COMUNS.filter(t => t.rc === 'incomum'), 'Aparecem de vez em quando.'],
+    ['Comuns', COMUNS.filter(t => t.rc === 'comum'), 'Os mais vistos na rua.']
   ];
   const tv = totaisVar();
   if (albumAba === 'amigos') {
@@ -5510,7 +5562,6 @@ function abrirAlbum() {
       const b = cria('div', 'bloco');
       b.appendChild(cria('h3', '', titulo + ' · ' + achados + '/' + lista.length));
       b.appendChild(cria('p', 'nota', nota));
-      if (titulo === 'Secretos') b.appendChild(cria('p', 'nota contaSec', 'Felinos épicos resgatados: ' + epicosTotal() + ' · Flores e plantas compradas: ' + floresCompradas() + '/' + FLORES_DEC().length + ' · colocadas: ' + Math.min(floresColocadas(), FLORES_MIN) + '/' + FLORES_MIN));
       const g = cria('div', 'gradeAlbum'); for (const t of lista) g.appendChild(cartaoAlbum(t));
       if (titulo === 'Míticos') for (let q = 0; q < 2; q++) { const v = cria('div', 'raca falta col-mitico vagaAmigo'); v.appendChild(cria('div', 'vagaInterro', '?')); v.appendChild(cria('b', '', 'Em breve')); g.appendChild(v); }
       b.appendChild(g); raiz.appendChild(b);
@@ -10471,6 +10522,7 @@ function fmtPct(p) {
   if (p >= 0.1) return (Math.round(p * 100) / 100).toLocaleString('pt-BR') + '%';
   return (Math.round(p * 1000) / 1000).toLocaleString('pt-BR') + '%';
 }
+const regAbertas = new Set();
 function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrulha */
   $('xpPill').textContent = save.moedas.toLocaleString('pt-BR');
   const lista = $('listaRegioes'); lista.textContent = '';
@@ -10483,21 +10535,22 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
     topo.appendChild(cria('span', 'nivelSelo', String(r.nivel)));
     const t = cria('div'); t.appendChild(cria('b', '', r.nome)); t.appendChild(cria('small', '', r.desc)); topo.appendChild(t);
     card.appendChild(topo);
+    const det = cria('div', 'regDet');
     { const metas = METAS_EST[idx] || METAS_EST[0], linha = cria('div', 'regEstrelas'); linha.appendChild(estrelasEl(save.estrelas[idx] || 0, 0, metas));
       const mb = save.melhorReg[idx]; linha.appendChild(cria('small', 'regMelhor', (save.estrelas[idx] || 0) >= 3 ? 'Completa!' : mb ? 'Melhor: ' + mb + ' pts' : ok ? 'Ainda sem pontos aqui' : '')); card.appendChild(linha);
       const pl = cria('div', 'regPremios'); pl.appendChild(cria('small', '', 'Prêmios:'));
       for (let q = 0; q < 3; q++) { const pr = premioDaEstrela(idx, q); if (!pr) continue; const tem = (save.estrelas[idx] || 0) > q, it = cria('span', 'regPremio' + (tem ? ' ok' : '')); it.innerHTML = icoPremio(pr); it.title = ESTRELA_ORD[q] + ' estrela: ' + pr.nome; pl.appendChild(it); }
-      card.appendChild(pl);
+      det.appendChild(pl);
       if (idx === idxAurora() && (save.estrelas[idx] || 0) >= 3) {
         const au = cria('div', 'regAurora' + (save.secretos && save.secretos.aurora ? ' ok' : ''));
         au.innerHTML = '<span class="auEst">' + ICO.estrela + '</span><div><b>Estrela da Aurora</b><small>' + (save.secretos && save.secretos.aurora ? 'Conquistada! O céu se acendeu.' : 'Faça ' + Math.round(A('auroraMeta')) + ' pts e algo especial acontece no céu…') + '</small></div>';
-        card.appendChild(au);
+        det.appendChild(au);
       } }
     const todos = r.tiposGatos.concat(r.tiposE, r.tiposL, r.tiposM).sort((a, b) => ORDEM_RAR[a.rc] - ORDEM_RAR[b.rc]);
     const ch = chancesRacas(r);
     const resumoCh = cria('div', 'regChances');
     for (const rar of ['comum', 'incomum', 'raro', 'epico', 'lendario', 'mitico']) if (ch.porRar[rar]) resumoCh.appendChild(cria('span', 'tag r-' + rar, NOME_RAR1[rar] + ' ' + fmtPct(ch.porRar[rar])));
-    card.appendChild(resumoCh);
+    det.appendChild(resumoCh);
     const faces = cria('div', 'regFaces');
     for (const tp of todos) {
       const achou = !!save.album[tp.raca], cel = cria('div', 'face bg-' + tp.rc);
@@ -10506,10 +10559,28 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
       cel.appendChild(c); cel.appendChild(cria('span', '', achou ? tp.raca : '???')); cel.appendChild(cria('b', 'pct', fmtPct(ch.res[tp.raca] || 0)));
       faces.appendChild(cel);
     }
-    card.appendChild(faces);
+    det.appendChild(faces);
     const nE = r.tiposE.length, nL = r.tiposL.length, nM = r.tiposM.length;
     const so = r.tiposGatos.every(tp => tp.rc === 'raro');
-    card.appendChild(cria('p', 'regRaros', (so ? 'Só gatos raros para cima. ' : '') + (nE || nL ? 'Felinos: ' + [nE ? nE + (nE > 1 ? ' épicos' : ' épico') : '', nL ? nL + (nL > 1 ? ' lendários' : ' lendário') : '', nM ? nM + (nM > 1 ? ' míticos' : ' mítico') : ''].filter(Boolean).join(', ').replace(/, ([^,]*)$/, ' e $1') + '.' : 'Sem felinos épicos por aqui.')));
+    det.appendChild(cria('p', 'regRaros', (so ? 'Só gatos raros para cima. ' : '') + (nE || nL ? 'Felinos: ' + [nE ? nE + (nE > 1 ? ' épicos' : ' épico') : '', nL ? nL + (nL > 1 ? ' lendários' : ' lendário') : '', nM ? nM + (nM > 1 ? ' míticos' : ' mítico') : ''].filter(Boolean).join(', ').replace(/, ([^,]*)$/, ' e $1') + '.' : 'Sem felinos épicos por aqui.')));
+    { /* resumo: só os gatos mais raros da região, sempre numa linha */
+      const topoRar = ORDEM_RAR[todos[todos.length - 1] ? todos[todos.length - 1].rc : 'comum'];
+      const raros = todos.filter(tp => ORDEM_RAR[tp.rc] === topoRar).concat(todos.filter(tp => ORDEM_RAR[tp.rc] < topoRar).reverse()).slice(0, 5);
+      const res = cria('div', 'regResumo'); res.appendChild(cria('small', '', 'Mais raros aqui:'));
+      const fr = cria('div', 'regResFaces');
+      for (const tp of raros) {
+        const achou = !!save.album[tp.raca], cel = cria('div', 'face fp bg-' + tp.rc), c = carinha(amostra(tp), 88);
+        if (!achou) { const k = c.getContext('2d'); k.globalCompositeOperation = 'source-atop'; k.fillStyle = '#b8ab9e'; k.fillRect(0, 0, 88, 88); k.globalCompositeOperation = 'source-over'; }
+        cel.appendChild(c); fr.appendChild(cel);
+      }
+      if (todos.length > raros.length) fr.appendChild(cria('span', 'regMais', '+' + (todos.length - raros.length)));
+      res.appendChild(fr); card.appendChild(res);
+      const aberta = regAbertas.has(idx);
+      det.hidden = !aberta; card.classList.toggle('aberta', aberta);
+      const tg = cria('button', 'regToggle', aberta ? 'Ocultar detalhes ▴' : 'Ver todos os gatos ▾'); tg.type = 'button';
+      tg.addEventListener('click', e => { e.stopPropagation(); if (regAbertas.has(idx)) regAbertas.delete(idx); else regAbertas.add(idx); det.hidden = !regAbertas.has(idx); card.classList.toggle('aberta', regAbertas.has(idx)); tg.textContent = regAbertas.has(idx) ? 'Ocultar detalhes ▴' : 'Ver todos os gatos ▾'; });
+      card.appendChild(tg); card.appendChild(det);
+    }
     if (ok) {
       const b = cria('button', 'mini' + (atual ? ' usando' : ''), atual ? 'Região escolhida' : 'Escolher esta região'); b.type = 'button'; b.disabled = atual;
       b.addEventListener('click', () => { save.regiao = idx; salvar(); construirPista(regiaoAtual()); pos = 0; ultimoIdx = 0; atualizarMenu(); abrirRegioes(); });
@@ -10541,6 +10612,11 @@ function abrirRegioes() { /* monta a lista de regiões dentro de Preparar patrul
 function abrirPreparar() {
   abrirRegioes();
   menu.hidden = true; fim.hidden = true; telaGatos.hidden = true; $('telaPreparar').hidden = false;
+  /* 3.4.2: a tela abre já na região escolhida, sem precisar descer a lista */
+  setTimeout(() => {
+    const corpo = document.querySelector('#telaPreparar .corpo'), at = document.querySelector('#listaRegioes .regiao.atual');
+    if (corpo && at) corpo.scrollTop = Math.max(0, at.getBoundingClientRect().top - corpo.getBoundingClientRect().top + corpo.scrollTop - 10);
+  }, 60);
   tentarTut('preparar', tourPreparar);
 }
 $('fecharPreparar').addEventListener('click', () => {
@@ -10822,6 +10898,39 @@ function quando(ms) {
   const d = new Date(ms); const p = n => String(n).padStart(2, '0');
   return p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' às ' + p(d.getHours()) + ':' + p(d.getMinutes());
 }
+/* cópias de segurança: guarda as últimas 6, mais nova primeiro (nunca some progresso sem ter cópia) */
+function lerCopias() {
+  let l = []; try { l = JSON.parse(ler('pegagatos.backups') || '[]'); } catch (e) {}
+  if (!Array.isArray(l)) l = [];
+  let velho = null; try { velho = JSON.parse(ler('pegagatos.backup') || 'null'); } catch (e) {}
+  if (velho && velho.save && !l.some(c => c.em === velho.em)) l.push(velho);
+  return l.filter(c => c && c.save && !saveVazio(c.save)).sort((a, b) => (b.em || 0) - (a.em || 0)).slice(0, 6);
+}
+function guardarCopia(sv, piloto, de) {
+  if (!sv || saveVazio(sv)) return;
+  const l = lerCopias(), c = { em: Date.now(), save: sv, piloto: piloto || '', de: de || '' };
+  l.unshift(c);
+  gravar('pegagatos.backups', JSON.stringify(l.slice(0, 6)));
+  gravar('pegagatos.backup', JSON.stringify(c));
+}
+/* números do progresso para comparar */
+function dadosSave(sv) {
+  sv = sv || {};
+  const alb = sv.album || {}, base = TIPOS.filter(t => !t.amigo);
+  return {
+    racas: base.filter(t => alb[t.raca] > 0).length, total: base.length,
+    regs: Array.isArray(sv.regioes) ? sv.regioes.length : 1, regTot: REGIOES.length,
+    moedas: sv.moedas || 0, gatos: Object.values(alb).reduce((a, b) => a + (+b || 0), 0),
+    recorde: sv.recorde || 0, xp: sv.xp || 0
+  };
+}
+function listaDados(sv) {
+  const d = dadosSave(sv), box = cria('div', 'saveDados');
+  for (const [k, v] of [['Álbum', d.racas + '/' + d.total], ['Regiões', d.regs + '/' + d.regTot], ['Moedas', d.moedas.toLocaleString('pt-BR')], ['Resgatados', d.gatos.toLocaleString('pt-BR')], ['Recorde', d.recorde]]) {
+    const l = cria('div'); l.appendChild(cria('span', '', k)); l.appendChild(cria('b', '', String(v))); box.appendChild(l);
+  }
+  return box;
+}
 /* regiões compradas só aumentam: ao trocar de progresso, nunca perde uma região que um dos lados já tinha (mesma versão de numeração) */
 function unirRegioes(dest, outro) {
   if (!dest || !outro || dest.regV !== outro.regV || !Array.isArray(outro.regioes)) return false;
@@ -10834,7 +10943,7 @@ function aplicarNuvem(rem) {
   let novo = null; try { novo = JSON.parse(rem.dados); } catch (e) {}
   if (!novo || typeof novo !== 'object') return false;
   if (unirRegioes(novo, save)) rem = Object.assign({}, rem, { dados: JSON.stringify(novo) });
-  if (!saveVazio(save)) gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
+  guardarCopia(save, ler('gatuno.gato') || '', 'este aparelho');
   gravar('pegagatos.save', rem.dados);
   if (rem.piloto) gravar('gatuno.gato', rem.piloto);
   conta.upd = rem.upd; conta.sujo = 0; conta.sinc = Date.now(); gravarConta();
@@ -10844,21 +10953,42 @@ function aplicarNuvem(rem) {
 /* modo automático: nunca pergunta. Se este aparelho tem mudanças ainda não enviadas (jogou sem internet), elas sobem;
    senão vale a nuvem. O que não for usado fica como cópia neste aparelho. */
 function resolverAuto(rem, dn) {
-  const localManda = !saveVazio(save) && (conta.sujo || saveVazio(dn));
-  if (localManda) { if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); gravarNuvem(true).then(() => { nuvemErro = ''; atualizarContaUI(); }).catch(e => { nuvemErro = erroNuvem(e); atualizarContaUI(); }); }
+  /* 3.4.2: se os dois lados mudaram, nunca escolhe sozinho: pergunta */
+  if (!saveVazio(save) && !saveVazio(dn) && conta.sujo) { perguntarConflito(rem, null, true); return; }
+  const localManda = !saveVazio(save) && saveVazio(dn);
+  if (localManda) { if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save)); guardarCopia(dn, rem.piloto, 'nuvem'); gravarNuvem(true).then(() => { nuvemErro = ''; atualizarContaUI(); }).catch(e => { nuvemErro = erroNuvem(e); atualizarContaUI(); }); }
   else aplicarNuvem(rem);
 }
-function perguntarConflito(rem, fim) {
+const emPatrulha = () => ['play', 'count', 'freando', 'pause'].indexOf(state) >= 0;
+function perguntarConflito(rem, fim, jaAuto) {
   let dn = null; try { dn = JSON.parse(rem.dados); } catch (e) {}
   if (!dn) { enviarNuvem(true); return; }
-  if (!fim && conta && !conta.manual) { resolverAuto(rem, dn); return; }
-  nuvemConflito = true;
+  if (!fim && !jaAuto && conta && !conta.manual) { resolverAuto(rem, dn); return; }
+  nuvemConflito = true; clearTimeout(nuvemT); nuvemT = null;
+  /* no meio da patrulha não interrompe: pergunta quando ela acabar (nada é enviado até lá) */
+  if (emPatrulha()) { setTimeout(() => perguntarConflito(rem, fim, true), 2000); return; }
   const de = rem.plat === 'ios' ? 'iPhone/site' : rem.plat === 'android' ? 'Android' : 'outro aparelho';
-  janelaAviso({ ico: 'nuvem', titulo: 'Qual progresso usar?',
-    texto: 'Na nuvem (' + de + (rem.em ? ', ' + quando(rem.em) : '') + '): ' + resumoSave(dn) + '. Neste aparelho: ' + resumoSave(save) + '. O que não for escolhido fica guardado como cópia neste aparelho.',
-    okTxt: 'Usar o da nuvem', outroTxt: 'Usar o deste aparelho',
-    ok: () => { nuvemConflito = false; aplicarNuvem(rem); },
-    outro: () => { nuvemConflito = false; if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save)); gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save: dn, piloto: rem.piloto || '' })); enviarNuvem(true).then(() => fim && fim()); } });
+  const dL = dadosSave(save), dN = dadosSave(dn);
+  const melhorN = dN.xp > dL.xp || (dN.xp === dL.xp && dN.gatos > dL.gatos);
+  const melhorL = dL.xp > dN.xp || (dL.xp === dN.xp && dL.gatos > dN.gatos);
+  const box = $('saveLados'); box.textContent = '';
+  const lado = (titulo, ico, quandoTxt, sv, melhor, okTxt, fn) => {
+    const c = cria('div', 'saveLado' + (melhor ? ' melhor' : ''));
+    if (melhor) c.appendChild(cria('span', 'saveSelo', 'Mais avançado'));
+    const h = cria('h3'); h.insertAdjacentHTML('afterbegin', ICO[ico] || ''); h.appendChild(document.createTextNode(titulo)); c.appendChild(h);
+    c.appendChild(cria('small', '', quandoTxt));
+    c.appendChild(listaDados(sv));
+    const b = cria('button', melhor ? 'acao' : 'sec', okTxt); b.type = 'button';
+    b.addEventListener('click', () => { $('telaSave').hidden = true; nuvemConflito = false; fn(); });
+    c.appendChild(b); box.appendChild(c);
+  };
+  lado('Nuvem', 'nuvem', de + (rem.em ? ' · ' + quando(rem.em) : ''), dn, melhorN, 'Usar este', () => aplicarNuvem(rem));
+  lado('Este aparelho', 'casa', 'jogado aqui' + (conta.sinc ? ' · desde ' + quando(conta.sinc) : ''), save, melhorL, 'Usar este', () => {
+    if (unirRegioes(save, dn)) gravar('pegagatos.save', JSON.stringify(save));
+    guardarCopia(dn, rem.piloto, 'nuvem');
+    enviarNuvem(true).then(() => fim && fim());
+  });
+  $('telaSave').hidden = false;
 }
 async function enviarNuvem(forcar) {
   clearTimeout(nuvemT); nuvemT = null;
@@ -10877,10 +11007,13 @@ function agendarNuvem() { if (conta && !conta.expirou && !nuvemT) nuvemT = setTi
 { const salvarLocal = salvar; salvar = function () { salvarLocal(); if (conta && !nuvemBoot) { if (!conta.sujo) { conta.sujo = 1; gravarConta(); } agendarNuvem(); } }; }
 document.addEventListener('visibilitychange', () => { if (document.hidden && conta && conta.sujo) enviarNuvem(); });
 /* a internet voltou: sobe o que ficou pendente */
-window.addEventListener('online', () => { if (conta && !conta.expirou && conta.sujo) enviarNuvem(); });
+window.addEventListener('online', () => { if (conta && !conta.expirou) sincronizarInicio(); });
+/* voltou para o jogo (app estava em segundo plano): confere se outro aparelho mudou a nuvem */
+{ let ultConf = Date.now(); document.addEventListener('visibilitychange', () => { if (!document.hidden && conta && !conta.expirou && !nuvemConflito && Date.now() - ultConf > 15000) { ultConf = Date.now(); sincronizarInicio(); } }); }
 /* ao abrir o jogo: confere se outro aparelho mudou a nuvem */
 async function sincronizarInicio() {
   if (!conta || conta.expirou) return;
+  if (conta.forcarProx) { conta.forcarProx = 0; gravarConta(); await enviarNuvem(true); atualizarContaUI(); return; }
   try {
     const rem = await lerNuvem();
     if (!rem) { conta.upd = null; gravarConta(); await enviarNuvem(); return; }
@@ -10985,7 +11118,7 @@ function montarConta(msg, erro) {
     const bA = bloco('Sincronização');
     const lA = cria('label', 'nota'); const ck = document.createElement('input'); ck.type = 'checkbox'; ck.checked = !conta.manual;
     ck.addEventListener('change', () => { conta.manual = ck.checked ? 0 : 1; gravarConta(); });
-    lA.appendChild(ck); lA.appendChild(document.createTextNode(' Sincronizar sozinho com a nuvem, sem perguntar qual progresso usar'));
+    lA.appendChild(ck); lA.appendChild(document.createTextNode(' Sincronizar sozinho com a nuvem (só pergunta quando você jogou nos dois lugares)'));
     bA.appendChild(lA);
     const b2 = bloco('Apagar conta');
     b2.appendChild(cria('p', 'nota', 'Apaga sua conta e o progresso da nuvem. O progresso deste aparelho continua.'));
@@ -10999,20 +11132,25 @@ function montarConta(msg, erro) {
     });
     b2.appendChild(bAp);
   }
-  let bk = null; try { bk = JSON.parse(ler('pegagatos.backup') || 'null'); } catch (e) {}
-  if (bk && bk.save) {
-    const b3 = bloco('Cópia de segurança');
-    b3.appendChild(cria('p', 'nota', 'Progresso guardado em ' + quando(bk.em) + ': ' + resumoSave(bk.save) + '.'));
-    const bRest = cria('button', 'mini claro', 'Voltar para esta cópia'); bRest.type = 'button'; let armado = 0;
-    bRest.addEventListener('click', () => {
-      const agora = performance.now();
-      if (agora - armado > 3000) { armado = agora; bRest.textContent = 'Tem certeza?'; bRest.classList.add('alerta'); return; }
-      gravar('pegagatos.backup', JSON.stringify({ em: Date.now(), save, piloto: ler('gatuno.gato') || '' }));
-      gravar('pegagatos.save', JSON.stringify(bk.save)); if (bk.piloto) gravar('gatuno.gato', bk.piloto);
-      if (conta) { conta.sujo = 1; gravarConta(); }
-      location.reload();
-    });
-    b3.appendChild(bRest);
+  const copias = lerCopias();
+  if (copias.length) {
+    const b3 = bloco('Cópias de segurança');
+    b3.appendChild(cria('p', 'nota', 'Toda vez que um progresso é trocado por outro, o antigo fica guardado aqui. Toque para voltar a ele.'));
+    for (const bk of copias) {
+      const it = cria('div', 'copiaItem');
+      it.appendChild(cria('b', '', quando(bk.em) + (bk.de ? ' · ' + bk.de : '')));
+      it.appendChild(listaDados(bk.save));
+      const bRest = cria('button', 'mini claro', 'Voltar para esta cópia'); bRest.type = 'button'; let armado = 0;
+      bRest.addEventListener('click', () => {
+        const agora = performance.now();
+        if (agora - armado > 3000) { armado = agora; bRest.textContent = 'Tem certeza?'; bRest.classList.add('alerta'); return; }
+        guardarCopia(save, ler('gatuno.gato') || '', 'antes de restaurar');
+        gravar('pegagatos.save', JSON.stringify(bk.save)); if (bk.piloto) gravar('gatuno.gato', bk.piloto);
+        if (conta) { conta.sujo = 1; conta.forcarProx = 1; gravarConta(); }
+        location.reload();
+      });
+      it.appendChild(bRest); b3.appendChild(it);
+    }
   }
   const priv = bloco('Privacidade');
   priv.appendChild(cria('p', 'nota', 'Guardamos só seu e-mail e o progresso, no Firebase (Google), para recuperar em outro aparelho. Nada é compartilhado. Você pode apagar a conta e os dados a qualquer momento nesta tela.'));
@@ -11026,7 +11164,7 @@ $('cfgConta').addEventListener('click', abrirConta);
     const r = resgatarCodigo(inp.value);
     if (r.erro) { if (!/Digite|já /.test(r.erro) && ++tent.n >= 5) { tent.n = 0; tent.ate = Date.now() + 30000; } msg.textContent = r.erro; return; }
     inp.value = ''; msg.textContent = 'Código resgatado!';
-    if (r.hotel) { janelaAviso({ ico: 'hotel', titulo: 'Hotel 7 Vidas liberado!', texto: 'Abra o hotel na tela inicial e vá ao 7º andar: a Estação Espacial tem 9 gatos esperando por você.', okTxt: 'Entendi' }); return; }
+    if (r.hotel) { janelaAviso({ ico: 'hotel', titulo: 'Festival dos Felinos liberado!', texto: 'Abra o hotel na tela inicial e vá ao 7º andar: a Estação Espacial tem 9 gatos esperando por você.', okTxt: 'Entendi' }); return; }
     janelaAviso({ gato: gatoDe({ n: r.t.nomeGato, r: r.t.raca, o: r.t.olhos[0], f: 0, s: r.t.sexo }), titulo: r.t.raca + ' chegou!', texto: 'Um amigo especial foi para a sua Casa. Veja no Álbum, na aba Amigos.' });
   };
   $('cfgCodBtn').addEventListener('click', fazer);
@@ -11044,12 +11182,12 @@ function convidarNuvem(tent) {
 function oferecerRecuperar(tent) {
   if (!saveVazio(save)) return;
   let c = null;
-  for (const k of ['pegagatos.seguranca', 'pegagatos.backup']) { let x = null; try { x = JSON.parse(ler(k) || 'null'); } catch (e) {} if (x && !saveVazio(x.save) && (!c || (x.em || 0) > (c.em || 0))) c = x; }
+  for (const x of [(() => { try { return JSON.parse(ler('pegagatos.seguranca') || 'null'); } catch (e) { return null; } })()].concat(lerCopias())) if (x && !saveVazio(x.save) && (!c || (x.em || 0) > (c.em || 0))) c = x;
   if (!c) return;
   const livre = state === 'menu' && !menu.hidden && $('telaAviso').hidden;
   if (!livre) { if ((tent || 0) < 40) setTimeout(() => oferecerRecuperar((tent || 0) + 1), 1500); return; }
   janelaAviso({ ico: 'nuvem', titulo: 'Recuperar seu progresso?', texto: 'Achamos um progresso guardado neste aparelho' + (c.em ? ' em ' + quando(c.em) : '') + ': ' + resumoSave(c.save) + '.', okTxt: 'Recuperar', outroTxt: 'Agora não',
-    ok: () => { gravar('pegagatos.save', JSON.stringify(c.save)); if (c.piloto) gravar('gatuno.gato', c.piloto); if (conta) { conta.sujo = 1; gravarConta(); } location.reload(); } });
+    ok: () => { gravar('pegagatos.save', JSON.stringify(c.save)); if (c.piloto) gravar('gatuno.gato', c.piloto); if (conta) { conta.sujo = 1; conta.forcarProx = 1; gravarConta(); } location.reload(); } });
 }
 setTimeout(oferecerRecuperar, 1200);
 atualizarContaUI();
