@@ -1,6 +1,6 @@
 /* Patrulha dos Bigodes (site): guarda o jogo no aparelho para abrir sem internet.
    Com internet, sempre pega a versão nova do servidor (sem usar o cache do navegador). */
-const CACHE = 'patrulha-site-3.4.2';
+const CACHE = 'patrulha-site-3.4.3';
 const BASE = ['./', 'index.html', 'manifest.webmanifest', 'icone-192.png', 'icone-512.png', 'apple-touch-icon.png'];
 const pedir = r => new Request(r.url, { cache: 'no-store', credentials: 'same-origin' });
 self.addEventListener('install', e => {
